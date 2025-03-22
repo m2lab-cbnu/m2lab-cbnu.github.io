@@ -16,57 +16,92 @@
             text-align: left;
         }
         h1, h2 { color: #2c3e50; text-align: center; }
-        .section { margin-bottom: 30px; }
+        .section { margin-bottom: 40px; }
         .sub-section { margin-bottom: 15px; }
         p { line-height: 1.6; font-size: 18px; }
         strong { color: #2c3e50; }
+        .person {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .person img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .person-info {
+            flex: 1;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>People</h1>
 
+        <!-- Principal Investigator -->
         <div class="section">
             <h2>Principal Investigator</h2>
-            <p><strong>Dr. Kyongmo An</strong><br>
-               Assistant Professor, Chungbuk National University<br>
-               Email: kman@cbnu.ac.kr</p>
-        </div>
+            <div class="person">
+                <img src="kyongmophoto10.jpg" alt="Dr. Kyongmo An">
+                <div class="person-info">
+                    <p><strong>Dr. Kyongmo An</strong><br>
+                    Assistant Professor, Chungbuk National University<br>
+                    Email: kman@cbnu.ac.kr</p>
 
-        <div class="section">
-            <h2>Education</h2>
-            <div class="sub-section">
-                <p><strong>The University of Texas at Austin (UT), Austin, TX, USA</strong><br>
-                Ph. D. in Physics (2010 - 2016)</p>
-                
-                <p><strong>Korea Advanced Institute of Science and Technology (KAIST), Daejeon, South Korea</strong><br>
-                M. S. in Physics (2008 - 2010)</p>
+                    <p><strong>Education</strong><br>
+                    Ph.D., Physics, University of Texas at Austin (2010–2016)<br>
+                    M.S., Physics, KAIST (2008–2010)<br>
+                    B.S., Physics, Yonsei University (2002–2008)</p>
 
-                <p><strong>Yonsei University, Seoul, South Korea</strong><br>
-                B. S. in Physics (2002- 2008)</p>
+                    <p><strong>Previous Positions</strong><br>
+                    Invited Scholar, KRISS (2021–2024)<br>
+                    Postdoctoral Researcher, SPINTEC (2019–2021)<br>
+                    EPFL Fellow, EPFL (2017–2019)</p>
+                </div>
             </div>
         </div>
 
-        <div class="section">
-            <h2>Previous Positions</h2>
-            <div class="sub-section">
-                <p><strong>Korea Research Institute of Standards and Science (KRISS), South Korea</strong><br>
-                Invited Scholar (2021 - 2024)</p>
-
-                <p><strong>SPINTEC, Grenoble, France</strong><br>
-                Postdoctoral Researcher (2019 - 2021)</p>
-
-                <p><strong>École Polytechnique Fédérale de Lausanne (EPFL), Lausanne, Switzerland</strong><br>
-                Marie Curie EPFL Fellow (2017 - 2019)</p>
-                
-            </div>
-        </div>
-
+        <!-- Students -->
         <div class="section">
             <h2>Students</h2>
-            <p>Coming soon...</p>
+            <div class="person">
+                <img src="images/student1.jpg" alt="Student Name">
+                <div class="person-info">
+                    <p><strong>Student Name</strong><br>
+                    Master’s Student<br>
+                    M² Lab, CBNU</p>
+                </div>
+            </div>
         </div>
 
+        <!-- Visitors -->
+        <div class="section">
+            <h2>Visitors</h2>
+            <div class="person">
+                <img src="images/visitor1.jpg" alt="Visitor Name">
+                <div class="person-info">
+                    <p><strong>Visitor Name</strong><br>
+                    Visiting Scholar from XYZ University<br>
+                    Mar 2024 – Aug 2024</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alumni -->
+        <div class="section">
+            <h2>Alumni</h2>
+            <div class="person">
+                <img src="images/alumni1.jpg" alt="Alumni Name">
+                <div class="person-info">
+                    <p><strong>Alumni Name</strong><br>
+                    Now at ABC Company</p>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
