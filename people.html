@@ -1,154 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>People | M² Lab</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-    body {
-      background-color: #121212;
-      color: #f1f1f1;
-      line-height: 1.6;
-    }
-    header {
-      background: #1e1e1e;
-      position: relative;
-      padding: 30px 20px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-    }
-    .lab-title {
-      font-size: 28px;
-      font-weight: 600;
-      color: #00e0ff;
-      letter-spacing: 1.2px;
-    }
-    .logo {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      height: 100px;
-    }
-    nav {
-      background: #1e1e1e;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      padding: 15px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-    nav a {
-      color: #bbbbbb;
-      text-decoration: none;
-      padding: 8px 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      transition: 0.3s;
-    }
-    nav a:hover {
-      background-color: #00e0ff;
-      color: #121212;
-    }
-    .container {
-      max-width: 900px;
-      margin: 60px auto;
-      padding: 40px;
-      background: #1e1e1e;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0, 224, 255, 0.15);
-    }
-    h1, h2 {
-      color: #00e0ff;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    p {
-      font-size: 16px;
-      color: #cccccc;
-    }
-    .section {
-      margin-bottom: 40px;
-    }
-    .person {
-      display: flex;
-      align-items: flex-start;
-      gap: 30px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .person img {
-      max-height: 180px;
-      width: auto;
-      border-radius: 12px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-    .person-info {
-      flex: 1;
-      min-width: 250px;
-    }
-    footer {
-      background: #1e1e1e;
-      color: #888888;
-      text-align: center;
-      padding: 20px;
-      margin-top: 60px;
-      font-size: 14px;
-      border-top: 1px solid #333;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="lab-title">M² Lab | Microwave Magnonics Lab</div>
-    <img src="logo.png" alt="M² Lab Logo" class="logo">
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>People | M² Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+      }
+      body {
+        background-color: #121212;
+        color: #f1f1f1;
+        line-height: 1.6;
+      }
+      header {
+        background: #1e1e1e;
+        position: relative;
+        padding: 30px 20px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+      }
+      .lab-title {
+        font-size: 28px;
+        font-weight: 600;
+        color: #00e0ff;
+        letter-spacing: 1.2px;
+      }
+      .logo {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        height: 100px;
+      }
+      nav {
+        background: #1e1e1e;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+      nav a {
+        color: #bbbbbb;
+        text-decoration: none;
+        padding: 8px 12px;
+        font-size: 16px;
+        border-radius: 8px;
+        transition: 0.3s;
+      }
+      nav a:hover {
+        background-color: #00e0ff;
+        color: #121212;
+      }
+      .container {
+        max-width: 900px;
+        margin: 60px auto;
+        padding: 40px;
+        background: #1e1e1e;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0, 224, 255, 0.15);
+      }
+      h1,
+      h2 {
+        color: #00e0ff;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      p {
+        font-size: 16px;
+        color: #cccccc;
+        margin-bottom: 10px;
+      }
+      .section {
+        margin-bottom: 40px;
+      }
+      .person {
+        display: flex;
+        align-items: flex-start;
+        gap: 30px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+      .person img {
+        max-height: 180px;
+        width: auto;
+        border-radius: 12px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+      .person-info {
+        flex: 1;
+        min-width: 250px;
+      }
+      footer {
+        background: #1e1e1e;
+        color: #888888;
+        text-align: center;
+        padding: 20px;
+        margin-top: 60px;
+        font-size: 14px;
+        border-top: 1px solid #333;
+      }
+    </style>
+  </head>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="research.html">Research</a>
-    <a href="people.html">People</a>
-    <a href="publications.html">Publications</a>
-    <a href="news.html">News</a>
-    <a href="contact.html">Contact</a>
-  </nav>
+  <body>
+    <header>
+      <div class="lab-title">M² Lab | Microwave Magnonics Lab</div>
+      <img src="logo.png" alt="M² Lab Logo" class="logo" />
+    </header>
 
-  <div class="container">
-    <h1>People</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="research.html">Research</a>
+      <a href="people.html">People</a>
+      <a href="publications.html">Publications</a>
+      <a href="news.html">News</a>
+      <a href="contact.html">Contact</a>
+    </nav>
 
-    <!-- Principal Investigator -->
-    <div class="section">
-      <h2>Principal Investigator</h2>
-      <div class="person">
-        <img src="photo_3x4.jpeg" alt="Dr. Kyongmo An">
-        <div class="person-info">
-          <p><strong>Dr. Kyongmo An</strong><br>
-          Assistant Professor, Chungbuk National University<br>
-          Email: kman@cbnu.ac.kr</p>
+    <div class="container">
+      <h1>People</h1>
 
-          <p><strong>Education</strong><br>
-          Ph.D., Physics, University of Texas at Austin (2010–2016)<br>
-          M.S., Physics, KAIST (2008–2010)<br>
-          B.S., Physics, Yonsei University (2002–2008)</p>
+      <!-- Principal Investigator -->
+      <div class="section">
+        <h2>Principal Investigator</h2>
+        <div class="person">
+          <img src="photo_3x4.jpeg" alt="Dr. Kyongmo An" />
+          <div class="person-info">
+            <p><strong>Kyongmo An</strong><br />
+              Assistant Professor, Chungbuk National University<br />
+              Email: kman@cbnu.ac.kr
+            </p>
 
-          <p><strong>Previous Positions</strong><br>
-          Invited Scholar, KRISS (2021–2024)<br>
-          Postdoctoral Researcher, SPINTEC (2019–2021)<br>
-          Marie-Curie EPFL Fellow, EPFL (2017–2019)</p>
+            <p><strong>Education</strong><br />
+              Ph.D., Physics, University of Texas at Austin (2010–2016)<br />
+              M.S., Physics, KAIST (2008–2010)<br />
+              B.S., Physics, Yonsei University (2002–2008)
+            </p>
+
+            <p><strong>Previous Positions</strong><br />
+              Visiting Scholar, KRISS (2021–2024)<br />
+              Postdoctoral Researcher, SPINTEC (2019–2021)<br />
+              Marie-Curie EPFL Fellow, EPFL (2017–2019)
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <footer>
-    © 2025 M² Lab | Chungbuk National University, Department of Physics Education
-  </footer>
-</body>
+    <footer>
+      © 2025 M² Lab | Chungbuk National University, Department of Physics Education
+    </footer>
+  </body>
 </html>
