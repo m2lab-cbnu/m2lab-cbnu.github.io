@@ -18,14 +18,8 @@
       line-height: 1.6;
     }
     header {
-      background: #1e1e1e;
       padding: 30px;
       text-align: center;
-      font-size: 32px;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      color: #00e0ff;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
     }
     nav {
       background: #1e1e1e;
@@ -50,54 +44,52 @@
       background-color: #00e0ff;
       color: #121212;
     }
-    .container {
-      max-width: 900px;
-      margin: 80px auto;
-      padding: 40px;
-      background: #1e1e1e;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0, 224, 255, 0.15);
+    .hero {
       text-align: center;
+      padding: 60px 20px;
     }
-    h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
+    .hero img {
+      width: 300px;
+      max-width: 80%;
+      margin-bottom: 30px;
+    }
+    .hero h1 {
+      font-size: 28px;
       color: #00e0ff;
+      margin-bottom: 15px;
     }
-    p {
+    .hero p {
       font-size: 18px;
       color: #cccccc;
     }
     footer {
+      margin-top: 60px;
+      padding: 20px;
       background: #1e1e1e;
       color: #888888;
       text-align: center;
-      padding: 20px;
-      margin-top: 60px;
       font-size: 14px;
-      border-top: 1px solid #333;
     }
   </style>
 </head>
 <body>
 
   <header>
-    M² Lab | Microwave Magnonics Lab
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="research.html">Research</a>
+      <a href="people.html">People</a>
+      <a href="publications.html">Publications</a>
+      <a href="news.html">News</a>
+      <a href="contact.html">Contact</a>
+    </nav>
   </header>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="research.html">Research</a>
-    <a href="people.html">People</a>
-    <a href="publications.html">Publications</a>
-    <a href="news.html">News</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-
-  <div class="container">
+  <section class="hero">
+    <img src="logo.png" alt="M² Lab Logo" />
     <h1>Welcome to M² Lab</h1>
-    <p>We explore spin-based quantum dynamics and develop low-power magnonic platforms for the future of computing.</p>
-  </div>
+    <p>We explore spin-based quantum dynamics and develop low-power magnonic platforms<br>for next-generation computing and information technologies.</p>
+  </section>
 
   <footer>
     © 2025 M² Lab | Chungbuk National University, Department of Physics Education
