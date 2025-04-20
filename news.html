@@ -1,20 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News | M² Lab</title>
-    <style>
-        body { font-family: "Georgia", serif; background: #f8f1e5; text-align: center; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
-        h1 { color: #2c3e50; }
-        p { font-size: 18px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News | M² Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background-color: #121212;
+      color: #f1f1f1;
+      line-height: 1.6;
+    }
+    header {
+      background: #1e1e1e;
+      position: relative;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    }
+    .lab-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: #00e0ff;
+      letter-spacing: 1.2px;
+    }
+    .logo {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      height: 100px;
+    }
+    nav {
+      background: #1e1e1e;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 15px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    nav a {
+      color: #bbbbbb;
+      text-decoration: none;
+      padding: 8px 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    nav a:hover {
+      background-color: #00e0ff;
+      color: #121212;
+    }
+    .container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 40px;
+      background: #1e1e1e;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 224, 255, 0.15);
+    }
+    h1 {
+      font-size: 36px;
+      color: #00e0ff;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .news-item {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #333;
+    }
+    .news-item h3 {
+      color: #00e0ff;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .news-item p {
+      color: #cccccc;
+      font-size: 15px;
+    }
+    footer {
+      background: #1e1e1e;
+      color: #888888;
+      text-align: center;
+      padding: 20px;
+      margin-top: 60px;
+      font-size: 14px;
+      border-top: 1px solid #333;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>News</h1>
-        <p>Latest updates and announcements from M² Lab.</p>
+  <header>
+    <div class="lab-title">M² Lab | Microwave Magnonics Lab</div>
+    <img src="logo.png" alt="M² Lab Logo" class="logo" />
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="research.html">Research</a>
+    <a href="people.html">People</a>
+    <a href="publications.html">Publications</a>
+    <a href="news.html">News</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <div class="container">
+    <h1>News</h1>
+
+    <div class="news-item">
+      <h3>[Apr 2025] New Paper Published in <i>Nature Communications</i></h3>
+      <p>Our latest work on nonlinear magnonic waveguides is now published! Congratulations to the team!</p>
     </div>
+
+    <div class="news-item">
+      <h3>[Mar 2025] M² Lab Launches at Chungbuk National University</h3>
+      <p>The Microwave Magnonics Lab officially begins operation. Exciting research ahead!</p>
+    </div>
+
+    <div class="news-item">
+      <h3>[Feb 2025] First Equipment Arrived</h3>
+      <p>Our new VNA and FMR setup is now installed and ready to use.</p>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 M² Lab | Chungbuk National University, Department of Physics Education
+  </footer>
 </body>
 </html>
