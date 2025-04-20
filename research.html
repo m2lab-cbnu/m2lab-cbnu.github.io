@@ -1,20 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research | M² Lab</title>
-    <style>
-        body { text-align: center; font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
-        a { display: block; margin-top: 20px; color: #005bb5; text-decoration: none; font-size: 18px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research | M² Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background-color: #121212;
+      color: #f1f1f1;
+      line-height: 1.6;
+    }
+    header {
+      background: #1e1e1e;
+      position: relative;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    }
+    .lab-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: #00e0ff;
+      letter-spacing: 1.2px;
+    }
+    .logo {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      height: 100px;
+    }
+    nav {
+      background: #1e1e1e;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 15px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    nav a {
+      color: #bbbbbb;
+      text-decoration: none;
+      padding: 8px 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    nav a:hover {
+      background-color: #00e0ff;
+      color: #121212;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 60px auto;
+      padding: 40px;
+      background: #1e1e1e;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 224, 255, 0.15);
+    }
+    h1 {
+      font-size: 36px;
+      text-align: center;
+      color: #00e0ff;
+      margin-bottom: 20px;
+    }
+    h2 {
+      font-size: 24px;
+      color: #00e0ff;
+      margin-top: 40px;
+      margin-bottom: 15px;
+    }
+    p {
+      font-size: 16px;
+      color: #cccccc;
+      margin-bottom: 20px;
+    }
+    .research-image {
+      width: 100%;
+      max-width: 800px;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 224, 255, 0.2);
+      display: block;
+    }
+    footer {
+      background: #1e1e1e;
+      color: #888888;
+      text-align: center;
+      padding: 20px;
+      margin-top: 60px;
+      font-size: 14px;
+      border-top: 1px solid #333;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Research</h1>
-        <p>Our lab focuses on Microwave Magnonics for Next-Generation Computing and Quantum Information Processing.</p>
-        <a href="index.html">← Back to Home</a>
-    </div>
+  <header>
+    <div class="lab-title">M² Lab | Microwave Magnonics Lab</div>
+    <img src="logo.png" alt="M² Lab Logo" class="logo" />
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="research.html">Research</a>
+    <a href="people.html">People</a>
+    <a href="publications.html">Publications</a>
+    <a href="news.html">News</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <div class="container">
+    <h1>Our Research</h1>
+    <p>M² Lab focuses on fundamental and applied research in microwave magnonics, where spin waves (magnons) interact with phonons, photons, and electric currents. We aim to build next-generation devices for quantum information transfer, neuromorphic computing, and spin-based signal processing using magnonic and hybrid systems.</p>
+
+    <h2>Research Themes</h2>
+    <p><strong>1. Magnon-Phonon Coupling</strong><br />
+    Investigating coherent interaction between magnons and phonons in engineered platforms. We explore how vibrational modes can mediate long-range magnon coupling and energy transport.</p>
+
+    <p><strong>2. Spin-Wave Logic & Neuromorphic Devices</strong><br />
+    We design spin-wave devices that perform logic operations and emulate neural functions using nonlinear interference of spin waves.</p>
+
+    <p><strong>3. Quantum Magnonics</strong><br />
+    Utilizing microwave magnonic platforms to explore hybrid quantum systems and information transfer at GHz frequencies, with relevance to quantum communication and quantum sensing.</p>
+
+    <img src="research_concept_diagram.png" alt="Research Diagram" class="research-image" />
+
+    <h2>Vision</h2>
+    <p>We envision a new information architecture where spin-based excitations serve as carriers of logic, memory, and entangled quantum states. M² Lab combines experimental tools with international collaboration to push the frontier of low-dissipation, high-speed, and coherent information transport.</p>
+  </div>
+
+  <footer>
+    © 2025 M² Lab | Chungbuk National University, Department of Physics Education
+  </footer>
 </body>
 </html>
