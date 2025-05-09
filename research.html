@@ -1,53 +1,196 @@
-<div class="container">
-  <h1>Our Research</h1>
-  <p>M² Lab conducts cutting-edge research at the intersection of spin dynamics, phononics, and microwave engineering. Our mission is to develop magnonic and hybrid platforms that enable low-energy information processing, quantum signal transduction, and neuromorphic computation using spin waves and phonons.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research | M² Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background-color: #121212;
+      color: #f1f1f1;
+      line-height: 1.6;
+    }
+    header {
+      background: #1e1e1e;
+      position: relative;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    }
+    .lab-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: #00e0ff;
+      letter-spacing: 1.2px;
+    }
+    .logo {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      height: 100px;
+    }
+    nav {
+      background: #1e1e1e;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 15px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    nav a {
+      color: #bbbbbb;
+      text-decoration: none;
+      padding: 8px 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    nav a:hover {
+      background-color: #00e0ff;
+      color: #121212;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 60px auto;
+      padding: 40px;
+      background: #1e1e1e;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 224, 255, 0.15);
+    }
+    h1 {
+      font-size: 36px;
+      text-align: center;
+      color: #00e0ff;
+      margin-bottom: 20px;
+    }
+    h2 {
+      font-size: 24px;
+      color: #00e0ff;
+      margin-top: 40px;
+      margin-bottom: 15px;
+    }
+    p {
+      font-size: 16px;
+      color: #cccccc;
+      margin-bottom: 20px;
+    }
+    .research-image {
+      width: 60%;
+      max-width: 500px;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 224, 255, 0.2);
+      display: block;
+      background-color: #f5f5f5;  /* 💡 밝은 배경 추가 */
+      padding: 10px;              /* 여백 넣어주면 더 자연스러움 */
+    }
 
-  <img src="1d spin.gif" alt="magnon transport" class="research-image" />
+    .research-image-large {
+      width: 80%;
+      max-width: 700px;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 224, 255, 0.2);
+      display: block;
+      background-color: #f5f5f5;  /* 💡 밝은 배경 추가 */
+      padding: 10px;              /* 여백 넣어주면 더 자연스러움 */
+    }
 
-  <h2>Research Themes</h2>
-  <p style="text-align: center;">
-    <a href="#theme1" style="color:#00e0ff;">Magnon-Phonon Coupling</a> |
-    <a href="#theme2" style="color:#00e0ff;">Spin-Wave Logic</a> |
-    <a href="#theme3" style="color:#00e0ff;">Quantum Magnonics</a>
-  </p>
+    .research-image-small {
+      width: 40%;
+      max-width: 400px;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 224, 255, 0.2);
+      display: block;
+      background-color: #f5f5f5;  /* 💡 밝은 배경 추가 */
+      padding: 10px;              /* 여백 넣어주면 더 자연스러움 */
+    }
+    
+    footer {
+      background: #1e1e1e;
+      color: #888888;
+      text-align: center;
+      padding: 20px;
+      margin-top: 60px;
+      font-size: 14px;
+      border-top: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="lab-title">M² Lab | Microwave Magnonics Lab</div>
+    <a href="index.html" aria-label="Return to home page">
+      <img src="logo.png" alt="M² Lab Logo" class="logo">
+    </a>
+  </header>
 
-  <p id="theme1"><strong>1. Magnon-Phonon Coupling</strong><br />
-  Investigating coherent interaction between magnons and phonons in engineered platforms. We explore how vibrational modes can mediate long-range magnon coupling and energy transport.</p>
-  <p style="font-style: italic;">Representative Publications:</p>
-  <ul>
-    <li><a href="https://doi.org/10.1103/PhysRevX.12.011060" target="_blank" style="color:#00e0ff;">Bright and dark states of two distant macrospins strongly coupled by phonons</a>, <i>Phys. Rev. X</i>, 2022</li>
-    <li><a href="https://doi.org/10.1103/PhysRevB.101.060407" target="_blank" style="color:#00e0ff;">Coherent long-range transfer of angular momentum between magnon Kittel modes by phonons</a>, <i>Phys. Rev. B</i>, 2020</li>
-    <li><a href="https://doi.org/10.1103/PhysRevApplied.20.014046" target="_blank" style="color:#00e0ff;">Optimizing the magnon-phonon cooperativity in planar geometries</a>, <i>Phys. Rev. Applied</i>, 2023</li>
-  </ul>
-  <img src="shearwave_EVENPhonon.gif" alt="shearwave" class="research-image-small" />
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="research.html">Research</a>
+    <a href="people.html">People</a>
+    <a href="publications.html">Publications</a>
+    <a href="teaching.html">Teaching</a>
+    <a href="news.html">News</a>
+    <a href="contact.html">Contact</a>
+  </nav>
 
-  <p id="theme2"><strong>2. Spin-Wave Logic & Neuromorphic Devices</strong><br />
-  We design spin-wave devices that perform logic operations and emulate neural functions using nonlinear interaction among spin waves.</p>
-  <p style="font-style: italic;">Representative Publications:</p>
-  <ul>
-    <li><a href="https://doi.org/10.1038/s41467-024-51483-7" target="_blank" style="color:#00e0ff;">Emergent coherent modes in nonlinear magnonic waveguides</a>, <i>Nature Communications</i>, 2024</li>
-    <li><a href="https://doi.org/10.1103/PhysRevApplied.11.034065" target="_blank" style="color:#00e0ff;">Optimization of Spin-Wave Propagation with Enhanced Group Velocities</a>, <i>Phys. Rev. Applied</i>, 2019</li>
-  </ul>
-  <img src="g348197.png" alt="neuromorphic" class="research-image-large" />
+  <div class="container">
+    <h1>Our Research</h1>
+    <p>M² Lab focuses on fundamental and applied research in microwave magnonics, where spin waves (magnons) interact with phonons, photons, and electric currents. We aim to build next-generation devices for quantum information transfer, neuromorphic computing, and spin-based signal processing using magnonic and hybrid systems.</p>
 
-  <p id="theme3"><strong>3. Quantum Magnonics</strong><br />
-  We utilize microwave magnonic platforms to explore hybrid quantum systems and information transfer at GHz frequencies.</p>
-  <p style="font-style: italic;">Representative Publications:</p>
-  <ul>
-    <li><a href="https://doi.org/10.1103/PhysRevX.12.011060" target="_blank" style="color:#00e0ff;">Bright and dark states of two distant macrospins strongly coupled by phonons</a>, <i>Phys. Rev. X</i>, 2022</li>
-    <li><a href="https://doi.org/10.1103/PhysRevLett.117.107202" target="_blank" style="color:#00e0ff;">Magnons and phonons optically driven out of local equilibrium</a>, <i>Phys. Rev. Lett.</i>, 2016</li>
-  </ul>
-  <img src="blochsphere_v4.png" alt="blochsphere" class="research-image-small" />
+    <img src="1d spin.gif" alt="neuromorphic" class="research-image" />
+    
+    <h2>Research Themes</h2>
+    <p><strong>1. Magnon-Phonon Coupling</strong><br />
+    Investigating coherent interaction between magnons and phonons in engineered platforms. We explore how vibrational modes can mediate long-range magnon coupling and energy transport.</p>
+    
+    <ul style="margin-top: 10px; font-size: 15px; color: #bbbbbb;">
+      <li><a href="https://doi.org/10.1103/PhysRevX.12.011060" target="_blank" style="color:#00e0ff;">Bright and dark states of two distant macrospins strongly coupled by phonons</a>, <i>Phys. Rev. X</i>, 2022</li>
+      <li><a href="https://doi.org/10.1103/PhysRevB.101.060407" target="_blank" style="color:#00e0ff;">Coherent long-range transfer of angular momentum between magnon Kittel modes by phonons</a>, <i>Phys. Rev. B</i>, 2020</li>
+      <li><a href="https://doi.org/10.1103/PhysRevApplied.20.014046" target="_blank" style="color:#00e0ff;">Optimizing the magnon-phonon cooperativity in planar geometries</a>, <i>Phys. Rev. Applied</i>, 2023</li>
+    </ul>
+    <img src="shearwave_EVENPhonon.gif" alt="shearwave" class="research-image-small" />
+    
+    <p><strong>2. Spin-Wave Logic & Neuromorphic Devices</strong><br />
+    We design spin-wave devices that perform logic operations and emulate neural functions using nonlinear interaction among spin waves.</p>
 
-  <h2>Ongoing Projects</h2>
+    <ul style="margin-top: 10px; font-size: 15px; color: #bbbbbb;">
+      <li><a href="https://doi.org/10.1038/s41467-024-51483-7" target="_blank" style="color:#00e0ff;">Emergent coherent modes in nonlinear magnonic waveguides</a>, <i>Nature Communications</i>, 2024</li>
+      <li><a href="https://doi.org/10.1103/PhysRevApplied.11.034065" target="_blank" style="color:#00e0ff;">Optimization of Spin-Wave Propagation with Enhanced Group Velocities</a>, <i>Phys. Rev. Applied</i>, 2019</li>
+    </ul>
+    <img src="g348197.png" alt="neuromorphic" class="research-image-large" />
+    
+    <p><strong>3. Quantum Magnonics</strong><br />
+    We utilize microwave magnonic platforms to explore hybrid quantum systems and information transfer at GHz frequencies. This could be potentially useful for quantum communication and quantum sensing.</p>
 
-  <div class="project-highlight">
-    <p><strong>Sejong Science Fellowship (2021–2026)</strong><br />
-    Exploring low-dissipation information transport using quantum-like magnon dynamics and engineered phononic structures.</p>
+    <ul style="margin-top: 10px; font-size: 15px; color: #bbbbbb;">
+      <li><a href="https://doi.org/10.1103/PhysRevX.12.011060" target="_blank" style="color:#00e0ff;">Bright and dark states of two distant macrospins strongly coupled by phonons</a>, <i>Phys. Rev. X</i>, 2022</li>
+    </ul>
+    
+    <img src="blochsphere_v4.png" alt="blochsphere" class="research-image-small" />
+    
+    <h2>Ongoing Projects</h2>
+
+    <p><strong>Sejong Science Fellowship (2021-2026)</strong><br />
+    This project supports frontier research on quantum-like magnon dynamics and spin-phonon interactions. We are exploring low-dissipation information transport using microwave magnonics and engineered phononic structures.</p>
+
+    <p><strong>ITRC Program at Chungbuk National University (2024-2031)</strong><br />
+    M² Lab participates in the ITRC (Information Technology Research Center) program, focusing on next-generation spin-based device platforms for ultra-low power computing and quantum communication technologies.</p>
+
   </div>
 
-  <div class="project-highlight">
-    <p><strong>ITRC Program at Chungbuk National University (2024–2031)</strong><br />
-    Developing spin-based platforms for ultra-low power computing and quantum communication.</p>
-  </div>
-</div>
+  <footer>
+    © 2025 M² Lab | Chungbuk National University, Department of Physics Education
+  </footer>
+</body>
+</html>
