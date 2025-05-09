@@ -17,8 +17,6 @@
       color: #f1f1f1;
       line-height: 1.6;
     }
-
-    /* === Header === */
     header {
       background: #1e1e1e;
       position: relative;
@@ -38,8 +36,6 @@
       right: 20px;
       height: 100px;
     }
-
-    /* === Navigation === */
     nav {
       background: #1e1e1e;
       display: flex;
@@ -61,37 +57,62 @@
       background-color: #00e0ff;
       color: #121212;
     }
-
-    .container {
-      max-width: 900px;
-      margin: 80px auto;
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 20px 100px;
+      background: linear-gradient(145deg, #121212 0%, #1f1f1f 100%);
+      border-bottom: 1px solid #222;
+    }
+    .hero h1 {
+      font-size: 48px;
+      color: #00e0ff;
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: 20px;
+      color: #cccccc;
+      max-width: 700px;
+    }
+    .cta-button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 12px 24px;
+      font-size: 16px;
+      color: #121212;
+      background-color: #00e0ff;
+      border: none;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+    .cta-button:hover {
+      background-color: #00bcd4;
+    }
+    .highlights {
+      background-color: #1e1e1e;
       padding: 40px;
-      background: #1e1e1e;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0, 224, 255, 0.15);
       text-align: center;
     }
-    h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
+    .highlights h2 {
       color: #00e0ff;
+      margin-bottom: 20px;
     }
-    p {
-      font-size: 18px;
+    .highlights p {
+      font-size: 16px;
       color: #cccccc;
     }
-
     footer {
       background: #1e1e1e;
       color: #888888;
       text-align: center;
       padding: 20px;
-      margin-top: 60px;
       font-size: 14px;
       border-top: 1px solid #333;
     }
-
-    /* Responsive for smaller screens */
     @media (max-width: 768px) {
       .logo {
         position: static;
@@ -102,11 +123,13 @@
       .lab-title {
         font-size: 20px;
       }
+      .hero h1 {
+        font-size: 32px;
+      }
     }
   </style>
 </head>
 <body>
-
   <header>
     <div class="lab-title">M² Lab | Microwave Magnonics Lab</div>
     <a href="index.html" aria-label="Return to home page">
@@ -124,14 +147,19 @@
     <a href="contact.html">Contact</a>
   </nav>
 
-  <div class="container">
-    <h1>Welcome to M² Lab</h1>
-    <p>We explore spin-based quantum dynamics and develop low-power magnonic platforms for the future of computing.</p>
-  </div>
+  <section class="hero">
+    <h1>Quantum Spin & Microwave Innovation</h1>
+    <p>Advancing microwave magnonics for next-generation computing and quantum information platforms.</p>
+    <a href="research.html" class="cta-button">Explore Our Research</a>
+  </section>
+
+  <section class="highlights">
+    <h2>Latest Highlights</h2>
+    <p><strong>Spring 2025:</strong> Courses in Electromagnetism, Math Physics, and Thermal Physics underway.</p>
+  </section>
 
   <footer>
     © 2025 M² Lab | Chungbuk National University, Department of Physics Education
   </footer>
-
 </body>
 </html>
