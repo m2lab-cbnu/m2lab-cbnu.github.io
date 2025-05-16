@@ -25,10 +25,10 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
     }
     .lab-title {
-      font-size: 28px;
-      font-weight: 600;
+      font-size: 32px;
+      font-weight: 700;
       color: #00e0ff;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.5px;
     }
     .logo {
       position: absolute;
@@ -51,7 +51,7 @@
       padding: 8px 12px;
       font-size: 16px;
       border-radius: 8px;
-      transition: 0.3s;
+      transition: background-color 0.3s, color 0.3s;
     }
     nav a:hover {
       background-color: #00e0ff;
@@ -63,14 +63,15 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 120px 20px 100px;
-      background: linear-gradient(145deg, #121212 0%, #1f1f1f 100%);
+      padding: 120px 20px 80px;
+      background: radial-gradient(circle at top left, #1f1f1f, #121212);
       border-bottom: 1px solid #222;
     }
     .hero h1 {
       font-size: 48px;
       color: #00e0ff;
       margin-bottom: 20px;
+      text-shadow: 0 0 8px rgba(0,224,255,0.4);
     }
     .hero p {
       font-size: 20px;
@@ -92,9 +93,26 @@
     .cta-button:hover {
       background-color: #00bcd4;
     }
+    .quantum-visual {
+      text-align: center;
+      padding: 50px 20px;
+      background-color: #181818;
+      border-top: 1px solid #2a2a2a;
+    }
+    .quantum-visual img {
+      max-width: 90%;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,224,255,0.2);
+      margin-top: 20px;
+    }
+    .quantum-visual p {
+      font-size: 18px;
+      color: #cccccc;
+      margin-bottom: 20px;
+    }
     .highlights {
       background-color: #1e1e1e;
-      padding: 40px;
+      padding: 40px 20px;
       text-align: center;
     }
     .highlights h2 {
@@ -121,7 +139,7 @@
         height: 80px;
       }
       .lab-title {
-        font-size: 20px;
+        font-size: 24px;
       }
       .hero h1 {
         font-size: 32px;
@@ -148,11 +166,15 @@
   </nav>
 
   <section class="hero">
-    <h1 style="font-size: 32px; font-weight: 600; color: #00e0ff; max-width: 800px; margin-bottom: 20px;">
-      Welcome to the homepage of the Microwave Magnonics Lab at Chungbuk National University.
-    </h1>
-    <p>We advance microwave magnonics for next-generation computing and quantum information platforms.</p>
+    <h1>Welcome to the Microwave Magnonics Lab</h1>
+    <p>We explore spin dynamics and microwave magnonics to unlock the future of quantum and neuromorphic information processing.</p>
     <a href="research.html" class="cta-button">Explore Our Research</a>
+  </section>
+
+  <section class="quantum-visual">
+    <p><strong>Magnons as Quantum Messengers:</strong> The image below illustrates how magnons can mediate quantum information between microwave and optical domains.</p>
+    <img src="quantum_magnon.gif" alt="Magnons bridging quantum systems (placeholder image)">
+    <!-- Replace with actual image file, e.g., magnon_quantum_bridge.png -->
   </section>
 
   <section class="highlights">
