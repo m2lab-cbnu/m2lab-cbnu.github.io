@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M² Lab | Useful Resources</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#121212; --panel:#1e1e1e; --text:#f1f1f1; --muted:#bbbbbb;
+      --muted2:#cccccc; --line:#222; --brand:#00e0ff; --brand2:#00bcd4;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+    body { background:var(--bg); color:var(--text); line-height:1.6; }
+    header { background:var(--panel); position:relative; padding:30px 20px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,.6); }
+    .lab-title { font-size:28px; font-weight:600; color:var(--brand); letter-spacing:1.2px; }
+    .logo { position:absolute; top:15px; right:20px; height:100px; }
+    nav { background:var(--panel); display:flex; justify-content:center; flex-wrap:wrap; gap:20px; padding:15px; box-shadow:0 2px 10px rgba(0,0,0,.3); }
+    nav a { color:var(--muted); text-decoration:none; padding:8px 12px; font-size:16px; border-radius:8px; transition:.3s; }
+    nav a:hover { background:var(--brand); color:#121212; }
+    nav a[aria-current="page"] { background:var(--brand); color:#121212; }
+    main { max-width:1080px; margin:0 auto; padding:36px 20px; }
+    h1 { font-size:32px; color:var(--brand); margin-bottom:8px; }
+    .subtitle { color:var(--muted2); margin-bottom:20px; }
+
+    .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+    @media (max-width:860px){ .grid{ grid-template-columns:1fr; } .logo{ position:static; display:block; margin:10px auto 0; height:80px; } .lab-title{ font-size:20px; } }
+
+    .card { background:linear-gradient(145deg,#1d1d1d,#151515); border:1px solid var(--line);
+      border-radius:14px; padding:16px; box-shadow:0 10px 24px rgba(0,0,0,.25); }
+    .card h3 { font-size:18px; margin-bottom:6px; }
+    .card p { color:var(--muted2); font-size:14px; }
+    .actions { margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; }
+    .btn { display:inline-block; padding:10px 14px; border-radius:10px; border:1px solid var(--line);
+      background:var(--brand); color:#121212; text-decoration:none; font-size:14px; }
+    .btn.secondary { background:#1b1b1b; color:var(--muted2); }
+    .btn:hover { background:var(--brand2); }
+    .frame-wrap { margin-top:12px; border:1px solid var(--line); border-radius:12px; overflow:hidden; display:none; }
+    iframe { width:100%; height:600px; background:#0f0f0f; border:0; }
+    footer { background:var(--panel); color:#888; text-align:center; padding:20px; font-size:14px; border-top:1px solid #333; margin-top:28px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="lab-title">M² Lab | Microwave Magnonics Lab</div>
+    <a href="index.html" aria-label="Return to home page">
+      <img src="logo.png" alt="M² Lab Logo" class="logo">
+    </a>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="research.html">Research</a>
+    <a href="people.html">People</a>
+    <a href="publications.html">Publications</a>
+    <a href="teaching.html">Teaching</a>
+    <a href="news.html">News</a>
+    <a href="resources.html" aria-current="page">Useful Resources</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <main>
+    <h1>Useful Resources</h1>
+    <p class="subtitle">Lab demos, slides, templates, scripts, and more.</p>
+
+    <section class="grid">
+      <!-- Item 1: Sound Wave Demo -->
+      <article class="card" id="sound-wave">
+        <h3>Interactive Sound Wave Demo</h3>
+        <p>푸리에/사인파 합성, 파형 시각화, 오디오 재생 등을 테스트하는 데모입니다.</p>
+        <div class="actions">
+          <!-- 같은 폴더에 sound-wave.html이 있을 때 동작 -->
+          <a class="btn" href="sound-wave.html" target="_blank" rel="noopener">Open in new tab</a>
+          <button class="btn secondary" id="run-here-btn" type="button">Run here</button>
+        </div>
+        <div class="frame-wrap" id="frame-wrap">
+          <iframe id="demo-frame" src="" title="Sound Wave Demo"></iframe>
+        </div>
+      </article>
+
+      <!-- Item 2: (추가 예시 템플릿) 나중에 복사해서 쓰면 됨 -->
+      <article class="card" id="example-item" style="opacity:.7">
+        <h3>예시 리소스 제목</h3>
+        <p>설명 텍스트. 파일을 올린 뒤 아래 링크의 href만 바꾸면 됩니다.</p>
+        <div class="actions">
+          <a class="btn" href="assets/resources/your-file.pdf" download>Download</a>
+          <a class="btn secondary" href="assets/resources/your-file.pdf" target="_blank" rel="noopener">Open</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 M² Lab | Chungbuk National University, Department of Physics Education
+  </footer>
+
+  <script>
+    // “Run here” 버튼을 누르면 아래 iframe으로 같은 파일을 로드
+    const runBtn = document.getElementById('run-here-btn');
+    const frameWrap = document.getElementById('frame-wrap');
+    const frame = document.getElementById('demo-frame');
+
+    runBtn?.addEventListener('click', () => {
+      if (frameWrap.style.display !== 'block') {
+        frame.src = 'sound-wave.html';     // 같은 디렉토리에 있을 때
+        frameWrap.style.display = 'block';
+        runBtn.textContent = 'Hide';
+      } else {
+        frame.src = '';
+        frameWrap.style.display = 'none';
+        runBtn.textContent = 'Run here';
+      }
+    });
+  </script>
+</body>
+</html>
