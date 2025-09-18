@@ -4,49 +4,49 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>M² Lab | Microwave Magnonics Lab</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <!-- Distinct fonts for KR/EN to reduce confusion -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background-color: #121212; color: #f1f1f1; line-height: 1.6; }
-    header { background: #1e1e1e; position: relative; padding: 30px 20px; text-align: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6); }
-    .lab-title { font-size: 28px; font-weight: 600; color: #00e0ff; letter-spacing: 1.2px; }
-    .logo { position: absolute; top: 15px; right: 20px; height: 100px; }
-    nav { background: #1e1e1e; display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-    nav a { color: #bbbbbb; text-decoration: none; padding: 8px 12px; font-size: 16px; border-radius: 8px; transition: 0.3s; }
-    nav a:hover { background-color: #00e0ff; color: #121212; }
+    :root{ --bg:#121212; --card:#1e1e1e; --text:#f1f1f1; --muted:#b9c4c9; --line:#222; --accent:#00e0ff; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.65; font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    header { background: var(--card); position: relative; padding: 28px 20px; text-align: center; border-bottom: 1px solid var(--line); }
+    .lab-title { font-size: 26px; font-weight: 600; color: var(--accent); letter-spacing: 1px; }
+    .logo { position: absolute; top: 12px; right: 20px; height: 90px; }
+    nav { background: var(--card); display: flex; justify-content: center; flex-wrap: wrap; gap: 18px; padding: 14px; border-bottom: 1px solid var(--line); }
+    nav a { color: #bcbcbc; text-decoration: none; padding: 8px 12px; font-size: 15px; border-radius: 8px; transition: .25s; }
+    nav a:hover { background-color: var(--accent); color: #121212; }
 
-    /* Language toggle */
-    .i18n-bar{ display:flex; justify-content:center; gap:8px; padding: 10px 0 0; background:#1e1e1e; border-top:1px solid #222; border-bottom:1px solid #222; }
-    .i18n-btn{ background:#222; color:#ddd; border:1px solid #2b2b2b; border-radius:10px; padding:6px 10px; cursor:pointer; font-size:13px; }
-    .i18n-btn[aria-pressed="true"], .i18n-btn:hover{ background:#00e0ff; color:#121212; border-color: transparent; }
-    .en,.ko{ display:block; }
+    /* Simple language toggle (default: KO). No mixed view to keep it clean. */
+    .i18n-bar{ display:flex; justify-content:center; gap:8px; padding: 10px 0; background:#1a1a1a; border-bottom:1px solid var(--line); }
+    .i18n-btn{ background:#222; color:#ddd; border:1px solid #2b2b2b; border-radius:10px; padding:6px 12px; cursor:pointer; font-size:13px; }
+    .i18n-btn[aria-pressed="true"], .i18n-btn:hover{ background: var(--accent); color:#121212; border-color: transparent; }
+    .en{ font-family: 'Poppins', sans-serif; }
+    .ko{ font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; }
     .lang-en .ko{ display:none; }
     .lang-ko .en{ display:none; }
 
-    .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 20px 70px; background: linear-gradient(145deg, #121212 0%, #1f1f1f 100%); border-bottom: 1px solid #222; }
-    .hero h1 { font-size: 48px; color: #00e0ff; margin-bottom: 18px; }
-    .hero p { font-size: 20px; color: #cccccc; max-width: 900px; }
-    .cta-button { display: inline-block; margin-top: 28px; padding: 12px 24px; font-size: 16px; color: #121212; background-color: #00e0ff; border: none; border-radius: 10px; text-decoration: none; transition: background-color 0.3s; }
-    .cta-button:hover { background-color: #00bcd4; }
+    /* Minimal hero */
+    .hero { display:grid; place-items:center; text-align:center; padding: 72px 18px 60px; background: linear-gradient(160deg, #141414 0%, #1e1e1e 100%); border-bottom: 1px solid var(--line); }
+    .ko-title{ font-size: clamp(36px, 5.2vw, 56px); font-weight:700; letter-spacing:-0.2px; }
+    .en-title{ font-size: clamp(18px, 2.2vw, 24px); font-weight:600; color: var(--muted); letter-spacing:.3px; margin-top: 6px; }
+    .ko-lead{ font-size: clamp(16px, 2.1vw, 19px); color:#d6e3e7; margin-top: 14px; }
+    .en-lead{ font-size: clamp(14px, 1.8vw, 17px); color:#a7b7bd; margin-top: 10px; }
 
-    .hero-image { max-width: 780px; width: 100%; height: auto; border-radius: 16px; box-shadow: 0 0 20px rgba(0, 224, 255, 0.2); margin: 30px auto; display: block; }
-    .text-justified { max-width: 1080px; margin: 18px auto; text-align: justify; font-size: 16px; line-height: 1.8; color: #cccccc; }
+    .hero-image { max-width: 780px; width: 100%; border-radius: 16px; border:1px solid #263238; box-shadow: 0 0 18px rgba(0, 224, 255, 0.18); margin: 26px auto 22px; display: block; }
 
-    .highlights { background-color: #1e1e1e; padding: 40px 20px; text-align: center; border-top: 1px solid #222; }
-    .highlights h2 { color: #00e0ff; margin-bottom: 14px; }
-    .highlights p { font-size: 16px; color: #cccccc; }
+    .cta-button { display:inline-block; margin-top: 12px; padding: 11px 22px; font-size: 15px; color: #121212; background-color: var(--accent); border: none; border-radius: 10px; text-decoration: none; font-weight:600; }
+    .cta-button:hover { filter: brightness(0.95); }
 
-    footer { background: #1e1e1e; color: #888888; text-align: center; padding: 20px; font-size: 14px; border-top: 1px solid #333; }
+    footer { background: var(--card); color: #8a9398; text-align: center; padding: 20px; font-size: 14px; border-top: 1px solid var(--line); }
 
     @media (max-width: 768px) {
-      .logo { position: static; display: block; margin: 10px auto 0; height: 80px; }
+      .logo { position: static; display: block; margin: 6px auto 0; height: 76px; }
       .lab-title { font-size: 20px; }
-      .hero h1 { font-size: 32px; }
-      .hero p { font-size: 18px; }
     }
   </style>
 </head>
-<body class="lang-all">
+<body class="lang-ko">
   <header>
     <div class="lab-title">M² Lab | Microwave Magnonics Lab</div>
     <a href="index.html" aria-label="Return to home page">
@@ -65,47 +65,23 @@
     <a href="contact.html">Contact</a>
   </nav>
 
-  <!-- Language toggle bar -->
+  <!-- Language toggle bar (clean: KO or EN only) -->
   <div class="i18n-bar" role="group" aria-label="Language toggle">
-    <button class="i18n-btn" data-set-lang="all" aria-pressed="true">EN + 한글</button>
+    <button class="i18n-btn" data-set-lang="ko" aria-pressed="true">한글</button>
     <button class="i18n-btn" data-set-lang="en">English</button>
-    <button class="i18n-btn" data-set-lang="ko">한글만</button>
   </div>
 
   <section class="hero">
-    <h1>
-      <span class="en">Welcome to the Microwave Magnonics Lab at Chungbuk National University.</span>
-      <span class="ko">충북대학교 마이크로파 마그논닉스 연구실(M² Lab)에 오신 것을 환영합니다.</span>
-    </h1>
-    <p>
-      <span class="en">We advance microwave magnonics for next‑generation computing and quantum information platforms.</span>
-      <span class="ko">저희 연구실은 마이크로파 영역의 마그논(스핀파) 물리를 바탕으로 차세대 컴퓨팅과 양자 정보 플랫폼을 연구합니다.</span>
-    </p>
+    <h1 class="ko ko-title">충북대학교 마이크로파 마그논닉스 연구실(M² Lab)</h1>
+    <h1 class="en en-title">Microwave Magnonics Lab at Chungbuk National University</h1>
 
-    <img src="circlediagram2.png" alt="Schematic linking magnons, phonons, and superconducting qubits in the GHz band" class="hero-image"/>
+    <p class="ko ko-lead">마이크로파 대역의 마그논(스핀파)·포논·초전도 큐빗을 연결해 초저전력·자기장 가변·긴 코히어런스를 동시에 추구합니다. 전(全)마이크로파 양자 링크를 지향합니다.</p>
+    <p class="en en-lead">We study magnons, phonons, and superconducting qubits in the GHz band to pursue ultra‑low‑power, field‑tunable dynamics with long coherence—toward all‑microwave quantum links.</p>
 
-    <p class="text-justified">
-      <span class="en">Spin–phonon hybrid systems operate in the GHz microwave range, making them ideal to interface with superconducting quantum devices. Magnons offer ultra‑low‑power, field‑tunable dynamics; phonons provide long coherence for quantum memories; together with superconducting qubits, they form a route to all‑microwave quantum links.</span>
-      <span class="ko">스핀–포논 하이브리드 시스템은 GHz 대역에서 동작하여 초전도 양자 소자와의 결합에 적합합니다. 마그논은 초저전력·자기장 조정 가능성이 크고, 포논은 양자 메모리에 유리한 긴 코히어런스를 제공합니다. 이를 초전도 큐빗과 결합하여 전(全)마이크로파 기반의 양자 링크를 구현하는 것이 저희의 비전입니다.</span>
-    </p>
+    <img src="circlediagram2.png" alt="Schematic: magnons–phonons–superconducting qubits interface in the GHz band" class="hero-image"/>
 
-    <img src="quauntum_magnon.gif" alt="Animation of magnons bridging quantum microwave systems" class="hero-image" />
-
-    <a href="research.html" class="cta-button">
-      <span class="en">Explore Our Research</span>
-      <span class="ko">연구 주제 보러가기</span>
-    </a>
-  </section>
-  
-  <section class="highlights">
-    <h2>
-      <span class="en">Latest Highlights</span>
-      <span class="ko">최근 소식</span>
-    </h2>
-    <p>
-      <span class="en"><strong>Spring 2025:</strong> Courses in Electromagnetism, Mathematical Physics, and Thermal Physics are underway.</span>
-      <span class="ko"><strong>2025년 봄학기:</strong> 전자기학, 수리물리, 열·통계물리 과목을 진행 중입니다.</span>
-    </p>
+    <a href="research.html" class="cta-button ko">연구 주제 보러가기</a>
+    <a href="research.html" class="cta-button en">Explore Our Research</a>
   </section>
 
   <footer>
@@ -113,12 +89,12 @@
   </footer>
 
   <script>
-    // Language toggle (EN / KO / BOTH)
+    // Simple language toggle (KO default)
     (function(){
       const root = document.body;
       const btns = document.querySelectorAll('.i18n-btn');
       function setLang(mode){
-        root.classList.remove('lang-en','lang-ko','lang-all');
+        root.classList.remove('lang-en','lang-ko');
         root.classList.add('lang-' + mode);
         btns.forEach(b=> b.setAttribute('aria-pressed', String(b.dataset.setLang===mode)) );
         try{ sessionStorage.setItem('index-lang', mode); }catch(e){}
