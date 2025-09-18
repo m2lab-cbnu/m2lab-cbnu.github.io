@@ -1,105 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>News | M² Lab</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    :root{
+      --bg:#121212; --card:#1e1e1e; --text:#f1f1f1; --muted:#bbbbbb; --line:#333; --accent:#00e0ff;
     }
-    body {
-      background-color: #121212;
-      color: #f1f1f1;
-      line-height: 1.6;
-    }
-    header {
-      background: #1e1e1e;
-      position: relative;
-      padding: 30px 20px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-    }
-    .lab-title {
-      font-size: 28px;
-      font-weight: 600;
-      color: #00e0ff;
-      letter-spacing: 1.2px;
-    }
-    .logo {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      height: 100px;
-    }
-    nav {
-      background: #1e1e1e;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      padding: 15px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    }
-    nav a {
-      color: #bbbbbb;
-      text-decoration: none;
-      padding: 8px 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      transition: 0.3s;
-    }
-    nav a:hover {
-      background-color: #00e0ff;
-      color: #121212;
-    }
-    .container {
-      max-width: 900px;
-      margin: 60px auto;
-      padding: 40px;
-      background: #1e1e1e;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0, 224, 255, 0.15);
-    }
-    h1 {
-      font-size: 36px;
-      color: #00e0ff;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .news-item {
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #333;
-    }
-    .news-item h3 {
-      color: #00e0ff;
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-    .news-item p {
-      color: #cccccc;
-      font-size: 15px;
-    }
-    footer {
-      background: #1e1e1e;
-      color: #888888;
-      text-align: center;
-      padding: 20px;
-      margin-top: 60px;
-      font-size: 14px;
-      border-top: 1px solid #333;
+    body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+    header { background: var(--card); position: relative; padding: 30px 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,.6); }
+    .lab-title { font-size: 28px; font-weight: 600; color: var(--accent); letter-spacing: 1.2px; }
+    .logo { position: absolute; top: 15px; right: 20px; height: 100px; }
+    nav { background: var(--card); display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
+    nav a { color: #bbbbbb; text-decoration: none; padding: 8px 12px; font-size: 16px; border-radius: 8px; transition: .3s; }
+    nav a:hover { background-color: var(--accent); color: var(--bg); }
+
+    .container { max-width: 1000px; margin: 40px auto 60px; padding: 28px; }
+    h1 { font-size: 36px; color: var(--accent); text-align: center; margin: 6px 0 12px; }
+
+    /* Language toggle */
+    .i18n-bar{ display:flex; justify-content:center; gap:8px; margin:10px 0 22px; }
+    .i18n-btn{ background:#222; color:#ddd; border:1px solid #2b2b2b; border-radius:10px; padding:6px 10px; cursor:pointer; font-size:13px; }
+    .i18n-btn[aria-pressed="true"], .i18n-btn:hover{ background: var(--accent); color:#121212; border-color: transparent; }
+    .en,.ko{ display:block; }
+    .lang-en .ko{ display:none; }
+    .lang-ko .en{ display:none; }
+
+    .section-card{ background: var(--card); border-radius: 20px; box-shadow: 0 0 20px rgba(0,224,255,.12); padding: 26px; margin: 24px 0; border:1px solid #222; }
+
+    .news-item{ margin-bottom: 26px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+    .news-item:last-child{ border-bottom: none; padding-bottom: 0; }
+    .news-head{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    .news-item h3{ color: var(--accent); font-size: 20px; }
+    .date{ font-size: 13px; color:#9ea0a3; letter-spacing:.3px; }
+    .badge{ font-size: 11px; background: rgba(0,224,255,.12); color: var(--accent); border:1px solid rgba(0,224,255,.4); border-radius: 999px; padding: 4px 8px; }
+    .news-item p{ color:#cccccc; font-size: 15px; margin-top: 8px; }
+
+    /* Image grid */
+    .img-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:10px; margin: 14px 0 6px; }
+    .img-grid figure{ margin:0; border-radius: 14px; overflow:hidden; border:1px solid #2a2a2a; background:#161616; }
+    .img-grid img{ width:100%; height:220px; object-fit:cover; display:block; filter: saturate(1.05) contrast(1.02); }
+    .caption{ font-size:12px; color:#aab0b2; margin-top:8px; }
+
+    /* Project list styling */
+    .project{ background:#171717; border:1px solid #2a2a2a; border-radius:14px; padding:14px; margin-top:12px; }
+    .project h4{ color:#dffbff; font-size:16px; margin-bottom:6px; }
+    .project dl{ display:grid; grid-template-columns: 120px 1fr; gap:6px 12px; font-size:14px; color:#cfd4d6; }
+    .project dt{ color:#89a2a8; }
+
+    footer{ background: var(--card); color:#888; text-align:center; padding: 22px; margin-top: 40px; font-size: 14px; border-top: 1px solid var(--line); }
+
+    /* Small screens */
+    @media (max-width: 720px){
+      .img-grid{ grid-template-columns:1fr 1fr; }
+      .img-grid img{ height:160px; }
+      .project dl{ grid-template-columns: 100px 1fr; }
     }
   </style>
 </head>
-<body>
+<body class="lang-all">
   <header>
     <div class="lab-title">M² Lab | Microwave Magnonics Lab</div>
-    <!-- Logo wrapped in anchor to link back to home -->
     <a href="index.html" aria-label="Return to home page">
       <img src="logo.png" alt="M² Lab Logo" class="logo">
     </a>
@@ -111,20 +75,88 @@
     <a href="people.html">People</a>
     <a href="publications.html">Publications</a>
     <a href="teaching.html">Teaching</a>
-    <a href="news.html">News</a>
+    <a href="news.html" aria-current="page">News</a>
     <a href="contact.html">Contact</a>
   </nav>
 
   <div class="container">
     <h1>News</h1>
 
-    <div class="news-item">
-      <h3>[Mar 2025] M² Lab Launches at Chungbuk National University</h3>
-      <p>The Microwave Magnonics Lab officially begins operation. Exciting research ahead!</p>
+    <!-- Language toggle -->
+    <div class="i18n-bar" role="group" aria-label="Language toggle">
+      <button class="i18n-btn" data-set-lang="all" aria-pressed="true">EN + 한글</button>
+      <button class="i18n-btn" data-set-lang="en">English</button>
+      <button class="i18n-btn" data-set-lang="ko">한글만</button>
     </div>
+
+    <!-- ===== New: Lab Photos + Equipment status (Sep 2025) ===== -->
+    <section class="section-card" aria-labelledby="news-2025-09">
+      <div class="news-item">
+        <div class="news-head">
+          <h3 id="news-2025-09">[Sep 2025] Lab setup update — experiments underway</h3>
+          <span class="badge">Update</span>
+          <time class="date" datetime="2025-09-18">Updated Sep 18, 2025</time>
+        </div>
+        <p class="en">A quick look at our current lab setup. We have installed key microwave equipment and electromagnets. Below are recent photos from M² Lab.</p>
+        <p class="ko">최근 실험실 사진입니다. 마이크로파 장비 및 전자석 설치가 완료 되었습니다. 아래는 M² Lab의 최근 사진입니다.</p>
+
+        <!-- Replace image paths with your actual files under /images/news/... -->
+        <div class="img-grid" role="list" aria-label="Lab photos">
+          <figure role="listitem">
+            <img src="lab_250918.jpg" alt="Microwave measurement bench with RF instruments and electromagnet" loading="lazy">
+          </figure>
+        </div>
+        <div class="caption en">Highlights: RF source & analyzer, lock-in measurement chain, magnet/sample stages, optical table area. (More photos coming.)</div>
+        <div class="caption ko">주요 구성: 마이크로파 소스, 락인 측정 체인, 자석/시료 스테이지, 광학 테이블 구역. (추가 사진 업데이트 예정)</div>
+      </div>
+    </section>
+
+    <!-- ===== New: Newly awarded projects ===== -->
+    <section class="section-card" aria-labelledby="grants-2025">
+      <div class="news-item">
+        <div class="news-head">
+          <h3 id="grants-2025">[2025] New Projects Awarded</h3>
+          <span class="badge">Grants</span>
+        </div>
+        <p class="en">We are grateful for new funding "Magnon-Superconductor Quantum-Transduction Devices based on Chungcheong Open-Lab Foundation" (2025.09.01-2028.08.31)</p>
+        <p class="ko">"마그논-초전도 양자변환 소자 연구를 위한 충청권 오픈랩 기반 구축" 신규 과제가 선정되었습니다 (2025.09.01-2028.08.31)</p>
+
+    <!-- ===== Existing: Lab Launch (kept) ===== -->
+    <section class="section-card" aria-labelledby="news-2025-03">
+      <div class="news-item">
+        <div class="news-head">
+          <h3 id="news-2025-03">[Mar 2025] M² Lab Launches at Chungbuk National University</h3>
+          <time class="date" datetime="2025-03-01">March 2025</time>
+        </div>
+        <p class="en">The Microwave Magnonics Lab officially begins operation. Exciting research ahead!</p>
+        <p class="ko">M² Lab 출범!</p>
+      </div>
+    </section>
+
+  </div>
 
   <footer>
     © 2025 M² Lab | Chungbuk National University, Department of Physics Education
   </footer>
+
+  <script>
+    // Language toggle (EN / KO / BOTH)
+    (function(){
+      const root = document.body;
+      const btns = document.querySelectorAll('.i18n-btn');
+      function setLang(mode){
+        root.classList.remove('lang-en','lang-ko','lang-all');
+        root.classList.add('lang-' + mode);
+        btns.forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.setLang===mode)));
+        // persist preference for the session
+        try{ sessionStorage.setItem('news-lang', mode); }catch(e){}
+      }
+      btns.forEach(b=> b.addEventListener('click', ()=> setLang(b.dataset.setLang)) );
+      try{
+        const saved = sessionStorage.getItem('news-lang');
+        if(saved){ setLang(saved); }
+      }catch(e){}
+    })();
+  </script>
 </body>
 </html>
