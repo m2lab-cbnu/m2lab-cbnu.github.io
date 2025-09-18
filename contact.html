@@ -1,96 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact | M² Lab</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-    body {
-      background-color: #121212;
-      color: #f1f1f1;
-      line-height: 1.6;
-    }
-    header {
-      background: #1e1e1e;
-      position: relative;
-      padding: 30px 20px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-    }
-    .lab-title {
-      font-size: 28px;
-      font-weight: 600;
-      color: #00e0ff;
-      letter-spacing: 1.2px;
-    }
-    .logo {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      height: 100px;
-    }
-    nav {
-      background: #1e1e1e;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      padding: 15px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    }
-    nav a {
-      color: #bbbbbb;
-      text-decoration: none;
-      padding: 8px 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      transition: 0.3s;
-    }
-    nav a:hover {
-      background-color: #00e0ff;
-      color: #121212;
-    }
-    .container {
-      max-width: 700px;
-      margin: 60px auto;
-      padding: 40px;
-      background: #1e1e1e;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0, 224, 255, 0.15);
-      text-align: center;
-    }
-    h1 {
-      font-size: 36px;
-      color: #00e0ff;
-      margin-bottom: 20px;
-    }
-    p {
-      font-size: 18px;
-      color: #cccccc;
-      margin-bottom: 15px;
-    }
-    footer {
-      background: #1e1e1e;
-      color: #888888;
-      text-align: center;
-      padding: 20px;
-      margin-top: 60px;
-      font-size: 14px;
-      border-top: 1px solid #333;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    :root{ --bg:#121212; --card:#1e1e1e; --text:#f1f1f1; --muted:#bbbbbb; --line:#333; --accent:#00e0ff; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+    header { background: var(--card); position: relative; padding: 30px 20px; text-align: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6); }
+    .lab-title { font-size: 28px; font-weight: 600; color: var(--accent); letter-spacing: 1.2px; }
+    .logo { position: absolute; top: 15px; right: 20px; height: 100px; }
+    nav { background: var(--card); display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; padding: 15px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
+    nav a { color: #bbbbbb; text-decoration: none; padding: 8px 12px; font-size: 16px; border-radius: 8px; transition: 0.3s; }
+    nav a:hover { background-color: var(--accent); color: var(--bg); }
+
+    .i18n-bar{ display:flex; justify-content:center; gap:8px; padding: 10px 0; background:#1e1e1e; border-top:1px solid #222; border-bottom:1px solid #222; }
+    .i18n-btn{ background:#222; color:#ddd; border:1px solid #2b2b2b; border-radius:10px; padding:6px 10px; cursor:pointer; font-size:13px; }
+    .i18n-btn[aria-pressed="true"], .i18n-btn:hover{ background: var(--accent); color:#121212; border-color: transparent; }
+    .en,.ko{ display:block; }
+    .lang-en .ko{ display:none; }
+    .lang-ko .en{ display:none; }
+
+    .container { max-width: 880px; margin: 40px auto 60px; padding: 28px; background: var(--card); border-radius: 20px; box-shadow: 0 0 20px rgba(0, 224, 255, 0.12); }
+    h1 { font-size: 36px; color: var(--accent); margin-bottom: 10px; text-align:center; }
+    p { font-size: 17px; color: #cccccc; margin-bottom: 12px; }
+
+    .contact-list{ display:grid; grid-template-columns: 1fr; gap:8px; margin: 16px 0 12px; }
+    .field{ background:#171717; border:1px solid #2a2a2a; border-radius:12px; padding:12px 14px; }
+    .field strong{ color:#dffbff; }
+
+    .cta-row{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin: 18px 0 6px; }
+    .btn{ display:inline-block; padding:12px 18px; border-radius:10px; border:1px solid rgba(0,224,255,.4); background: rgba(0,224,255,.12); color:var(--accent); text-decoration:none; font-weight:600; }
+    .btn:hover{ background: var(--accent); color:#121212; }
+
+    .section{ margin-top: 26px; border-top:1px solid #2a2a2a; padding-top: 20px; }
+    .section h2{ color: var(--accent); font-size:22px; margin-bottom: 8px; text-align:center; }
+    ul{ margin: 10px 0 0 18px; color:#cfd4d6; }
+    li{ margin-bottom:6px; }
+
+    .template{ background:#141414; border:1px dashed #2b2b2b; border-radius:12px; padding:12px; margin-top: 10px; }
+    textarea{ width:100%; min-height: 170px; background:#0f0f0f; color:#e5eff2; border:1px solid #2b2b2b; border-radius:10px; padding:12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size:14px; }
+
+    footer { background: var(--card); color: #888888; text-align: center; padding: 20px; margin-top: 30px; font-size: 14px; border-top: 1px solid var(--line); }
   </style>
 </head>
-<body>
+<body class="lang-all">
   <header>
     <div class="lab-title">M² Lab | Microwave Magnonics Lab</div>
-    <!-- Logo wrapped in anchor to link back to home -->
     <a href="index.html" aria-label="Return to home page">
       <img src="logo.png" alt="M² Lab Logo" class="logo">
     </a>
@@ -103,25 +61,70 @@
     <a href="publications.html">Publications</a>
     <a href="teaching.html">Teaching</a>
     <a href="news.html">News</a>
-    <a href="contact.html">Contact</a>
+    <a href="contact.html" aria-current="page">Contact</a>
   </nav>
 
-  <div class="container">
-    <h1>Contact</h1>
-    <p><strong>Email:</strong> kman@cbnu.ac.kr</p>
-    <p><strong>Office:</strong> E1-1-313, Physics Education Department, CBNU</p>
-    <p><strong>Address:</strong> Chungbuk National University, Cheongju, Republic of Korea</p>
-
-    <hr style="margin: 40px auto; border: 0; border-top: 1px solid #444; width: 60%;" />
-  
-    <p style="font-size: 20px; color: #00e0ff; font-weight: 600;"> We are always looking for motivated students and researchers!</p>
-    <p>Undergraduates, graduate students, and postdoctoral researchers who are curious about spintronics, quantum physics, or experimental physics are welcome to join M² Lab.</p>
-    <p>If you're passionate about research and eager to learn, feel free to reach out anytime.</p>
-    <p><strong>Send us an email — we’d love to hear from you!</strong></p>
+  <!-- Language toggle -->
+  <div class="i18n-bar" role="group" aria-label="Language toggle">
+    <button class="i18n-btn" data-set-lang="all" aria-pressed="true">EN + 한글</button>
+    <button class="i18n-btn" data-set-lang="en">English</button>
+    <button class="i18n-btn" data-set-lang="ko">한글만</button>
   </div>
-  
+
+  <div class="container">
+    <h1><span class="en">Contact</span><span class="ko">연락처</span></h1>
+
+    <div class="contact-list">
+      <div class="field">
+        <p><strong>Email</strong> <span class="en">kman@cbnu.ac.kr</span><span class="ko">kman@cbnu.ac.kr</span></p>
+      </div>
+      <div class="field">
+        <p>
+          <strong class="en">Office</strong><strong class="ko">연구실</strong>
+          <span class="en">E1‑1‑313, Department of Physics Education, CBNU</span>
+          <span class="ko">충북대학교 물리교육과 E1‑1동 313호</span>
+        </p>
+      </div>
+      <div class="field">
+        <p>
+          <strong class="en">Address</strong><strong class="ko">주소</strong>
+          <span class="en">Chungbuk National University, Cheongju, Republic of Korea</span>
+          <span class="ko">대한민국 충북 청주시, 충북대학교</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><span class="en">We welcome motivated students!</span><span class="ko">열정 있는 학생을 환영합니다</span></h2>
+      <p class="en">Undergraduates, graduate students, and postdocs curious about spintronics, magnonics, microwave measurements, or quantum interfaces are encouraged to reach out. It is okay if you are new to research—we will start with hands‑on sessions.</p>
+      <p class="ko">스핀트로닉스, 마그논닉스, 마이크로파 측정, 양자 인터페이스에 관심 있는 학부·대학원생 및 박사후연구원을 환영합니다. 연구가 처음이어도 괜찮습니다. 기초 실습부터 함께 시작합니다.</p>
+
   <footer>
     © 2025 M² Lab | Chungbuk National University, Department of Physics Education
   </footer>
+
+  <script>
+    // Language toggle (EN / KO / BOTH)
+    (function(){
+      const root = document.body;
+      const btns = document.querySelectorAll('.i18n-btn');
+      function setLang(mode){
+        root.classList.remove('lang-en','lang-ko','lang-all');
+        root.classList.add('lang-' + mode);
+        btns.forEach(b=> b.setAttribute('aria-pressed', String(b.dataset.setLang===mode)) );
+        try{ sessionStorage.setItem('contact-lang', mode); }catch(e){}
+      }
+      btns.forEach(b=> b.addEventListener('click', ()=> setLang(b.dataset.setLang)) );
+      try{ const saved = sessionStorage.getItem('contact-lang'); if(saved){ setLang(saved); } }catch(e){}
+
+      // Copy template button
+      const copyBtn = document.getElementById('copyBtn');
+      const ta = document.getElementById('tmpl');
+      copyBtn?.addEventListener('click', async ()=>{
+        ta.select(); ta.setSelectionRange(0, ta.value.length);
+        try{ await navigator.clipboard.writeText(ta.value); copyBtn.textContent = 'Copied!'; setTimeout(()=>location.reload(), 900); }catch(e){ document.execCommand('copy'); copyBtn.textContent = 'Copied!'; setTimeout(()=>location.reload(), 900);} 
+      });
+    })();
+  </script>
 </body>
 </html>
