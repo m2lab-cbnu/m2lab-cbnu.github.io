@@ -83,17 +83,17 @@
       /* Grid System */
       .team-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* 카드를 조금 더 넓게 조정 */
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 30px;
         justify-content: center;
-        align-items: start; /* 카드의 높이가 내용에 따라 달라지도록 설정 */
+        align-items: start;
       }
 
       /* Member Card Style */
       .member-card {
         background: var(--card-bg);
         border-radius: 16px;
-        padding: 30px;
+        padding: 30px 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -101,8 +101,7 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         border: 1px solid #333;
-        position: relative;
-        overflow: hidden;
+        height: 100%; /* 카드 높이 맞춤 */
       }
       
       .member-card:hover {
@@ -111,18 +110,19 @@
         border-color: var(--primary-color);
       }
 
+      /* 사진 스타일 수정: 둥근 사각형 & 증명사진 비율 */
       .member-card img {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 50%;
+        width: 160px;          /* 적절한 너비 */
+        height: 210px;         /* 3:4 증명사진 비율 */
+        object-fit: cover;     /* 비율 유지하며 꽉 채움 */
+        border-radius: 12px;   /* 둥근 모서리 사각형 */
         margin-bottom: 20px;
-        border: 3px solid var(--primary-color);
+        border: 2px solid var(--primary-color);
         background-color: #333;
       }
 
       .member-name {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 600;
         color: #fff;
         margin-bottom: 5px;
@@ -133,55 +133,23 @@
         background: rgba(0, 224, 255, 0.1);
         color: var(--primary-color);
         padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.85rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
         font-weight: 600;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
+        letter-spacing: 0.5px;
       }
 
-      /* 상세 이력을 위한 스타일 (교수님 카드용) */
-      .info-block {
-        width: 100%;
-        text-align: left; /* 정보가 많을 땐 왼쪽 정렬이 읽기 편함 */
-        margin-top: 15px;
-        border-top: 1px solid #333;
-        padding-top: 15px;
-      }
-
-      .info-block h4 {
-        color: var(--primary-color);
-        font-size: 1rem;
-        margin-bottom: 10px;
-        font-weight: 600;
-      }
-
-      .info-block ul {
-        list-style: none;
-        padding-left: 0;
-      }
-
-      .info-block li {
+      /* 공통 정보 스타일 */
+      .member-info {
         font-size: 0.9rem;
         color: var(--text-muted);
-        margin-bottom: 6px;
-        display: flex;
-        flex-direction: column;
+        width: 100%;
+        line-height: 1.5;
       }
       
-      .info-block li strong {
-        color: #e0e0e0;
-      }
-
-      .info-block .date {
-        font-size: 0.8rem;
-        color: #888;
-      }
-
-      /* 학생용 간단 스타일 */
-      .student-info {
-        font-size: 0.95rem;
-        color: var(--text-muted);
-        margin-bottom: 10px;
+      .member-info p {
+        margin-bottom: 8px;
       }
 
       .email-link {
@@ -193,6 +161,13 @@
       }
       .email-link:hover {
         text-decoration: underline;
+      }
+
+      .divider {
+        width: 100%;
+        height: 1px;
+        background: #333;
+        margin: 15px 0;
       }
 
       footer {
@@ -237,75 +212,49 @@
         <div class="member-card">
           <img src="photo_3x4.jpeg" alt="Dr. Kyongmo An" />
           <div class="member-name">Kyongmo An</div>
-          <span class="member-role">Principal Investigator</span>
+          <span class="member-role">PRINCIPAL INVESTIGATOR</span>
           
-          <div class="student-info">
-            Assistant Professor<br>
-            Dept. of Physics Education, CBNU
-          </div>
-          <a href="mailto:kman@cbnu.ac.kr" class="email-link">kman@cbnu.ac.kr</a>
-
-          <div class="info-block">
-            <h4>Education</h4>
-            <ul>
-              <li>
-                <strong>Ph.D. Physics</strong>
-                <span>University of Texas at Austin <span class="date">(2010–2016)</span></span>
-              </li>
-              <li>
-                <strong>M.S. Physics</strong>
-                <span>KAIST <span class="date">(2008–2010)</span></span>
-              </li>
-              <li>
-                <strong>B.S. Physics</strong>
-                <span>Yonsei University <span class="date">(2002–2008)</span></span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="info-block">
-            <h4>Previous Positions</h4>
-            <ul>
-              <li>
-                <strong>Sejong Science Fellow</strong>
-                <span>KRISS <span class="date">(2021–2024)</span></span>
-              </li>
-              <li>
-                <strong>Postdoctoral Researcher</strong>
-                <span>SPINTEC <span class="date">(2019–2021)</span></span>
-              </li>
-              <li>
-                <strong>Marie-Curie EPFL Fellow</strong>
-                <span>EPFL <span class="date">(2017–2019)</span></span>
-              </li>
-            </ul>
+          <div class="member-info">
+            <p>Assistant Professor<br>Dept. of Physics Education, CBNU</p>
+            <a href="mailto:kman@cbnu.ac.kr" class="email-link">kman@cbnu.ac.kr</a>
+            
+            <div class="divider"></div>
+            
+            <p><strong>Education & Experience</strong><br>
+            Ph.D. UT Austin (2016)<br>
+            M.S. KAIST, B.S. Yonsei Univ.<br>
+            Ex-KRISS, SPINTEC, EPFL</p>
           </div>
         </div>
 
         <div class="member-card">
           <img src="taekyeoung_photo.jpg" alt="Taekyeoung An" />
           <div class="member-name">Taekyeoung An</div>
-          <span class="member-role">M.S. Researcher</span>
+          <span class="member-role">M.S. RESEARCHER</span>
           
-          <div class="student-info">
-            <p><strong>Research Area:</strong><br>Micromagnetic Simulation</p>
-            <br>
-            <p style="font-size: 0.85rem;">B.S. Kangwon National Univ.</p>
+          <div class="member-info">
+            <p><strong>Research Area</strong><br>Micromagnetic Simulation</p>
+            <a href="mailto:tk4214@naver.com" class="email-link">tk4214@naver.com</a>
+
+            <div class="divider"></div>
+
+            <p>B.S. Kangwon National Univ.</p>
           </div>
-          <a href="mailto:tk4214@naver.com" class="email-link">tk4214@naver.com</a>
         </div>
 
         <div class="member-card">
-          <img src="chanwoo-photo.jpeg" alt="Chanwoo Shin" onerror="this.src='https://via.placeholder.com/150/333/00e0ff?text=Member'" />
+          <img src="chanwoo-photo.jpeg" alt="Chanwoo Shin" onerror="this.src='https://via.placeholder.com/160x210/333/00e0ff?text=Member'" />
           <div class="member-name">Chanwoo Shin</div>
-          <span class="member-role">Undergraduate Researcher</span>
+          <span class="member-role">UNDERGRADUATE RESEARCHER</span>
           
-          <div class="student-info">
-            <p><strong>Research Interest:</strong><br>Physics Education / Magnonics</p>
-            <br>
-            <p style="font-size: 0.85rem;">B.S. Student, CBNU</p>
+          <div class="member-info">
+            <p><strong>Research Interest</strong><br>Physics Education / Magnonics</p>
+            <a href="mailto:chanwoo204@gmail.com" class="email-link">chanwoo204@gmail.com</a>
+            
+            <div class="divider"></div>
+            
+            <p>B.S. Student, CBNU</p>
           </div>
-          <a href="mailto:chanwoo204@gmail.com" class="email-link">chanwoo204@gmail.com</a>
         </div>
 
       </div>
