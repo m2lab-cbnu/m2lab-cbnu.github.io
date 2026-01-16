@@ -4,8 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>People | M² Lab</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
     <style>
+      :root {
+        --primary-color: #00e0ff;
+        --bg-color: #121212;
+        --card-bg: #1e1e1e;
+        --text-color: #f1f1f1;
+        --text-muted: #bbbbbb;
+      }
       * {
         margin: 0;
         padding: 0;
@@ -13,28 +20,30 @@
         font-family: 'Poppins', sans-serif;
       }
       body {
-        background-color: #121212;
-        color: #f1f1f1;
+        background-color: var(--bg-color);
+        color: var(--text-color);
         line-height: 1.6;
       }
+      
+      /* Header & Nav (기존 유지) */
       header {
         background: #1e1e1e;
-        position: relative;
         padding: 30px 20px;
         text-align: center;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+        position: relative;
       }
       .lab-title {
         font-size: 28px;
         font-weight: 600;
-        color: #00e0ff;
+        color: var(--primary-color);
         letter-spacing: 1.2px;
       }
       .logo {
         position: absolute;
         top: 15px;
         right: 20px;
-        height: 100px;
+        height: 80px; /* 모바일 대응 위해 조금 줄임 */
       }
       nav {
         background: #1e1e1e;
@@ -46,65 +55,125 @@
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
       }
       nav a {
-        color: #bbbbbb;
+        color: var(--text-muted);
         text-decoration: none;
         padding: 8px 12px;
         font-size: 16px;
         border-radius: 8px;
         transition: 0.3s;
       }
-      nav a:hover {
-        background-color: #00e0ff;
+      nav a:hover, nav a.active {
+        background-color: var(--primary-color);
         color: #121212;
       }
+
+      /* Main Layout */
       .container {
-        max-width: 900px;
+        max-width: 1200px; /* 가로 배치 위해 폭 넓힘 */
         margin: 60px auto;
-        padding: 40px;
-        background: #1e1e1e;
-        border-radius: 20px;
-        box-shadow: 0 0 20px rgba(0, 224, 255, 0.15);
+        padding: 20px;
       }
-      h1,
-      h2 {
-        color: #00e0ff;
+      h1 {
+        color: var(--primary-color);
         text-align: center;
-        margin-bottom: 30px;
-      }
-      p {
-        font-size: 16px;
-        color: #cccccc;
-        margin-bottom: 10px;
-      }
-      .section {
         margin-bottom: 40px;
+        font-size: 2.5rem;
       }
-      .person {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
+
+      /* 수평적 관계를 위한 Grid 시스템 */
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         gap: 30px;
-        margin-top: 20px;
-        flex-wrap: wrap;
+        justify-content: center;
       }
-      .person img {
-        max-height: 180px;
-        width: auto;
-        border-radius: 12px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+
+      /* 멤버 카드 스타일 */
+      .member-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #333;
       }
-      .person-info {
-        flex: 1;
-        min-width: 250px;
+      
+      .member-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 224, 255, 0.15);
+        border-color: var(--primary-color);
       }
+
+      .member-card img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%; /* 원형 프로필로 변경하여 부드러운 느낌 강조 */
+        margin-bottom: 20px;
+        border: 3px solid var(--primary-color);
+        background-color: #333;
+      }
+
+      .member-name {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 5px;
+      }
+
+      .member-role {
+        display: inline-block;
+        background: rgba(0, 224, 255, 0.1);
+        color: var(--primary-color);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      .member-info {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        width: 100%;
+      }
+      
+      .member-info p {
+        margin-bottom: 8px;
+      }
+
+      .email-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+      .email-link:hover {
+        text-decoration: underline;
+      }
+
+      .divider {
+        width: 40px;
+        height: 2px;
+        background: #333;
+        margin: 15px auto;
+      }
+
       footer {
         background: #1e1e1e;
         color: #888888;
         text-align: center;
-        padding: 20px;
-        margin-top: 60px;
+        padding: 30px;
+        margin-top: 80px;
         font-size: 14px;
         border-top: 1px solid #333;
+      }
+      
+      @media (max-width: 768px) {
+        .logo { display: none; } /* 모바일에서 로고 숨김 처리 (공간 확보) */
       }
     </style>
   </head>
@@ -120,7 +189,7 @@
     <nav>
       <a href="index.html">Home</a>
       <a href="research.html">Research</a>
-      <a href="people.html">People</a>
+      <a href="people.html" class="active">People</a>
       <a href="publications.html">Publications</a>
       <a href="teaching.html">Teaching</a>
       <a href="news.html">News</a>
@@ -128,54 +197,50 @@
     </nav>
 
     <div class="container">
-      <h1>People</h1>
+      <h1>Team Members</h1>
 
-      <!-- Principal Investigator -->
-      <div class="section">
-        <h2>Principal Investigator</h2>
-        <div class="person">
+      <div class="team-grid">
+        
+        <div class="member-card">
           <img src="photo_3x4.jpeg" alt="Dr. Kyongmo An" />
-          <div class="person-info">
-            <p><strong>Kyongmo An</strong><br />
-              Assistant Professor, Chungbuk National University<br />
-              Email: kman@cbnu.ac.kr
-            </p>
-
-            <p><strong>Education</strong><br />
-              Ph.D., Physics, University of Texas at Austin (2010–2016)<br />
-              M.S., Physics, KAIST (2008–2010)<br />
-              B.S., Physics, Yonsei University (2002–2008)
-            </p>
-
-            <p><strong>Previous Positions</strong><br />
-              Sejong Science Fellow, KRISS (2021–2024)<br />
-              Postdoctoral Researcher, SPINTEC (2019–2021)<br />
-              Marie-Curie EPFL Fellow, EPFL (2017–2019)
-            </p>
+          <div class="member-name">Kyongmo An</div>
+          <span class="member-role">Principal Investigator</span>
+          <div class="member-info">
+            <p>Assistant Professor<br>Dept. of Physics Education<br>Chungbuk National University</p>
+            <a href="mailto:kman@cbnu.ac.kr" class="email-link">kman@cbnu.ac.kr</a>
+            <div class="divider"></div>
+            <p style="font-size: 0.85rem;">Ph.D. UT Austin<br>Ex-KRISS, SPINTEC, EPFL</p>
           </div>
         </div>
-      </div>
 
-      <!-- Master Students -->
-      <div class="section">
-        <h2>Master Students</h2>
-        <div class="person">
+        <div class="member-card">
           <img src="taekyeoung_photo.jpg" alt="Taekyeoung An" />
-          <div class="person-info">
-            <p><strong>Taekyeoung An</strong><br />
-              M.S. Student <br />
-              Email: tk4214@naver.com
-            </p>
-            <p><strong>Education</strong><br />
-              B.S., Physics, Kangwon National University
-            </p>
+          <div class="member-name">Taekyeoung An</div>
+          <span class="member-role">M.S. Student</span>
+          <div class="member-info">
+            <p>Research Area:<br>Micromagnetic Simulation</p>
+            <a href="mailto:tk4214@naver.com" class="email-link">tk4214@naver.com</a>
+            <div class="divider"></div>
+            <p style="font-size: 0.85rem;">B.S. Kangwon National Univ.</p>
           </div>
         </div>
+
+        <div class="member-card">
+          <img src="placeholder_student.jpg" alt="New Student Name" onerror="this.src='https://via.placeholder.com/150/333/00e0ff?text=Member'" />
+          <div class="member-name">New Student Name</div> <span class="member-role">Undergraduate Researcher</span>
+          <div class="member-info">
+            <p>Research Interest:<br>Physics Education / Magnonics</p>
+            <a href="mailto:student@example.com" class="email-link">student@example.com</a>
+            <div class="divider"></div>
+            <p style="font-size: 0.85rem;">B.S. Student, CBNU</p>
+          </div>
+        </div>
+
       </div>
     </div>
 
     <footer>
-      © 2025 M² Lab | Chungbuk National University, Department of Physics Education
+      © 2026 M² Lab | Chungbuk National University, Department of Physics Education
     </footer>
   </body>
 </html>
