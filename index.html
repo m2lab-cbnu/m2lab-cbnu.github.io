@@ -26,8 +26,9 @@
 
     /* NAV */
     nav { position:sticky; top:0; z-index:100; background:rgba(11,15,20,.85); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
-    .nav-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; }
-    .nav-brand { font-family:'DM Serif Display',serif; font-size:20px; color:var(--accent); text-decoration:none; letter-spacing:.5px; }
+    .nav-inner { max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; }
+    .nav-brand { font-family:'DM Serif Display',serif; font-size:20px; color:var(--accent); text-decoration:none; letter-spacing:.5px; display:flex; align-items:center; gap:10px; }
+    .nav-logo { height:36px; width:auto; }
     .nav-links { display:flex; gap:6px; flex-wrap:wrap; }
     .nav-links a { color:var(--text-dim); text-decoration:none; font-size:13px; font-weight:500; padding:6px 12px; border-radius:6px; transition:.2s; }
     .nav-links a:hover,.nav-links a.active { color:#fff; background:var(--surface2); }
@@ -50,10 +51,10 @@
     .hero-stats .stat-label { font-size:12px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; }
 
     /* SECTIONS */
-    section { max-width:1200px; margin:0 auto; padding:60px 24px; }
+    section { max-width:1280px; margin:0 auto; padding:60px 24px; }
     .section-label { font-size:11px; text-transform:uppercase; letter-spacing:2.5px; color:var(--accent); font-weight:700; margin-bottom:8px; }
     .section-title { font-family:'DM Serif Display',serif; font-size:clamp(28px,3.5vw,40px); color:#fff; margin-bottom:24px; }
-    .divider { height:1px; background:var(--border); margin:0 auto; max-width:1200px; }
+    .divider { height:1px; background:var(--border); margin:0 auto; max-width:1280px; }
 
     /* NEWS — newspaper style */
     .news-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
@@ -142,6 +143,22 @@
     .resource-card a.btn { display:inline-block; padding:8px 14px; border-radius:8px; background:var(--accent-glow); color:var(--accent); text-decoration:none; font-size:13px; font-weight:600; border:1px solid rgba(0,212,255,.3); }
     .resource-card a.btn:hover { background:var(--accent); color:var(--bg); }
 
+    /* Desktop: ensure comfortable wide layout */
+    @media(min-width:1024px){
+      .nav-inner { max-width:1400px; }
+      section { max-width:1400px; padding:70px 60px; }
+      .divider { max-width:1400px; }
+      .hero { padding:100px 60px 80px; }
+      .news-grid { grid-template-columns:1fr 1fr; gap:24px; }
+      .research-grid { grid-template-columns:repeat(2,1fr); gap:24px; }
+      .people-grid { grid-template-columns:repeat(3,1fr); gap:24px; }
+      .photo-card { flex:0 0 340px; }
+      .photo-card img { height:240px; }
+    }
+    @media(min-width:1600px){
+      .research-grid { grid-template-columns:repeat(4,1fr); }
+    }
+
     /* FOOTER */
     footer { border-top:1px solid var(--border); padding:28px 24px; text-align:center; font-size:13px; color:var(--text-dim); }
   </style>
@@ -151,7 +168,7 @@
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <a href="#" class="nav-brand">M² Lab</a>
+    <a href="#" class="nav-brand"><img src="images/logo.png" alt="M² Lab" class="nav-logo"/>M² Lab</a>
     <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
     <div class="nav-links">
       <a href="#news">News</a>
@@ -169,11 +186,7 @@
 <div class="hero">
   <h1><span>M²</span> Lab</h1>
   <p class="tagline">Microwave Magnonics Lab at Chungbuk National University — advancing magnon-based platforms for quantum information, neuromorphic computing, and spin-wave signal processing.</p>
-  <div class="hero-stats">
-    <div class="stat"><div class="stat-num">9+</div><div class="stat-label">Selected Publications</div></div>
-    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Active Projects</div></div>
-    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Team Members</div></div>
-  </div>
+
 </div>
 
 <div class="divider"></div>
@@ -263,7 +276,7 @@
 
     <div class="photo-card">
       <img src="images/Tmag_photo.jpg" alt="Conference discussion"/>
-      <div class="caption">TMAG conference, 2024</div>
+      <div class="caption">TMAG conference, 2022</div>
     </div>
 
     <div class="photo-card">
@@ -413,7 +426,7 @@
       <h3>Kyongmo An</h3>
       <div class="person-role">Principal Investigator</div>
       <p style="font-size:13px;color:var(--text-dim);">Assistant Professor, Dept. of Physics Education, CBNU</p>
-      <a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a>
+      <a href="/cdn-cgi/l/email-protection#87eceae6e9c7e4e5e9f2a9e6e4a9ecf5"><span class="__cf_email__" data-cfemail="f893959996b89b9a968dd6999bd6938a">[email&#160;protected]</span></a>
       <div class="details">
         <h4>Education</h4>
         <ul>
@@ -435,7 +448,7 @@
       <h3>Taekyeoung An</h3>
       <div class="person-role">M.S. Researcher</div>
       <p style="font-size:13px;color:var(--text-dim);">Research: Micromagnetic Simulation</p>
-      <a href="mailto:tk4214@naver.com">tk4214@naver.com</a>
+      <a href="/cdn-cgi/l/email-protection#592d326d6b686d1937382f3c2b773a3634"><span class="__cf_email__" data-cfemail="65110e51575451250b041300174b060a08">[email&#160;protected]</span></a>
       <div class="details"><p style="margin-top:10px;">B.S. Kangwon National University</p></div>
     </div>
 
@@ -444,7 +457,7 @@
       <h3>Chanwoo Shin</h3>
       <div class="person-role">Undergraduate Researcher</div>
       <p style="font-size:13px;color:var(--text-dim);">Interest: Physics Education / Magnonics</p>
-      <a href="mailto:chanwoo204@gmail.com">chanwoo204@gmail.com</a>
+      <a href="/cdn-cgi/l/email-protection#e18289808f968e8ed3d1d5a1868c80888dcf828e8c"><span class="__cf_email__" data-cfemail="27444f464950484815171367404a464e4b0944484a">[email&#160;protected]</span></a>
       <div class="details"><p style="margin-top:10px;">B.S. Student, CBNU</p></div>
     </div>
   </div>
@@ -507,19 +520,5 @@
   <div class="section-title">Contact</div>
 
   <div class="contact-box">
-    <p><strong>Email:</strong> <a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a></p>
-    <p><strong>Address:</strong> E1-1-313, Department of Physics Education, Chungbuk National University, Cheongju, Republic of Korea</p>
-
-    <div class="recruit">
-      <h3>We welcome motivated students!</h3>
-      <p style="font-size:14px;color:var(--text-dim);">Undergraduates, graduate students, and postdocs curious about spintronics, magnonics, microwave measurements, or quantum interfaces are encouraged to reach out. Research experience is not required — you only need passion.</p>
-    </div>
-  </div>
-</section>
-
-<footer>
-  © 2025 M² Lab · Chungbuk National University, Department of Physics Education
-</footer>
-
-</body>
-</html>
+    <p><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#8ce7e1ede2ccefeee2f9a2edefa2e7fe"><span class="__cf_email__" data-cfemail="deb5b3bfb09ebdbcb0abf0bfbdf0b5ac">[email&#160;protected]</span></a></p>
+    <p><strong>Address:</strong> E1-1-313, Department of Physics Education, Chungbuk National University, Cheongju, Republic 
