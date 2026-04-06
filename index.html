@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M² Lab — Microwave Magnonics Lab at CBNU</title>
+  <meta name="description" content="Microwave Magnonics Lab (M² Lab) at Chungbuk National University. Research in magnon-phonon coupling, quantum magnonics, spin-wave devices, and spin-caloritronics."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --surface: #131920;
+      --surface2: #1a2230;
+      --border: #222d3a;
+      --text: #e4e8ec;
+      --text-dim: #8a95a3;
+      --accent: #00d4ff;
+      --accent2: #0090b8;
+      --accent-glow: rgba(0,212,255,.12);
+      --warm: #ff6b35;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; line-height:1.7; -webkit-font-smoothing:antialiased; }
+
+    /* NAV */
+    nav { position:sticky; top:0; z-index:100; background:rgba(11,15,20,.85); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+    .nav-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; }
+    .nav-brand { font-family:'DM Serif Display',serif; font-size:20px; color:var(--accent); text-decoration:none; letter-spacing:.5px; }
+    .nav-links { display:flex; gap:6px; flex-wrap:wrap; }
+    .nav-links a { color:var(--text-dim); text-decoration:none; font-size:13px; font-weight:500; padding:6px 12px; border-radius:6px; transition:.2s; }
+    .nav-links a:hover,.nav-links a.active { color:#fff; background:var(--surface2); }
+    .hamburger { display:none; background:none; border:none; color:var(--text); font-size:22px; cursor:pointer; }
+    @media(max-width:768px){
+      .hamburger{display:block;}
+      .nav-links{display:none;position:absolute;top:56px;left:0;right:0;background:var(--surface);flex-direction:column;padding:12px;border-bottom:1px solid var(--border);}
+      .nav-links.open{display:flex;}
+    }
+
+    /* HERO */
+    .hero { position:relative; padding:80px 24px 60px; text-align:center; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:-40%; left:50%; transform:translateX(-50%); width:800px; height:800px; background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 70%); pointer-events:none; }
+    .hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(36px,5vw,56px); color:#fff; margin-bottom:16px; position:relative; }
+    .hero h1 span { color:var(--accent); }
+    .hero .tagline { font-size:clamp(16px,2vw,20px); color:var(--text-dim); max-width:700px; margin:0 auto 28px; }
+    .hero-stats { display:flex; justify-content:center; gap:40px; flex-wrap:wrap; margin-top:32px; }
+    .hero-stats .stat { text-align:center; }
+    .hero-stats .stat-num { font-family:'DM Serif Display',serif; font-size:32px; color:var(--accent); }
+    .hero-stats .stat-label { font-size:12px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; }
+
+    /* SECTIONS */
+    section { max-width:1200px; margin:0 auto; padding:60px 24px; }
+    .section-label { font-size:11px; text-transform:uppercase; letter-spacing:2.5px; color:var(--accent); font-weight:700; margin-bottom:8px; }
+    .section-title { font-family:'DM Serif Display',serif; font-size:clamp(28px,3.5vw,40px); color:#fff; margin-bottom:24px; }
+    .divider { height:1px; background:var(--border); margin:0 auto; max-width:1200px; }
+
+    /* NEWS — newspaper style */
+    .news-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    @media(max-width:700px){ .news-grid{grid-template-columns:1fr;} }
+    .news-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; transition:.25s; }
+    .news-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+    .news-card.featured { grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:center; }
+    @media(max-width:700px){ .news-card.featured{grid-template-columns:1fr;} }
+    .news-card img { width:100%; border-radius:8px; object-fit:cover; }
+    .news-badge { display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; padding:3px 8px; border-radius:4px; background:var(--accent-glow); color:var(--accent); margin-bottom:8px; }
+    .news-badge.grant { background:rgba(255,107,53,.12); color:var(--warm); }
+    .news-date { font-size:12px; color:var(--text-dim); margin-bottom:6px; }
+    .news-card h3 { font-size:18px; color:#fff; margin-bottom:8px; line-height:1.4; }
+    .news-card p { font-size:14px; color:var(--text-dim); }
+
+    /* PHOTOS */
+    .photo-scroll { display:flex; gap:14px; overflow-x:auto; padding-bottom:12px; scroll-snap-type:x mandatory; }
+    .photo-scroll::-webkit-scrollbar { height:6px; }
+    .photo-scroll::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+    .photo-card { flex:0 0 280px; scroll-snap-align:start; border-radius:12px; overflow:hidden; position:relative; border:1px solid var(--border); }
+    .photo-card img { width:100%; height:200px; object-fit:cover; display:block; }
+    .photo-card .caption { padding:10px 12px; font-size:12px; color:var(--text-dim); background:var(--surface); }
+
+    /* RESEARCH */
+    .research-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
+    .research-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:28px 24px; transition:.25s; }
+    .research-card:hover { border-color:var(--accent); }
+    .research-card .num { font-family:'DM Serif Display',serif; font-size:36px; color:var(--accent); opacity:.4; margin-bottom:4px; }
+    .research-card h3 { font-size:17px; color:#fff; margin-bottom:10px; }
+    .research-card p { font-size:13.5px; color:var(--text-dim); }
+    .research-card .pubs { margin-top:12px; }
+    .research-card .pubs a { display:block; font-size:12px; color:var(--accent); text-decoration:none; margin-bottom:4px; line-height:1.4; }
+    .research-card .pubs a:hover { text-decoration:underline; }
+
+    /* PROJECTS */
+    .project-list { display:flex; flex-direction:column; gap:16px; }
+    .project-item { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px 24px; }
+    .project-item h3 { font-size:16px; color:#fff; margin-bottom:4px; }
+    .project-item .period { font-size:12px; color:var(--accent); margin-bottom:8px; }
+    .project-item p { font-size:14px; color:var(--text-dim); }
+
+    /* PUBLICATIONS */
+    .pub-list { list-style:none; }
+    .pub-list li { padding:16px 0; border-bottom:1px solid var(--border); }
+    .pub-list li:last-child { border-bottom:none; }
+    .pub-list .pub-title { color:var(--accent); text-decoration:none; font-weight:600; font-size:15px; line-height:1.4; display:block; margin-bottom:4px; }
+    .pub-list .pub-title:hover { text-decoration:underline; }
+    .pub-list .pub-authors { font-size:13px; color:var(--text-dim); }
+    .pub-list .pub-authors b { color:#fff; }
+    .pub-list .pub-journal { font-size:13px; color:var(--text-dim); font-style:italic; margin-top:2px; }
+    .pub-more { display:inline-block; margin-top:16px; color:var(--accent); text-decoration:none; font-size:14px; font-weight:600; }
+
+    /* PEOPLE */
+    .people-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; }
+    .person-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; text-align:center; transition:.25s; }
+    .person-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+    .person-card img { width:130px; height:170px; object-fit:cover; border-radius:10px; margin-bottom:14px; border:2px solid var(--border); }
+    .person-card h3 { font-size:17px; color:#fff; margin-bottom:4px; }
+    .person-role { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--accent); font-weight:700; margin-bottom:10px; }
+    .person-card .details { font-size:13px; color:var(--text-dim); text-align:left; }
+    .person-card .details h4 { font-size:12px; color:#fff; margin:10px 0 4px; border-left:2px solid var(--accent); padding-left:8px; }
+    .person-card .details li { list-style:none; margin-bottom:3px; line-height:1.4; }
+    .person-card .details .year { font-size:11px; color:#666; }
+    .person-card a { color:var(--accent); text-decoration:none; font-size:13px; }
+
+    /* TEACHING */
+    .teaching-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    @media(max-width:600px){ .teaching-grid{grid-template-columns:1fr;} }
+    .teaching-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; }
+    .teaching-card h3 { font-size:16px; color:var(--accent); margin-bottom:12px; }
+    .teaching-card li { list-style:none; font-size:14px; color:var(--text-dim); padding:4px 0; }
+
+    /* CONTACT */
+    .contact-box { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:32px; max-width:600px; }
+    .contact-box p { font-size:15px; color:var(--text-dim); margin-bottom:10px; }
+    .contact-box a { color:var(--accent); }
+    .contact-box .recruit { margin-top:20px; padding-top:20px; border-top:1px solid var(--border); }
+    .contact-box .recruit h3 { font-size:17px; color:#fff; margin-bottom:8px; }
+
+    /* RESOURCES */
+    .resources-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    @media(max-width:600px){ .resources-grid{grid-template-columns:1fr;} }
+    .resource-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; }
+    .resource-card h3 { font-size:15px; color:#fff; margin-bottom:6px; }
+    .resource-card p { font-size:13px; color:var(--text-dim); margin-bottom:10px; }
+    .resource-card a.btn { display:inline-block; padding:8px 14px; border-radius:8px; background:var(--accent-glow); color:var(--accent); text-decoration:none; font-size:13px; font-weight:600; border:1px solid rgba(0,212,255,.3); }
+    .resource-card a.btn:hover { background:var(--accent); color:var(--bg); }
+
+    /* FOOTER */
+    footer { border-top:1px solid var(--border); padding:28px 24px; text-align:center; font-size:13px; color:var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">M² Lab</a>
+    <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
+    <div class="nav-links">
+      <a href="#news">News</a>
+      <a href="#research">Research</a>
+      <a href="#publications">Publications</a>
+      <a href="#people">People</a>
+      <a href="#teaching">Teaching</a>
+      <a href="#resources">Resources</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1><span>M²</span> Lab</h1>
+  <p class="tagline">Microwave Magnonics Lab at Chungbuk National University — advancing magnon-based platforms for quantum information, neuromorphic computing, and spin-wave signal processing.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">9+</div><div class="stat-label">Selected Publications</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Active Projects</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Team Members</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- NEWS -->
+<section id="news">
+  <div class="section-label">Latest</div>
+  <div class="section-title">News & Highlights</div>
+
+  <div class="news-grid">
+    <!-- Featured news with photo -->
+    <div class="news-card featured">
+      <div>
+        <img src="lab_250918.jpg" alt="M² Lab microwave measurement setup with RF instruments and electromagnet"/>
+      </div>
+      <div>
+        <span class="news-badge">Update</span>
+        <div class="news-date">September 18, 2025</div>
+        <h3>Lab Setup Complete — Experiments Underway</h3>
+        <p>Key microwave equipment and electromagnets have been installed. The lab is now equipped with RF source &amp; analyzer, lock-in measurement systems, electromagnet, sample stages, and an optical table area. Active measurements are in progress.</p>
+      </div>
+    </div>
+
+    <div class="news-card">
+      <span class="news-badge grant">Grant</span>
+      <div class="news-date">September 2025</div>
+      <h3>New Project Awarded: Magnon-Superconductor Quantum Transduction</h3>
+      <p>Three-year funding (2025–2028) for "Magnon-Superconductor Quantum-Transduction Devices based on Chungcheong Open-Lab Foundation" has been awarded.</p>
+    </div>
+
+    <div class="news-card">
+      <span class="news-badge">Milestone</span>
+      <div class="news-date">March 2025</div>
+      <h3>M² Lab Launches at CBNU</h3>
+      <p>The Microwave Magnonics Lab officially begins operation in the Department of Physics Education at Chungbuk National University.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONFERENCE PHOTOS -->
+<section id="photos">
+  <div class="section-label">In Action</div>
+  <div class="section-title">Recent Activities</div>
+  <p style="font-size:14px;color:var(--text-dim);margin-bottom:18px;">Conference presentations, lab work, and collaborative visits.</p>
+  <div class="photo-scroll">
+    <!-- Replace these src paths with your actual conference/activity photos -->
+    <div class="photo-card">
+      <img src="20240626_152110.jpg" alt="Conference presentation"/>
+      <div class="caption">Research presentation, 2024</div>
+    </div>
+    <div class="photo-card">
+      <img src="20240626_172631.jpg" alt="Conference discussion"/>
+      <div class="caption">Discussion session, 2024</div>
+    </div>
+    <div class="photo-card">
+      <img src="lab_250918.jpg" alt="Lab setup"/>
+      <div class="caption">Lab setup at CBNU, Sep 2025</div>
+    </div>
+    <div class="photo-card">
+      <img src="20221006_192654.jpg" alt="Group dinner"/>
+      <div class="caption">Group event, 2022</div>
+    </div>
+    <div class="photo-card">
+      <img src="20220824_154346.jpg" alt="Lab work"/>
+      <div class="caption">Lab work, 2022</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RESEARCH -->
+<section id="research">
+  <div class="section-label">What We Do</div>
+  <div class="section-title">Research</div>
+  <p style="font-size:15px;color:var(--text-dim);margin-bottom:28px;max-width:800px;">We study how spin waves (magnons) interact with phonons, photons, and electric currents in the microwave regime, to build next-generation devices for quantum information, neuromorphic computing, and spin-based signal processing.</p>
+
+  <div class="research-grid">
+    <div class="research-card">
+      <div class="num">01</div>
+      <h3>Magnon–Phonon Coupling</h3>
+      <p>Coherent interaction between magnons and phonons in engineered platforms. Vibrational modes mediate long-range magnon coupling and energy transport.</p>
+      <div class="pubs">
+        <a href="https://doi.org/10.1103/PhysRevX.12.011060" target="_blank">Phys. Rev. X 12, 011060 (2022)</a>
+        <a href="https://doi.org/10.1103/PhysRevB.101.060407" target="_blank">Phys. Rev. B 101, 060407 (2020)</a>
+        <a href="https://doi.org/10.1103/PhysRevApplied.20.014046" target="_blank">Phys. Rev. Applied 20, 014046 (2023)</a>
+      </div>
+    </div>
+    <div class="research-card">
+      <div class="num">02</div>
+      <h3>Spin-Wave Logic &amp; Neuromorphic Devices</h3>
+      <p>Spin-wave devices that perform logic operations and emulate neural functions using nonlinear magnon interactions.</p>
+      <div class="pubs">
+        <a href="https://doi.org/10.1038/s41467-024-51483-7" target="_blank">Nat. Commun. 15, 7302 (2024)</a>
+        <a href="https://doi.org/10.1103/PhysRevApplied.11.034065" target="_blank">Phys. Rev. Applied 11, 034065 (2019)</a>
+      </div>
+    </div>
+    <div class="research-card">
+      <div class="num">03</div>
+      <h3>Quantum Magnonics</h3>
+      <p>Hybrid quantum systems and information transfer at GHz frequencies, toward quantum communication and quantum sensing.</p>
+      <div class="pubs">
+        <a href="https://doi.org/10.1103/PhysRevX.12.011060" target="_blank">Phys. Rev. X 12, 011060 (2022)</a>
+      </div>
+    </div>
+    <div class="research-card">
+      <div class="num">04</div>
+      <h3>Spin-Caloritronics</h3>
+      <p>Spin and heat interactions — thermally driven spin currents, nonlocal heat transfer via magnons and phonons, energy-efficient spin-based devices.</p>
+      <div class="pubs">
+        <a href="https://doi.org/10.1103/PhysRevB.103.174432" target="_blank">Phys. Rev. B 103, 174432 (2021)</a>
+        <a href="https://doi.org/10.1103/PhysRevLett.117.107202" target="_blank">Phys. Rev. Lett. 117, 107202 (2016)</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ongoing projects -->
+  <h3 style="font-family:'DM Serif Display',serif;font-size:24px;color:#fff;margin:40px 0 16px;">Ongoing Projects</h3>
+  <div class="project-list">
+    <div class="project-item">
+      <h3>Glocal R&amp;D — Magnon-Superconductor Quantum Transduction</h3>
+      <div class="period">2025 – 2028</div>
+      <p>Building a regional Open-Lab infrastructure for cryogenic quantum transduction between superconducting qubits and magnonic systems, including magnon squeezed state generation.</p>
+    </div>
+    <div class="project-item">
+      <h3>ITRC Program — Magnon-Based Quantum Sensing</h3>
+      <div class="period">2024 – 2031</div>
+      <p>Part of the Information Technology Research Center program at CBNU, developing magnon-based device platforms for next-generation quantum sensing technologies.</p>
+    </div>
+    <div class="project-item">
+      <h3>Sejong Science Fellowship</h3>
+      <div class="period">2021 – 2026</div>
+      <p>Frontier research on quantum-like magnon dynamics, spin-phonon interactions, and low-dissipation information transport using engineered phononic structures.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PUBLICATIONS -->
+<section id="publications">
+  <div class="section-label">Output</div>
+  <div class="section-title">Selected Publications</div>
+  <p style="font-size:13px;color:var(--text-dim);margin-bottom:20px;">†Corresponding Author &nbsp; *Equal Contributions</p>
+
+  <ul class="pub-list">
+    <li>
+      <a class="pub-title" href="https://doi.org/10.1038/s41467-024-51483-7" target="_blank">Emergent coherent modes in nonlinear magnonic waveguides detected at ultrahigh frequency resolution</a>
+      <div class="pub-authors"><b>K. An</b>*, M. Xu*, A. Mucchietto, C. Kim, K.-W. Moon, C. Hwang, D. Grundler†</div>
+      <div class="pub-journal">Nature Communications 15, 7302 (2024)</div>
+    </li>
+    <li>
+      <a class="pub-title" href="https://doi.org/10.1103/PhysRevApplied.20.014046" target="_blank">Optimizing the magnon-phonon cooperativity in planar geometries</a>
+      <div class="pub-authors"><b>K. An</b>, C. Kim, K.-W. Moon, R. Kohno, G. Olivetti, G. de Loubens, N. Vukadinovic, J. B. Youssef, C. Hwang†, O. Klein†</div>
+      <div class="pub-journal">Phys. Rev. Applied 20, 014046 (2023)</div>
+    </li>
+    <li>
+      <a class="pub-title" href="https://doi.org/10.1103/PhysRevX.12.011060" target="_blank">Bright and dark states of two distant macrospins strongly coupled by phonons</a>
+      <div class="pub-authors"><b>K. An</b>†, R. Kohno, A. N. Litvinenko, R. L. Seeger, V. V. Naletov, L. Vila, G. de Loubens, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</div>
+      <div class="pub-journal">Phys. Rev. X 12, 011060 (2022)</div>
+    </li>
+    <li>
+      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.103.174432" target="_blank">Short-range thermal magnon diffusion in magnetic garnet</a>
+      <div class="pub-authors"><b>K. An</b>, R. Kohno, N. Thiery, D. Reitz, L. Vila, V. V. Naletov, N. Beaulieu, J. B. Youssef, G. de Loubens, Y. Tserkovnyak, O. Klein†</div>
+      <div class="pub-journal">Phys. Rev. B 103, 174432 (2021)</div>
+    </li>
+    <li>
+      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.101.060407" target="_blank">Coherent long-range transfer of angular momentum between magnon Kittel modes by phonons</a>
+      <div class="pub-authors"><b>K. An</b>, A. N. Litvinenko, R. Kohno, A. A. Fuad, V. V. Naletov, L. Vila, U. Ebels, G. de Loubens, H. Hurdequint, N. Beaulieu, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</div>
+      <div class="pub-journal">Phys. Rev. B 101, 060407(R) (2020) — cited 160+ times</div>
+    </li>
+    <li>
+      <a class="pub-title" href="https://doi.org/10.1103/PhysRevApplied.11.034065" target="_blank">Optimization of spin-wave propagation with enhanced group velocities by exchange-coupled ferrimagnet-ferromagnet bilayers</a>
+      <div class="pub-authors"><b>K. An</b>†, V. S. Bhat, M. Mruczkiewicz, C. Dubs, D. Grundler</div>
+      <div class="pub-journal">Phys. Rev. Applied 11, 034065 (2019)</div>
+    </li>
+    <li>
+      <a class="pub-title" href="https://doi.org/10.1103/PhysRevLett.117.107202" target="_blank">Magnons and phonons optically driven out of local equilibrium in a magnetic insulator</a>
+      <div class="pub-authors"><b>K. An</b>, K. S. Olsson, A. Weathers, S. Sullivan, X. Chen, X. Li, L. G. Marshall, X. Ma, N. Klimovich, J. Zhou, L. Shi, X. Li</div>
+      <div class="pub-journal">Phys. Rev. Lett. 117, 107202 (2016)</div>
+    </li>
+    <li>
+      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.93.140404" target="_blank">Current control of magnetic anisotropy via stress in a ferromagnetic metal waveguide</a>
+      <div class="pub-authors"><b>K. An</b>, X. Ma, C.-F. Pai, J. Yang, K. Olsson, J. L. Erskine, A. H. MacDonald, D. C. Ralph, R. A. Buhrman, X. Li</div>
+      <div class="pub-journal">Phys. Rev. B 93, 140404(R) (2016) — Editors' Suggestion</div>
+    </li>
+    <li>
+      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.89.140405" target="_blank">Control of propagating spin waves via spin transfer torque in a metallic bilayer waveguide</a>
+      <div class="pub-authors"><b>K. An</b>, D. R. Birt, C.-F. Pai, K. Olsson, D. C. Ralph, R. A. Buhrman, X. Li</div>
+      <div class="pub-journal">Phys. Rev. B 89, 140405(R) (2014) — Editors' Suggestion</div>
+    </li>
+  </ul>
+  <a class="pub-more" href="https://scholar.google.com/citations?user=zsngCA4AAAAJ&hl=en" target="_blank">View full list on Google Scholar →</a>
+</section>
+
+<div class="divider"></div>
+
+<!-- PEOPLE -->
+<section id="people">
+  <div class="section-label">Team</div>
+  <div class="section-title">People</div>
+
+  <div class="people-grid">
+    <div class="person-card">
+      <img src="photo_3x4.jpeg" alt="Kyongmo An"/>
+      <h3>Kyongmo An</h3>
+      <div class="person-role">Principal Investigator</div>
+      <p style="font-size:13px;color:var(--text-dim);">Assistant Professor, Dept. of Physics Education, CBNU</p>
+      <a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a>
+      <div class="details">
+        <h4>Education</h4>
+        <ul>
+          <li><strong>Ph.D. Physics</strong>, UT Austin <span class="year">2010–2016</span></li>
+          <li><strong>M.S. Physics</strong>, KAIST <span class="year">2008–2010</span></li>
+          <li><strong>B.S. Physics</strong>, Yonsei University <span class="year">2002–2008</span></li>
+        </ul>
+        <h4>Previous Positions</h4>
+        <ul>
+          <li><strong>Sejong Science Fellow</strong>, KRISS <span class="year">2021–2024</span></li>
+          <li><strong>Postdoc</strong>, SPINTEC <span class="year">2019–2021</span></li>
+          <li><strong>Marie-Curie Fellow</strong>, EPFL <span class="year">2017–2019</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <img src="taekyeoung_photo.jpg" alt="Taekyeoung An"/>
+      <h3>Taekyeoung An</h3>
+      <div class="person-role">M.S. Researcher</div>
+      <p style="font-size:13px;color:var(--text-dim);">Research: Micromagnetic Simulation</p>
+      <a href="mailto:tk4214@naver.com">tk4214@naver.com</a>
+      <div class="details"><p style="margin-top:10px;">B.S. Kangwon National University</p></div>
+    </div>
+
+    <div class="person-card">
+      <img src="chanwoo-photo.jpeg" alt="Chanwoo Shin"/>
+      <h3>Chanwoo Shin</h3>
+      <div class="person-role">Undergraduate Researcher</div>
+      <p style="font-size:13px;color:var(--text-dim);">Interest: Physics Education / Magnonics</p>
+      <a href="mailto:chanwoo204@gmail.com">chanwoo204@gmail.com</a>
+      <div class="details"><p style="margin-top:10px;">B.S. Student, CBNU</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TEACHING -->
+<section id="teaching">
+  <div class="section-label">Courses</div>
+  <div class="section-title">Teaching</div>
+
+  <div class="teaching-grid">
+    <div class="teaching-card">
+      <h3>Spring 2025</h3>
+      <ul>
+        <li>Electromagnetism &amp; EM Education I</li>
+        <li>Mathematical Physics I</li>
+        <li>Thermal and Statistical Physics</li>
+      </ul>
+    </div>
+    <div class="teaching-card">
+      <h3>Fall 2025</h3>
+      <ul>
+        <li>Electromagnetism &amp; EM Education II</li>
+        <li>Mathematical Physics II</li>
+        <li>Physics Experiment II</li>
+        <li>Solid State Physics Education</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RESOURCES -->
+<section id="resources">
+  <div class="section-label">Tools</div>
+  <div class="section-title">Useful Resources</div>
+
+  <div class="resources-grid">
+    <div class="resource-card">
+      <h3>Magnetic Field Calculator</h3>
+      <p>Compute B and H fields for a rectangular-cross-section conductor using Biot–Savart multi-filament summation.</p>
+      <a class="btn" href="magnetic-field-rect.html" target="_blank">Open Calculator</a>
+    </div>
+    <div class="resource-card">
+      <h3>Interactive Sound Wave Demo</h3>
+      <p>Fourier/sine-wave synthesis, waveform visualization, and audio playback demo.</p>
+      <a class="btn" href="sound-wave.html" target="_blank">Open Demo</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Get in Touch</div>
+  <div class="section-title">Contact</div>
+
+  <div class="contact-box">
+    <p><strong>Email:</strong> <a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a></p>
+    <p><strong>Address:</strong> E1-1-313, Department of Physics Education, Chungbuk National University, Cheongju, Republic of Korea</p>
+
+    <div class="recruit">
+      <h3>We welcome motivated students!</h3>
+      <p style="font-size:14px;color:var(--text-dim);">Undergraduates, graduate students, and postdocs curious about spintronics, magnonics, microwave measurements, or quantum interfaces are encouraged to reach out. Research experience is not required — you only need passion.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2025 M² Lab · Chungbuk National University, Department of Physics Education
+</footer>
+
+</body>
+</html>
