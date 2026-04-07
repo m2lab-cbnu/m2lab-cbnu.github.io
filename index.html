@@ -79,17 +79,17 @@
     .photo-card .caption { padding:10px 12px; font-size:12px; color:var(--text-dim); background:var(--surface); }
 
     /* RESEARCH */
-    .research-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:24px; }
-    @media(max-width:700px){ .research-grid{grid-template-columns:1fr;} }
-    .research-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:28px 24px; transition:.25s; }
+    .research-grid { display:flex; flex-direction:column; gap:28px; }
+    .research-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:32px; transition:.25s; display:grid; grid-template-columns:320px 1fr; gap:28px; align-items:start; }
     .research-card:hover { border-color:var(--accent); }
+    @media(max-width:800px){ .research-card{grid-template-columns:1fr; } }
     .research-card .num { font-family:'DM Serif Display',serif; font-size:36px; color:var(--accent); opacity:.4; margin-bottom:4px; }
-    .research-card h3 { font-size:17px; color:#fff; margin-bottom:10px; }
-    .research-card p { font-size:13.5px; color:var(--text-dim); }
-    .research-fig { width:100%; height:240px; border-radius:8px; margin-bottom:16px; overflow:hidden; background:#f5f5f5; border:1px solid rgba(0,212,255,.1); display:flex; align-items:center; justify-content:center; padding:10px; }
+    .research-card h3 { font-size:19px; color:#fff; margin-bottom:10px; }
+    .research-card p { font-size:14px; color:var(--text-dim); line-height:1.7; }
+    .research-fig { width:100%; border-radius:8px; overflow:hidden; background:#f5f5f5; border:1px solid rgba(0,212,255,.1); display:flex; align-items:center; justify-content:center; padding:12px; aspect-ratio:4/3; }
     .research-fig img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
-    .research-overview { display:flex; gap:24px; align-items:center; justify-content:center; flex-wrap:wrap; margin-bottom:32px; }
-    .research-overview img { max-width:460px; width:100%; border-radius:12px; border:1px solid var(--border); box-shadow:0 0 20px rgba(0,212,255,.1); background:#f5f5f5; padding:8px; }
+    .research-overview { display:flex; justify-content:center; margin-bottom:36px; }
+    .research-overview img { max-width:520px; width:100%; border-radius:12px; border:1px solid var(--border); box-shadow:0 0 20px rgba(0,212,255,.1); background:#f5f5f5; padding:10px; }
     .research-card .pubs { margin-top:12px; }
     .research-card .pubs a { display:block; font-size:12px; color:var(--accent); text-decoration:none; margin-bottom:4px; line-height:1.4; }
     .research-card .pubs a:hover { text-decoration:underline; }
@@ -155,13 +155,13 @@
       .divider { max-width:1400px; }
       .hero { padding:100px 60px 80px; }
       .news-grid { grid-template-columns:1fr 1fr; gap:24px; }
-      .research-grid { grid-template-columns:repeat(2,1fr); gap:24px; }
+      .research-card { grid-template-columns:360px 1fr; gap:36px; padding:36px; }
       .people-grid { grid-template-columns:repeat(3,1fr); gap:24px; }
       .photo-card { flex:0 0 340px; }
       .photo-card img { height:240px; }
     }
     @media(min-width:1600px){
-      .research-grid { grid-template-columns:repeat(2,1fr); }
+      .research-card { grid-template-columns:420px 1fr; }
     }
 
     /* FOOTER */
@@ -295,6 +295,7 @@
 </section>
 
 <div class="divider"></div>
+
 <!-- RESEARCH -->
 <section id="research">
   <div class="section-label">What We Do</div>
