@@ -85,6 +85,10 @@
     .research-card .num { font-family:'DM Serif Display',serif; font-size:36px; color:var(--accent); opacity:.4; margin-bottom:4px; }
     .research-card h3 { font-size:17px; color:#fff; margin-bottom:10px; }
     .research-card p { font-size:13.5px; color:var(--text-dim); }
+    .research-fig { width:100%; border-radius:8px; margin-bottom:16px; overflow:hidden; background:#f5f5f5; border:1px solid rgba(0,212,255,.1); }
+    .research-fig img { width:100%; height:auto; display:block; }
+    .research-overview { display:flex; gap:24px; align-items:center; justify-content:center; flex-wrap:wrap; margin-bottom:32px; }
+    .research-overview img { max-width:380px; width:100%; border-radius:12px; border:1px solid var(--border); box-shadow:0 0 20px rgba(0,212,255,.1); }
     .research-card .pubs { margin-top:12px; }
     .research-card .pubs a { display:block; font-size:12px; color:var(--accent); text-decoration:none; margin-bottom:4px; line-height:1.4; }
     .research-card .pubs a:hover { text-decoration:underline; }
@@ -187,6 +191,7 @@
   <img src="images/logo.png" alt="" style="height:80px;margin-bottom:16px;"/>
   <h1><span>M²</span> Lab</h1>
   <p class="tagline">Microwave Magnonics Lab at Chungbuk National University — advancing magnon-based platforms for quantum information, neuromorphic computing, and spin-wave signal processing.</p>
+  <img src="images/quauntum_magnon.gif" alt="Animation of magnons bridging quantum microwave systems" style="max-width:600px;width:90%;border-radius:14px;margin-top:8px;box-shadow:0 0 30px rgba(0,212,255,.15);"/>
 
 </div>
 
@@ -296,8 +301,14 @@
   <div class="section-title">Research</div>
   <p style="font-size:15px;color:var(--text-dim);margin-bottom:28px;max-width:800px;">We study how spin waves (magnons) interact with phonons, photons, and electric currents in the microwave regime, to build next-generation devices for quantum information, neuromorphic computing, and spin-based signal processing.</p>
 
+  <div class="research-overview">
+    <img src="images/circlediagram2.png" alt="Schematic linking magnons, phonons, and superconducting qubits in the GHz band"/>
+    <img src="images/1d spin.gif" alt="1D spin wave simulation"/>
+  </div>
+
   <div class="research-grid">
     <div class="research-card">
+      <div class="research-fig"><img src="images/shearwave_EVENPhonon.gif" alt="Shear wave phonon mode animation"/></div>
       <div class="num">01</div>
       <h3>Magnon–Phonon Coupling</h3>
       <p>Coherent interaction between magnons and phonons in engineered platforms. Vibrational modes mediate long-range magnon coupling and energy transport.</p>
@@ -308,6 +319,7 @@
       </div>
     </div>
     <div class="research-card">
+      <div class="research-fig"><img src="images/g348197.png" alt="Spin-wave logic and neuromorphic device schematic"/></div>
       <div class="num">02</div>
       <h3>Spin-Wave Logic &amp; Neuromorphic Devices</h3>
       <p>Spin-wave devices that perform logic operations and emulate neural functions using nonlinear magnon interactions.</p>
@@ -317,6 +329,7 @@
       </div>
     </div>
     <div class="research-card">
+      <div class="research-fig"><img src="images/blochsphere_v4.png" alt="Bloch sphere representation for quantum magnonics"/></div>
       <div class="num">03</div>
       <h3>Quantum Magnonics</h3>
       <p>Hybrid quantum systems and information transfer at GHz frequencies, toward quantum communication and quantum sensing.</p>
@@ -325,6 +338,7 @@
       </div>
     </div>
     <div class="research-card">
+      <div class="research-fig"><img src="images/thermal.png" alt="Spin caloritronics thermal spin transport"/></div>
       <div class="num">04</div>
       <h3>Spin-Caloritronics</h3>
       <p>Spin and heat interactions — thermally driven spin currents, nonlocal heat transfer via magnons and phonons, energy-efficient spin-based devices.</p>
@@ -525,14 +539,14 @@
     <p><strong>Address:</strong> E1-1-313, Department of Physics Education, Chungbuk National University, Cheongju, Republic of Korea</p>
 
     <div class="recruit">
-      <h3>We welcome motivated students!</h3>
+      <h3>Join Us</h3>
       <p style="font-size:14px;color:var(--text-dim);">Undergraduates, graduate students, and postdocs curious about spintronics, magnonics, microwave measurements, or quantum interfaces are encouraged to reach out. Research experience is not required — you only need passion.</p>
     </div>
   </div>
 </section>
 
 <footer>
-  © 2025 M² Lab · Chungbuk National University, Department of Physics Education
+  © 2026 M² Lab · Chungbuk National University, Department of Physics Education
 </footer>
 
 </body>
