@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Wave Demo — Time Axis + Phase-Lock + Sine</title>
+<style>
+  :root { --bg:#0b0f14; --card:#11161d; --ink:#eaf1ff; --mut:#9fb2c8; --pri:#3aa0ff; --acc:#00c29a; --grid:#223141; }
+  body{margin:18px;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--ink)}
+  h1{font-size:18px;margin:0 0 10px;color:var(--ink)}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0}
+  label{font-size:13px;color:var(--mut)}
+  input[type="range"]{width:220px}
+  input[type="text"],input[type="number"],select{background:#0e141b;color:var(--ink);border:1px solid #263241;border-radius:10px;padding:6px 10px}
+  button{background:var(--pri);border:0;color:#fff;border-radius:10px;padding:8px 14px;cursor:pointer}
+  button.secondary{background:#334455;color:#dfe9f6}
+  .card{background:var(--card);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);padding:14px;margin:10px 0}
+  .grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:900px){.grid{grid-template-columns:1fr 1fr}}
+  canvas{width:100%;height:auto;background:#0c1219;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+  small{color:var(--mut)}
+  .pill{padding:4px 8px;background:#0e1822;border-radius:999px;border:1px solid #263241}
+</style>
+</head>
+<body>
+  <h1>Wave Demo — 소리 + 실시간 파형 (시간축·지터개선·사인모드)</h1>
+
+  <div class="card">
+    <div class="row">
+      <button id="btnPlay">Play</button>
+      <button id="btnStop" class="secondary">Stop</button>
+      <label>Volume <input id="gain" type="range" min="0" max="1" step="0.01" value="0.35"></label>
+      <span id="status" class="pill">stopped</span>
+    </div>
+    <div class="row">
+      <label>Wave Type
+        <select id="waveType">
+          <option value="piecewise">Piecewise (Custom)</option>
+          <option value="sine">Sine</option>
+          <option value="square">Square</option>
+          <option value="triangle">Triangle</option>
+          <option value="sawtooth">Sawtooth</option>
+        </select>
+      </label>
+      <label>Frequency (Hz) <input id="freq" type="range" min="50" max="2000" step="1" value="262"></label>
+      <span id="freqVal" class="pill">262 Hz</span>
+      <label>Harmonics <input id="nharm" type="range" min="1" max="256" step="1" value="96"></label>
+      <span id="nharmVal" class="pill">96</span>
+      <label>Window (ms) <input id="win" type="range" min="10" max="200" step="1" value="80"></label>
+      <span id="winVal" class="pill">80 ms</span>
+      <label><input id="lock" type="checkbox" checked> Phase-Lock (지터 감소)</label>
+    </div>
+    <div class="row" id="pieceControls">
+      <label>Levels (콤마): <input id="levels" type="text" value="1, -0.875, 0.875"></label>
+      <label>Fractions (합=1): <input id="fracs" type="text" value="0.25, 0.25, 0.5"></label>
+      <button id="btnUpdate" class="secondary">Update waveform</button>
+    </div>
+    <small>Tip: Phase-Lock는 매 프레임을 0교차(상승) 기준으로 정렬해 흔들림이 거의 사라집니다. Window를 주파수에 맞춰 1~3 주기 정도로 두면 가장 안정적입니다.</small>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3 style="margin:0 0 8px">Time scope (시간축, ms)</h3>
+      <canvas id="scope" width="1000" height="320"></canvas>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 8px">Spectrum</h3>
+      <canvas id="spec" width="1000" height="320"></canvas>
+    </div>
+  </div>
+
+<script>
+(() => {
+  // ====== Audio graph ======
+  let actx, osc, gain, analyser;
+  let rafId;
+  const state = {
+    playing: false,
+    freq: 262,
+    nharm: 96,
+    windowMs: 80,
+    phaseLock: true,
+    waveType: 'piecewise',
+    piece: { levels:[1, -0.875, 0.875], fracs:[0.25, 0.25, 0.5] },
+    periodicWave: null,
+  };
+
+  const els = {
+    play:     document.getElementById('btnPlay'),
+    stop:     document.getElementById('btnStop'),
+    gain:     document.getElementById('gain'),
+    freq:     document.getElementById('freq'),
+    freqVal:  document.getElementById('freqVal'),
+    nharm:    document.getElementById('nharm'),
+    nharmVal: document.getElementById('nharmVal'),
+    win:      document.getElementById('win'),
+    winVal:   document.getElementById('winVal'),
+    lock:     document.getElementById('lock'),
+    waveType: document.getElementById('waveType'),
+    levels:   document.getElementById('levels'),
+    fracs:    document.getElementById('fracs'),
+    update:   document.getElementById('btnUpdate'),
+    status:   document.getElementById('status'),
+    pieceRow: document.getElementById('pieceControls'),
+    scope:    document.getElementById('scope'),
+    spec:     document.getElementById('spec'),
+  };
+  const sctx = els.scope.getContext('2d');
+  const pctx = els.spec.getContext('2d');
+
+  function ensureCtx() {
+    if (!actx) {
+      actx = new (window.AudioContext || window.webkitAudioContext)();
+      gain = actx.createGain();
+      analyser = actx.createAnalyser();
+      analyser.fftSize = 8192; // 긴 버퍼로 시간 해상도↑(지터↓)
+      analyser.smoothingTimeConstant = 0.4;
+      gain.connect(analyser).connect(actx.destination);
+      gain.gain.value = parseFloat(els.gain.value);
+    }
+  }
+
+  function stop() {
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+    if (osc) { try{osc.stop();}catch(_){} try{osc.disconnect();}catch(_){} }
+    osc = null;
+    state.playing = false;
+    els.status.textContent = 'stopped';
+  }
+
+  function parseCsvNumbers(s) {
+    return s.split(',').map(v => parseFloat(v.trim())).filter(v => !Number.isNaN(v));
+  }
+
+  function makePiecewisePeriodicWave(levels, fracs, nharm) {
+    // numeric integration over a period to get Fourier coeffs
+    const M = 4096;
+    const f = new Float32Array(M);
+    // normalize fracs
+    let sum = fracs.reduce((a,b)=>a+b,0);
+    fracs = sum>0 ? fracs.map(x=>x/sum) : fracs.map(()=>1/fracs.length);
+    const edges = [0]; let acc=0;
+    for (let r of fracs){ acc+=r; edges.push(acc); }
+
+    for (let k=0;k<M;k++){
+      const ph = k/M;
+      let seg = edges.length-2;
+      for (let j=0;j<edges.length-1;j++){ if (ph>=edges[j] && ph<edges[j+1]) { seg=j; break; } }
+      f[k] = levels[seg] ?? 0;
+    }
+    // DC remove
+    let mean=0; for (let k=0;k<M;k++) mean+=f[k]; mean/=M;
+    for (let k=0;k<M;k++) f[k]-=mean;
+
+    const real = new Float32Array(nharm+1), imag = new Float32Array(nharm+1);
+    for (let n=1;n<=nharm;n++){
+      let a=0,b=0;
+      for (let k=0;k<M;k++){
+        const th = 2*Math.PI*n*(k/M), val=f[k];
+        a += val*Math.cos(th); b += val*Math.sin(th);
+      }
+      real[n]=(2/M)*a; imag[n]=(2/M)*b;
+    }
+    return actx.createPeriodicWave(real, imag, {disableNormalization:false});
+  }
+
+  function updatePeriodicWave() {
+    ensureCtx();
+    const wt = state.waveType;
+    if (wt === 'piecewise') {
+      state.periodicWave = makePiecewisePeriodicWave(state.piece.levels, state.piece.fracs, state.nharm);
+    } else {
+      state.periodicWave = null; // not used for builtin types
+    }
+  }
+
+  function start() {
+    ensureCtx();
+    stop();
+    osc = actx.createOscillator();
+    osc.frequency.value = state.freq;
+
+    if (state.waveType === 'piecewise') {
+      if (!state.periodicWave) updatePeriodicWave();
+      osc.setPeriodicWave(state.periodicWave);
+    } else if (state.waveType === 'sine') {
+      osc.type = 'sine';
+    } else if (state.waveType === 'square') {
+      osc.type = 'square';
+    } else if (state.waveType === 'triangle') {
+      osc.type = 'triangle';
+    } else if (state.waveType === 'sawtooth') {
+      osc.type = 'sawtooth';
+    }
+
+    osc.connect(gain);
+    osc.start();
+    state.playing = true;
+    els.status.textContent = 'playing';
+    animate();
+  }
+
+  // ====== Drawing helpers ======
+  const timeBuf = new Float32Array(16384);
+  const freqBuf = new Uint8Array(2048);
+
+  function niceStep(targetMs) {
+    // choose 1,2,5 × 10^k ms
+    const bases = [1,2,5];
+    let k = Math.pow(10, Math.floor(Math.log10(targetMs)));
+    let best = bases[0]*k, err = Math.abs(best-targetMs);
+    for (let b of bases){
+      const v = b*k, e = Math.abs(v-targetMs);
+      if (e < err) { err=e; best=v; }
+    }
+    // adjust decade up/down if far
+    if (targetMs > 8*best/5) best*=2; // coarse tweak
+    return best;
+  }
+
+  function drawScopeAligned(sampleRate) {
+    const w = els.scope.width, h = els.scope.height;
+    const winSec = state.windowMs/1000;
+    const need = Math.min(timeBuf.length, analyser.fftSize);
+    analyser.getFloatTimeDomainData(timeBuf);
+    // phase lock: find rising zero-crossing near center of buffer
+    let idx0 = Math.floor(need/2);
+    if (state.phaseLock) {
+      let best = -1, bestMag = 0;
+      for (let i=10; i<need-10; i++){
+        if (timeBuf[i-1] <= 0 && timeBuf[i] > 0) {
+          const mag = timeBuf[i]; // prefer larger slope (approx)
+          if (mag > bestMag) { bestMag = mag; best = i; }
+        }
+      }
+      if (best > 0) idx0 = best;
+    }
+    // pick a window ending at idx1 for scroll=off (locked), or sliding (unlocked)
+    const span = Math.min(Math.floor(winSec*sampleRate), need-1);
+    const idx1 = Math.min(need-1, idx0 + Math.floor(span/2));
+    const idxL = Math.max(0, idx1 - span);
+    const xs = span; // samples to plot
+
+    // Clear & grid
+    sctx.clearRect(0,0,w,h);
+    sctx.fillStyle = '#0b1016'; sctx.fillRect(0,0,w,h);
+
+    // grid lines (time axis labels in ms)
+    const msSpan = 1000*span/sampleRate;
+    const stepMs = niceStep(msSpan/6); // ~6 ticks
+    const pxPerMs = w / msSpan;
+    sctx.strokeStyle = '#223141'; sctx.lineWidth = 1;
+    sctx.fillStyle = '#7fa1bf'; sctx.font = '12px ui-sans-serif';
+
+    // left-to-right from 0..msSpan (phase-locked) else -msSpan..0
+    const leftMs  = state.phaseLock ? 0 : -msSpan;
+    const rightMs = state.phaseLock ? msSpan : 0;
+    const zeroX = state.phaseLock ? 0 : w; // if scrolling, right edge is "now"
+
+    for (let ms=Math.ceil(leftMs/stepMs)*stepMs; ms<=rightMs+1e-6; ms+=stepMs){
+      const x = zeroX + (ms * pxPerMs);
+      sctx.beginPath(); sctx.moveTo(x,0); sctx.lineTo(x,h); sctx.stroke();
+      const label = `${Math.round(ms)} ms`;
+      sctx.fillText(label, x+4, h-6);
+    }
+    // midline
+    sctx.strokeStyle = '#2a4258'; sctx.beginPath(); sctx.moveTo(0,h/2); sctx.lineTo(w,h/2); sctx.stroke();
+
+    // anti-alias min/max envelope downsampling
+    sctx.strokeStyle = '#3aa0ff'; sctx.lineWidth = 2;
+    const samplesPerPx = xs / w;
+    sctx.beginPath();
+    for (let x=0; x<w; x++){
+      const a = Math.floor(idxL + x * samplesPerPx);
+      const b = Math.min(need-1, Math.floor(a + samplesPerPx));
+      let mn= 1e9, mx=-1e9;
+      for (let i=a;i<=b;i++){ const v=timeBuf[i]; if(v<mn) mn=v; if(v>mx) mx=v; }
+      const y1 = (0.5 - 0.45*mx) * h;
+      const y2 = (0.5 - 0.45*mn) * h;
+      sctx.moveTo(x, y1); sctx.lineTo(x, y2);
+    }
+    sctx.stroke();
+  }
+
+  function drawSpectrum(sampleRate) {
+    const w = els.spec.width, h = els.spec.height;
+    pctx.clearRect(0,0,w,h);
+    pctx.fillStyle = '#0b1016'; pctx.fillRect(0,0,w,h);
+    analyser.getByteFrequencyData(freqBuf);
+    const bins = freqBuf.length;
+    const barW = Math.max(1, Math.floor(w/bins));
+    for (let i=0;i<bins;i++){
+      const mag = freqBuf[i]/255;
+      const x = i*barW;
+      const y = h*(1-mag);
+      pctx.fillStyle = '#00c29a';
+      pctx.fillRect(x,y,barW-1,h-y);
+    }
+    // freq axis labels
+    pctx.fillStyle = '#7fa1bf'; pctx.font = '12px ui-sans-serif';
+    pctx.strokeStyle = '#223141';
+    const maxHz = sampleRate/2;
+    const nice = [50,100,200,500,1000,2000,5000,10000,20000];
+    for (let hz of nice){
+      if (hz>maxHz) break;
+      const x = (hz/maxHz)*w;
+      pctx.beginPath(); pctx.moveTo(x,0); pctx.lineTo(x,h); pctx.stroke();
+      pctx.fillText(`${hz} Hz`, x+4, h-6);
+    }
+  }
+
+  function animate() {
+    const loop = () => {
+      rafId = requestAnimationFrame(loop);
+      const sr = actx.sampleRate;
+      // keep analyser buffer long enough for chosen window
+      const needSize = 1<<Math.ceil(Math.log2(sr*(state.windowMs/1000) + 1024));
+      if (needSize !== analyser.fftSize && needSize <= 32768) analyser.fftSize = needSize;
+      drawScopeAligned(sr);
+      drawSpectrum(sr);
+    };
+    loop();
+  }
+
+  // ====== UI wiring ======
+  els.play.addEventListener('click', () => { updatePeriodicWave(); start(); });
+  els.stop.addEventListener('click', () => stop());
+  els.gain.addEventListener('input', e => { ensureCtx(); gain.gain.value = parseFloat(e.target.value); });
+  els.freq.addEventListener('input', e => {
+    state.freq = parseFloat(e.target.value);
+    els.freqVal.textContent = `${state.freq} Hz`;
+    if (osc) osc.frequency.value = state.freq;
+  });
+  els.nharm.addEventListener('input', e => {
+    state.nharm = parseInt(e.target.value,10);
+    els.nharmVal.textContent = state.nharm;
+    if (state.waveType==='piecewise'){ updatePeriodicWave(); if (osc) osc.setPeriodicWave(state.periodicWave); }
+  });
+  els.win.addEventListener('input', e => { state.windowMs = parseInt(e.target.value,10); els.winVal.textContent = `${state.windowMs} ms`; });
+  els.lock.addEventListener('change', e => { state.phaseLock = e.target.checked; });
+  els.waveType.addEventListener('change', e => {
+    state.waveType = e.target.value;
+    els.pieceRow.style.display = (state.waveType==='piecewise') ? 'flex' : 'none';
+  });
+  els.update.addEventListener('click', () => {
+    state.piece.levels = parseCsvNumbers(els.levels.value);
+    state.piece.fracs  = parseCsvNumbers(els.fracs.value);
+    if (state.piece.levels.length !== state.piece.fracs.length) { alert('Levels와 Fractions 길이가 같아야 합니다.'); return; }
+    updatePeriodicWave();
+    if (osc && state.waveType==='piecewise') osc.setPeriodicWave(state.periodicWave);
+  });
+
+  // init text
+  els.freqVal.textContent  = `${state.freq} Hz`;
+  els.nharmVal.textContent = `${state.nharm}`;
+  els.winVal.textContent   = `${state.windowMs} ms`;
+  els.pieceRow.style.display = 'flex';
+})();
+</script>
+</body>
+</html>
