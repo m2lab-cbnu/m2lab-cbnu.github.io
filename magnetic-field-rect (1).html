@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Magnetic Field – Rectangular Conductor</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#121212; --panel:#1e1e1e; --text:#f1f1f1; --muted:#bbbbbb; --line:#222; --brand:#00e0ff; --brand2:#00bcd4; }
+  *{ box-sizing:border-box; font-family:'Poppins',sans-serif; }
+  body{ background:var(--bg); color:var(--text); margin:0; }
+  header{ background:var(--panel); padding:18px 20px; border-bottom:1px solid var(--line); }
+  h1{ font-size:22px; color:var(--brand); margin:0; }
+  main{ max-width:980px; margin:0 auto; padding:22px 16px 40px; }
+  .card{ background:linear-gradient(145deg,#1d1d1d,#151515); border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow:0 10px 24px rgba(0,0,0,.25); }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:860px){ .grid{ grid-template-columns:1fr; } }
+  label{ font-size:13px; color:var(--muted); display:block; margin-bottom:6px; }
+  input, select{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:#0f0f0f; color:var(--text); }
+  .row{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .actions{ display:flex; gap:10px; margin-top:12px; }
+  button{ padding:10px 14px; border-radius:10px; border:1px solid var(--line); cursor:pointer; background:var(--brand); color:#121212; }
+  button.secondary{ background:#1b1b1b; color:var(--muted); }
+  .out{ margin-top:14px; padding:12px; border:1px dashed var(--line); border-radius:10px; background:#111; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; }
+  details{ margin-top:14px; }
+  summary{ cursor:pointer; color:var(--muted); }
+  .note{ color:#9ad7df; font-size:13px; margin-top:8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Magnetic Field of a Finite Rectangular Conductor</h1>
+</header>
+<main>
+  <div class="card">
+    <div class="grid">
+      <section>
+        <h3 style="margin-top:0;">Geometry & Current</h3>
+        <div class="row">
+          <div>
+            <label>Width w</label>
+            <input id="w" type="number" step="any" value="3.3"/>
+          </div>
+          <div>
+            <label>Thickness t</label>
+            <input id="t" type="number" step="any" value="0.18"/>
+          </div>
+          <div>
+            <label>Length L</label>
+            <input id="L" type="number" step="any" value="5"/>
+          </div>
+        </div>
+        <div class="row" style="margin-top:8px;">
+          <div>
+            <label>Units (w, t, L)</label>
+            <select id="unit">
+              <option value="mm" selected>mm</option>
+              <option value="m">m</option>
+            </select>
+          </div>
+          <div>
+            <label>Current I (A)</label>
+            <input id="I" type="number" step="any" value="0.1"/>
+          </div>
+          <div>
+            <label>Filament grid (Nx×Nz)</label>
+            <input id="grid" type="text" value="7x7" />
+          </div>
+        </div>
+        <p class="note">좌표계: 도체 중심이 (0,0,0), 길이방향은 +y. 전류는 +y 방향.</p>
+      </section>
+
+      <section>
+        <h3 style="margin-top:0;">Observation Point r = (x, y, z)</h3>
+        <div class="row">
+          <div>
+            <label>x</label>
+            <input id="x" type="number" step="any" value="5"/>
+          </div>
+          <div>
+            <label>y</label>
+            <input id="y" type="number" step="any" value="0"/>
+          </div>
+          <div>
+            <label>z</label>
+            <input id="z" type="number" step="any" value="1"/>
+          </div>
+        </div>
+        <div style="margin-top:8px;">
+          <label>Units for (x,y,z)</label>
+          <select id="runit">
+            <option value="mm" selected>mm</option>
+            <option value="m">m</option>
+          </select>
+        </div>
+      </section>
+    </div>
+
+    <div class="actions">
+      <button id="calc">Compute</button>
+      <button class="secondary" id="fill-demo">Demo point near edge</button>
+    </div>
+
+    <div class="out" id="out">Results will appear here.</div>
+
+    <details>
+      <summary>Model & formula (click)</summary>
+      <p style="margin-top:8px;">
+        직사각 단면을 Nx×Nz개의 가는 필라멘트로 치환. 필라멘트는 y축을 따라 길이 \(L\) (중심 \(-L/2 \sim L/2\))이고,
+        전류는 \(I_f = I/(N_x N_z)\)가 균일하게 흐른다고 가정. 관측점 \(\mathbf{r}=(x,y,z)\), 필라멘트 위치 \((x_i,z_k)\)일 때
+        \(\rho^2=(x-x_i)^2+(z-z_k)^2\), \(u\in\{y-L/2,\; y+L/2\}\).
+      </p>
+      <pre>
+B_x = (μ₀ I_f / 4π) · (z - z_k) · [ u / (ρ² √(ρ² + u²)) ]_{u=y-L/2}^{y+L/2}
+B_z =-(μ₀ I_f / 4π) · (x - x_i) · [ u / (ρ² √(ρ² + u²)) ]_{u=y-L/2}^{y+L/2}
+B_y = 0
+      </pre>
+      <p>합산하여 전체 B⃗ 를 구하고, H⃗ = B⃗ /μ₀.</p>
+    </details>
+  </div>
+</main>
+
+<script>
+const mu0 = 4e-7 * Math.PI;
+
+function mmToM(v, unit){ return unit === 'mm' ? (v * 1e-3) : v; }
+
+function parseGrid(text){
+  const m = String(text).toLowerCase().replace(/\s+/g,'').match(/^(\d+)\s*[x×]\s*(\d+)$/);
+  if(!m) return [7,7];
+  return [Math.max(1,parseInt(m[1])), Math.max(1,parseInt(m[2]))];
+}
+
+function linspace(a,b,n){
+  if(n===1) return [0.5*(a+b)];
+  const step=(b-a)/(n);
+  const arr=[];
+  for(let i=0;i<n;i++){
+    const left=a + i*step;
+    const right=left+step;
+    arr.push(0.5*(left+right)); // cell center
+  }
+  return arr;
+}
+
+function compute(){
+  const w_in = parseFloat(document.getElementById('w').value || '0');
+  const t_in = parseFloat(document.getElementById('t').value || '0');
+  const L_in = parseFloat(document.getElementById('L').value || '0');
+  const unit = document.getElementById('unit').value;
+
+  const I = parseFloat(document.getElementById('I').value || '0');
+
+  const x_in = parseFloat(document.getElementById('x').value || '0');
+  const y_in = parseFloat(document.getElementById('y').value || '0');
+  const z_in = parseFloat(document.getElementById('z').value || '0');
+  const runit = document.getElementById('runit').value;
+
+  const [Nx,Nz] = parseGrid(document.getElementById('grid').value || '7x7');
+
+  // to meters
+  const w = mmToM(w_in, unit);
+  const t = mmToM(t_in, unit);
+  const L = mmToM(L_in, unit);
+  const x0 = mmToM(x_in, runit);
+  const y0 = mmToM(y_in, runit);
+  const z0 = mmToM(z_in, runit);
+
+  if(!(w>0 && t>0 && L>0)){ return writeOut('Check geometry: w,t,L must be > 0'); }
+
+  // filament centers across cross-section
+  const xs = linspace(-w/2, w/2, Nx);
+  const zs = linspace(-t/2, t/2, Nz);
+  const If = I / (Nx * Nz);
+
+  let Bx=0, By=0, Bz=0;
+  const tiny = 1e-12;
+
+  for(const xi of xs){
+    for(const zk of zs){
+      const Rx = x0 - xi;
+      const Rz = z0 - zk;
+      let rho2 = Rx*Rx + Rz*Rz;
+      if(rho2 < tiny) rho2 = tiny;
+
+      const ua = y0 - L/2;
+      const ub = y0 + L/2;
+
+      const F = (u)=> u / (rho2 * Math.sqrt(rho2 + u*u));
+
+      const integral = F(ub) - F(ua); // ∫ du/(rho^2+u^2)^{3/2}
+      const pref = mu0 * If / (4*Math.PI);
+
+      Bx += pref * (Rz) * integral;
+      Bz += -pref * (Rx) * integral;
+      // By += 0
+    }
+  }
+
+  const Bmag = Math.sqrt(Bx*Bx + By*By + Bz*Bz);
+  const Hx = Bx / mu0, Hy = By / mu0, Hz = Bz / mu0;
+  const Hmag = Bmag / mu0;
+
+  writeOut([
+    `Input geometry: w=${w_in} ${unit}, t=${t_in} ${unit}, L=${L_in} ${unit}, I=${I} A`,
+    `Point r=(${x_in}, ${y_in}, ${z_in}) ${runit}  |  Grid: ${Nx}×${Nz}`,
+    '',
+    `B = ( ${fmt(Bx)} , ${fmt(By)} , ${fmt(Bz)} ) T`,
+    `|B| = ${fmt(Bmag)} T`,
+    `H = ( ${fmt(Hx)} , ${fmt(Hy)} , ${fmt(Hz)} ) A/m`,
+    `|H| = ${fmt(Hmag)} A/m`
+  ].join('\n'));
+}
+
+function fmt(x){
+  if (!isFinite(x)) return String(x);
+  const ax = Math.abs(x);
+  if(ax===0) return '0';
+  if(ax>=1e-3 && ax<1e3) return x.toFixed(6);
+  return x.toExponential(6);
+}
+
+function writeOut(text){
+  document.getElementById('out').textContent = text;
+}
+
+document.getElementById('calc').addEventListener('click', compute);
+
+document.getElementById('fill-demo').addEventListener('click', ()=>{
+  // A small demo near the edge
+  document.getElementById('w').value = 3.3;
+  document.getElementById('t').value = 0.18;
+  document.getElementById('L').value = 5;      // mm
+  document.getElementById('unit').value = 'mm';
+  document.getElementById('I').value = 0.1;    // A
+
+  document.getElementById('x').value = 2.0;    // mm
+  document.getElementById('y').value = 0.0;    // mm
+  document.getElementById('z').value = 0.2;    // mm
+  document.getElementById('runit').value = 'mm';
+
+  document.getElementById('grid').value = '11x11';
+  compute();
+});
+
+// auto compute once on load
+compute();
+</script>
+</body>
+</html>

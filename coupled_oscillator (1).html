@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>결합 진동 정규모드 시뮬레이션</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+    background: #f5f5f0;
+    color: #2c2c2a;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    color: #5f5e5a;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  button {
+    padding: 8px 14px;
+    font-size: 13px;
+    background: #ffffff;
+    border: 0.5px solid #b4b2a9;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+    color: #2c2c2a;
+  }
+  button:hover {
+    background: #f1efe8;
+    border-color: #888780;
+  }
+  button:active {
+    transform: scale(0.98);
+  }
+  button.active {
+    background: #E6F1FB;
+    border-color: #185FA5;
+    color: #0C447C;
+  }
+  .sliders {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .slider-group label {
+    display: block;
+    font-size: 12px;
+    color: #5f5e5a;
+    margin-bottom: 4px;
+  }
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background: #d3d1c7;
+    border-radius: 2px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #185FA5;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #185FA5;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
+  .value-display {
+    font-size: 13px;
+    font-weight: 500;
+    min-width: 36px;
+    text-align: right;
+  }
+  .canvas-container {
+    background: #f9f8f3;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+  .grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .small-canvas-container {
+    background: #f9f8f3;
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .canvas-label {
+    font-size: 12px;
+    color: #5f5e5a;
+    margin-bottom: 6px;
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .info-panel {
+    background: #f9f8f3;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 13px;
+  }
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .info-item .label {
+    color: #5f5e5a;
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+  .info-item .value {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .description {
+    margin-top: 20px;
+    padding: 16px;
+    background: #f9f8f3;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #444441;
+  }
+  .description h3 {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 8px;
+    color: #2c2c2a;
+  }
+  .description ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .description li {
+    margin-bottom: 4px;
+  }
+  @media (max-width: 600px) {
+    .grid-2col, .sliders { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>결합 진동의 정규모드</h1>
+  <div class="subtitle">두 질량(4m, m)이 스프링으로 연결된 결합 진동계의 시뮬레이션</div>
+
+  <div class="controls">
+    <button id="btn-mode1">모드 1만 (느린 진동)</button>
+    <button id="btn-mode2">모드 2만 (빠른 진동)</button>
+    <button id="btn-mixed">두 모드 섞임</button>
+    <button id="btn-pause">일시정지</button>
+    <button id="btn-reset">리셋</button>
+  </div>
+
+  <div class="sliders">
+    <div class="slider-group">
+      <label>4m 초기 변위 (x)</label>
+      <div class="slider-row">
+        <input type="range" id="x0" min="-50" max="50" value="20" step="1">
+        <span id="x0-out" class="value-display">20</span>
+      </div>
+    </div>
+    <div class="slider-group">
+      <label>m 초기 변위 (y)</label>
+      <div class="slider-row">
+        <input type="range" id="y0" min="-100" max="100" value="40" step="1">
+        <span id="y0-out" class="value-display">40</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="canvas-container">
+    <canvas id="osc-canvas" width="660" height="280"></canvas>
+  </div>
+
+  <div class="grid-2col">
+    <div class="small-canvas-container">
+      <div class="canvas-label">좌표공간 (x, y) — 비스듬한 모드 축</div>
+      <canvas id="phase-canvas" width="320" height="240"></canvas>
+    </div>
+    <div class="small-canvas-container">
+      <div class="canvas-label">시간에 따른 변위</div>
+      <canvas id="time-canvas" width="320" height="240"></canvas>
+    </div>
+  </div>
+
+  <div class="info-panel">
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="label">모드 1 진폭 (a₁)</div>
+        <div class="value" id="amp1">—</div>
+      </div>
+      <div class="info-item">
+        <div class="label">모드 2 진폭 (a₂)</div>
+        <div class="value" id="amp2">—</div>
+      </div>
+      <div class="info-item">
+        <div class="label">진동수 비 (ω₂/ω₁)</div>
+        <div class="value">√3 ≈ 1.73</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="description">
+    <h3>관찰 포인트</h3>
+    <ul>
+      <li><b>모드 1만</b>: 초기조건 (20, 40) → 비율 1:2. 두 질량이 같은 방향으로 단일 진동수 ω₁로만 진동. 좌표공간에서 초록 직선 위만 움직임.</li>
+      <li><b>모드 2만</b>: 초기조건 (20, -40) → 비율 1:-2. 두 질량이 반대 방향으로 단일 진동수 ω₂로만 진동. 주황 직선 위만 움직임.</li>
+      <li><b>두 모드 섞임</b>: 일반 초기조건. 좌표공간에 복잡한 리사주 곡선. 시간 그래프에 두 진동수 겹침.</li>
+      <li><b>핵심</b>: 모드 1로만 시작하면 영원히 모드 2 성분이 0. 비스듬한 모드 축이지만 모드 분리는 정확히 보존됨.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(function() {
+  const canvas = document.getElementById('osc-canvas');
+  const ctx = canvas.getContext('2d');
+  const pcanvas = document.getElementById('phase-canvas');
+  const pctx = pcanvas.getContext('2d');
+  const tcanvas = document.getElementById('time-canvas');
+  const tctx = tcanvas.getContext('2d');
+
+  // 캔버스 해상도 보정 (선명한 렌더링)
+  function setupCanvas(c, ctx) {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = c.getBoundingClientRect();
+    if (rect.width > 0) {
+      const w = c.width;
+      const h = c.height;
+      c.width = w * dpr;
+      c.height = h * dpr;
+      c.style.width = w + 'px';
+      c.style.height = h + 'px';
+      ctx.scale(dpr, dpr);
+      return { w, h };
+    }
+    return { w: c.width, h: c.height };
+  }
+
+  const oscDim = setupCanvas(canvas, ctx);
+  const phaseDim = setupCanvas(pcanvas, pctx);
+  const timeDim = setupCanvas(tcanvas, tctx);
+
+  // 물리: m=1, k=1로 정규화
+  // 모드 1: omega1^2 = 1/2, 고유벡터 (1, 2)
+  // 모드 2: omega2^2 = 3/2, 고유벡터 (1, -2)
+  const omega1 = Math.sqrt(0.5);
+  const omega2 = Math.sqrt(1.5);
+
+  let state = {
+    x0: 20,
+    y0: 40,
+    t: 0,
+    paused: false,
+    history: []
+  };
+
+  function getModeAmplitudes(x, y) {
+    return {
+      a1: (2 * x + y) / 4,
+      a2: (2 * x - y) / 4
+    };
+  }
+
+  function computePosition(t) {
+    const { a1, a2 } = getModeAmplitudes(state.x0, state.y0);
+    const x = a1 * Math.cos(omega1 * t) + a2 * Math.cos(omega2 * t);
+    const y = 2 * a1 * Math.cos(omega1 * t) - 2 * a2 * Math.cos(omega2 * t);
+    return { x, y };
+  }
+
+  function drawOscillator() {
+    const W = oscDim.w;
+    const H = oscDim.h;
+    ctx.clearRect(0, 0, W, H);
+
+    const { x, y } = computePosition(state.t);
+
+    const ceilingY = 20;
+    ctx.strokeStyle = '#5f5e5a';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(W/2 - 80, ceilingY);
+    ctx.lineTo(W/2 + 80, ceilingY);
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    for (let i = -75; i <= 75; i += 12) {
+      ctx.beginPath();
+      ctx.moveTo(W/2 + i, ceilingY);
+      ctx.lineTo(W/2 + i - 8, ceilingY - 10);
+      ctx.stroke();
+    }
+
+    const restY1 = 100;
+    const restY2 = 200;
+    const cx = W / 2;
+    const scale = 1.2;
+    const m1y = restY1 + x * scale;
+    const m2y = restY2 + y * scale;
+
+    ctx.strokeStyle = '#d3d1c7';
+    ctx.setLineDash([3, 4]);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx - 100, restY1);
+    ctx.lineTo(cx + 100, restY1);
+    ctx.moveTo(cx - 100, restY2);
+    ctx.lineTo(cx + 100, restY2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    function drawSpring(x1, y1, x2, y2, coils) {
+      const dx = x2 - x1, dy = y2 - y1;
+      const len = Math.sqrt(dx*dx + dy*dy);
+      if (len < 1) return;
+      const nx = dx / len, ny = dy / len;
+      const px = -ny, py = nx;
+
+      ctx.strokeStyle = '#5f5e5a';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+
+      const segs = coils * 2;
+      for (let i = 1; i <= segs; i++) {
+        const t = i / segs;
+        const baseX = x1 + dx * t;
+        const baseY = y1 + dy * t;
+        const offset = (i % 2 === 1 ? 6 : -6);
+        if (i === segs) {
+          ctx.lineTo(x2, y2);
+        } else {
+          ctx.lineTo(baseX + px * offset, baseY + py * offset);
+        }
+      }
+      ctx.stroke();
+    }
+
+    drawSpring(cx, ceilingY, cx, m1y - 25, 8);
+    drawSpring(cx, m1y + 25, cx, m2y - 18, 6);
+
+    ctx.fillStyle = '#185FA5';
+    ctx.fillRect(cx - 28, m1y - 25, 56, 50);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '500 14px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('4m', cx, m1y);
+
+    ctx.fillStyle = '#534AB7';
+    ctx.fillRect(cx - 18, m2y - 18, 36, 36);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText('m', cx, m2y);
+
+    if (Math.abs(x) > 1) {
+      ctx.strokeStyle = '#0C447C';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(cx + 50, restY1);
+      ctx.lineTo(cx + 50, m1y);
+      ctx.stroke();
+      const dir1 = x > 0 ? 1 : -1;
+      ctx.beginPath();
+      ctx.moveTo(cx + 50, m1y);
+      ctx.lineTo(cx + 47, m1y - 5 * dir1);
+      ctx.lineTo(cx + 53, m1y - 5 * dir1);
+      ctx.closePath();
+      ctx.fillStyle = '#0C447C';
+      ctx.fill();
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('x=' + x.toFixed(1), cx + 56, (restY1 + m1y) / 2);
+    }
+    if (Math.abs(y) > 1) {
+      ctx.strokeStyle = '#3C3489';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(cx + 40, restY2);
+      ctx.lineTo(cx + 40, m2y);
+      ctx.stroke();
+      const dir2 = y > 0 ? 1 : -1;
+      ctx.beginPath();
+      ctx.moveTo(cx + 40, m2y);
+      ctx.lineTo(cx + 37, m2y - 5 * dir2);
+      ctx.lineTo(cx + 43, m2y - 5 * dir2);
+      ctx.closePath();
+      ctx.fillStyle = '#3C3489';
+      ctx.fill();
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('y=' + y.toFixed(1), cx + 46, (restY2 + m2y) / 2);
+    }
+
+    ctx.fillStyle = '#5f5e5a';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('3k', cx - 35, (ceilingY + m1y) / 2);
+    ctx.fillText('k', cx - 25, (m1y + m2y) / 2);
+  }
+
+  function drawPhaseSpace() {
+    const W = phaseDim.w;
+    const H = phaseDim.h;
+    pctx.clearRect(0, 0, W, H);
+
+    const cx = W / 2;
+    const cy = H / 2;
+    const scale = 1.5;
+
+    pctx.strokeStyle = '#e8e6dd';
+    pctx.lineWidth = 0.5;
+    for (let i = -100; i <= 100; i += 25) {
+      pctx.beginPath();
+      pctx.moveTo(cx + i * scale, 0);
+      pctx.lineTo(cx + i * scale, H);
+      pctx.moveTo(0, cy + i * scale);
+      pctx.lineTo(W, cy + i * scale);
+      pctx.stroke();
+    }
+
+    pctx.strokeStyle = '#888780';
+    pctx.lineWidth = 1;
+    pctx.beginPath();
+    pctx.moveTo(0, cy); pctx.lineTo(W, cy);
+    pctx.moveTo(cx, 0); pctx.lineTo(cx, H);
+    pctx.stroke();
+
+    pctx.fillStyle = '#5f5e5a';
+    pctx.font = '11px sans-serif';
+    pctx.textAlign = 'left';
+    pctx.fillText('x (4m)', W - 40, cy - 4);
+    pctx.textAlign = 'right';
+    pctx.fillText('y (m)', cx - 4, 12);
+
+    pctx.strokeStyle = '#1D9E75';
+    pctx.lineWidth = 1.2;
+    pctx.setLineDash([5, 4]);
+    pctx.beginPath();
+    pctx.moveTo(cx - 60 * scale, cy - 120 * scale);
+    pctx.lineTo(cx + 60 * scale, cy + 120 * scale);
+    pctx.stroke();
+    pctx.fillStyle = '#0F6E56';
+    pctx.font = '500 11px sans-serif';
+    pctx.textAlign = 'left';
+    pctx.fillText('모드 1', cx + 50 * scale, cy + 105 * scale);
+
+    pctx.strokeStyle = '#D85A30';
+    pctx.beginPath();
+    pctx.moveTo(cx - 60 * scale, cy + 120 * scale);
+    pctx.lineTo(cx + 60 * scale, cy - 120 * scale);
+    pctx.stroke();
+    pctx.fillStyle = '#993C1D';
+    pctx.fillText('모드 2', cx + 50 * scale, cy - 105 * scale);
+    pctx.setLineDash([]);
+
+    if (state.history.length > 1) {
+      pctx.strokeStyle = '#534AB7';
+      pctx.lineWidth = 1;
+      pctx.beginPath();
+      const first = state.history[0];
+      pctx.moveTo(cx + first.x * scale, cy - first.y * scale);
+      for (let i = 1; i < state.history.length; i++) {
+        const p = state.history[i];
+        pctx.lineTo(cx + p.x * scale, cy - p.y * scale);
+      }
+      pctx.stroke();
+    }
+
+    const { x, y } = computePosition(state.t);
+    pctx.fillStyle = '#3C3489';
+    pctx.beginPath();
+    pctx.arc(cx + x * scale, cy - y * scale, 5, 0, Math.PI * 2);
+    pctx.fill();
+  }
+
+  function drawTimeSeries() {
+    const W = timeDim.w;
+    const H = timeDim.h;
+    tctx.clearRect(0, 0, W, H);
+
+    const padding = 20;
+    const plotW = W - padding * 2;
+    const plotH = H - padding * 2;
+    const yScale = plotH / 240;
+
+    tctx.strokeStyle = '#e8e6dd';
+    tctx.lineWidth = 0.5;
+    tctx.beginPath();
+    tctx.moveTo(padding, H/2);
+    tctx.lineTo(W - padding, H/2);
+    tctx.stroke();
+
+    tctx.fillStyle = '#5f5e5a';
+    tctx.font = '11px sans-serif';
+    tctx.textAlign = 'left';
+    tctx.fillText('시간', W - 30, H/2 - 4);
+
+    const tWindow = 30;
+    const tStart = Math.max(0, state.t - tWindow);
+    const tEnd = state.t;
+    const points = 200;
+
+    tctx.strokeStyle = '#185FA5';
+    tctx.lineWidth = 1.5;
+    tctx.beginPath();
+    for (let i = 0; i <= points; i++) {
+      const t = tStart + (tEnd - tStart) * i / points;
+      const { x } = computePosition(t);
+      const px = padding + plotW * i / points;
+      const py = H/2 - x * yScale;
+      if (i === 0) tctx.moveTo(px, py);
+      else tctx.lineTo(px, py);
+    }
+    tctx.stroke();
+
+    tctx.strokeStyle = '#534AB7';
+    tctx.lineWidth = 1.5;
+    tctx.beginPath();
+    for (let i = 0; i <= points; i++) {
+      const t = tStart + (tEnd - tStart) * i / points;
+      const { y } = computePosition(t);
+      const px = padding + plotW * i / points;
+      const py = H/2 - y * yScale;
+      if (i === 0) tctx.moveTo(px, py);
+      else tctx.lineTo(px, py);
+    }
+    tctx.stroke();
+
+    tctx.fillStyle = '#185FA5';
+    tctx.fillRect(padding, padding - 8, 12, 2);
+    tctx.fillStyle = '#5f5e5a';
+    tctx.textAlign = 'left';
+    tctx.fillText('x (4m)', padding + 16, padding - 4);
+    tctx.fillStyle = '#534AB7';
+    tctx.fillRect(padding + 60, padding - 8, 12, 2);
+    tctx.fillStyle = '#5f5e5a';
+    tctx.fillText('y (m)', padding + 76, padding - 4);
+  }
+
+  function updateInfo() {
+    const { a1, a2 } = getModeAmplitudes(state.x0, state.y0);
+    document.getElementById('amp1').textContent = a1.toFixed(2);
+    document.getElementById('amp2').textContent = a2.toFixed(2);
+  }
+
+  function setInitial(x, y) {
+    state.x0 = x;
+    state.y0 = y;
+    state.t = 0;
+    state.history = [];
+    document.getElementById('x0').value = x;
+    document.getElementById('y0').value = y;
+    document.getElementById('x0-out').textContent = x;
+    document.getElementById('y0-out').textContent = y;
+    updateInfo();
+  }
+
+  function animate() {
+    if (!state.paused) {
+      state.t += 0.04;
+      const { x, y } = computePosition(state.t);
+      state.history.push({ x, y });
+      if (state.history.length > 800) state.history.shift();
+    }
+    drawOscillator();
+    drawPhaseSpace();
+    drawTimeSeries();
+    requestAnimationFrame(animate);
+  }
+
+  document.getElementById('x0').addEventListener('input', function(e) {
+    const v = parseFloat(e.target.value);
+    document.getElementById('x0-out').textContent = v;
+    state.x0 = v;
+    state.t = 0;
+    state.history = [];
+    updateInfo();
+  });
+  document.getElementById('y0').addEventListener('input', function(e) {
+    const v = parseFloat(e.target.value);
+    document.getElementById('y0-out').textContent = v;
+    state.y0 = v;
+    state.t = 0;
+    state.history = [];
+    updateInfo();
+  });
+  document.getElementById('btn-mode1').addEventListener('click', function() {
+    setInitial(20, 40);
+  });
+  document.getElementById('btn-mode2').addEventListener('click', function() {
+    setInitial(20, -40);
+  });
+  document.getElementById('btn-mixed').addEventListener('click', function() {
+    setInitial(30, 10);
+  });
+  document.getElementById('btn-pause').addEventListener('click', function(e) {
+    state.paused = !state.paused;
+    e.target.textContent = state.paused ? '재생' : '일시정지';
+  });
+  document.getElementById('btn-reset').addEventListener('click', function() {
+    state.t = 0;
+    state.history = [];
+  });
+
+  updateInfo();
+  animate();
+})();
+</script>
+
+</body>
+</html>
