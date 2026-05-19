@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microwave Ovens and Induction — Two Faces of EM Heating</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,700;0,800;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+  --ink: #1a1614;
+  --paper: #f4ede1;
+  --paper-shade: #ebe0cc;
+  --rule: #2a2520;
+  --accent: #9a2617;
+  --accent-soft: #c46b5f;
+  --highlight: #f7d774;
+  --muted: #6b5d4f;
+  --insight-bg: #faf3e3;
+  --warn-bg: #fde8e3;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.75;
+  font-size: 17px;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(154, 38, 23, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(0, 0, 0, 0.02) 0%, transparent 50%);
+}
+
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 80px 32px 120px;
+}
+
+/* Header */
+header {
+  border-bottom: 3px double var(--rule);
+  padding-bottom: 40px;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 800;
+  font-size: clamp(40px, 6vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  color: var(--ink);
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 21px;
+  line-height: 1.55;
+  color: var(--muted);
+  font-style: italic;
+  max-width: 620px;
+  font-weight: 500;
+}
+
+.meta {
+  margin-top: 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.meta span::before {
+  content: "—— ";
+  color: var(--accent);
+}
+
+/* TOC */
+.toc {
+  background: var(--paper-shade);
+  border-left: 4px solid var(--accent);
+  padding: 28px 32px;
+  margin: 48px 0 64px;
+}
+
+.toc-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+
+.toc ol {
+  list-style: none;
+  counter-reset: toc;
+}
+
+.toc li {
+  counter-increment: toc;
+  padding: 6px 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+}
+
+.toc li::before {
+  content: counter(toc, decimal-leading-zero) " · ";
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  margin-right: 8px;
+}
+
+.toc a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.toc a:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* Sections */
+section {
+  margin-bottom: 72px;
+}
+
+.section-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 32px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 16px;
+}
+
+h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 40px 0 16px;
+  color: var(--ink);
+}
+
+h3::before {
+  content: "§ ";
+  color: var(--accent);
+  font-weight: 400;
+}
+
+p {
+  margin-bottom: 18px;
+}
+
+p + p { margin-top: -4px; }
+
+strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+/* Drop cap on first paragraph */
+section .lead::first-letter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 78px;
+  font-weight: 800;
+  float: left;
+  line-height: 0.85;
+  margin: 8px 12px 0 0;
+  color: var(--accent);
+}
+
+/* Insight boxes */
+.insight, .warn, .formula-box, .conclusion {
+  margin: 32px 0;
+  padding: 24px 28px;
+  position: relative;
+}
+
+.insight {
+  background: var(--insight-bg);
+  border: 1px solid rgba(154, 38, 23, 0.2);
+  border-left: 4px solid var(--accent);
+}
+
+.insight::before {
+  content: "INSIGHT";
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  background: var(--paper);
+  padding: 0 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.warn {
+  background: var(--warn-bg);
+  border: 1px solid rgba(196, 107, 95, 0.4);
+  border-left: 4px solid var(--accent-soft);
+}
+
+.warn::before {
+  content: "COMMON MISCONCEPTION";
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  background: var(--paper);
+  padding: 0 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--accent-soft);
+  font-weight: 500;
+}
+
+.formula-box {
+  background: var(--paper-shade);
+  border-left: 4px solid var(--ink);
+  text-align: center;
+  font-size: 18px;
+}
+
+.conclusion {
+  background: var(--ink);
+  color: var(--paper);
+  border-left: 4px solid var(--highlight);
+  margin-top: 48px;
+}
+
+.conclusion::before {
+  content: "BOTTOM LINE";
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  background: var(--paper);
+  padding: 0 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.conclusion strong {
+  color: var(--highlight);
+}
+
+/* Inline code-like */
+code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.92em;
+  background: var(--paper-shade);
+  padding: 2px 6px;
+  border-radius: 2px;
+  color: var(--ink);
+}
+
+/* Math display block */
+.math-display {
+  margin: 24px 0;
+  padding: 16px;
+  background: var(--paper-shade);
+  text-align: center;
+  border-left: 3px solid var(--accent);
+  overflow-x: auto;
+}
+
+/* Comparison table */
+.compare-table {
+  width: 100%;
+  margin: 32px 0;
+  border-collapse: collapse;
+  font-size: 15px;
+  background: var(--paper-shade);
+}
+
+.compare-table th, .compare-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.compare-table thead th {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 500;
+  border-bottom: none;
+}
+
+.compare-table td:first-child {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 17px;
+}
+
+.compare-table .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+}
+
+.compare-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Two-column layout */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 32px 0;
+}
+
+.col-card {
+  background: var(--paper-shade);
+  padding: 24px;
+  border-top: 3px solid var(--accent);
+}
+
+.col-card h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+
+.col-card .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+/* SVG diagram styling */
+.diagram {
+  margin: 36px 0;
+  text-align: center;
+}
+
+.diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.diagram-caption {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--muted);
+  margin-top: 12px;
+  text-align: center;
+}
+
+.ornament {
+  text-align: center;
+  margin: 56px 0;
+  color: var(--accent);
+  font-size: 18px;
+  letter-spacing: 1em;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .container { padding: 48px 20px 80px; }
+  h1 { font-size: 38px; }
+  .two-col { grid-template-columns: 1fr; }
+  .compare-table { font-size: 13px; }
+  .compare-table th, .compare-table td { padding: 10px 8px; }
+}
+
+/* Channel diagram */
+.channels {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: center;
+  margin: 36px 0;
+}
+
+.channel {
+  background: var(--paper-shade);
+  padding: 20px;
+  border-left: 4px solid var(--accent);
+  position: relative;
+}
+
+.channel .ch-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.channel .ch-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1.25;
+  margin-bottom: 10px;
+}
+
+.channel .ch-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.times {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px;
+  color: var(--accent);
+  font-weight: 400;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .channels { grid-template-columns: 1fr; }
+  .times { transform: rotate(90deg); }
+}
+
+ul.bullet-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 16px 0;
+}
+
+ul.bullet-list li {
+  padding-left: 20px;
+  margin-bottom: 12px;
+  border-left: 2px solid var(--accent-soft);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <div class="eyebrow">Physics Note · Electromagnetism</div>
+  <h1>Microwaves and Induction:<br><em>Same EM, Different Mechanisms</em></h1>
+  <p class="subtitle">Why an electric field — not magnetic — heats water, and why magnetization $M$ — not skin depth — heats your pan. A walk through the gap between common intuitions and the actual physics.</p>
+  <div class="meta">
+    <span>Dielectric loss</span>
+    <span>Eddy currents</span>
+    <span>Boundary conditions</span>
+  </div>
+</header>
+
+<div class="toc">
+  <div class="toc-title">Contents</div>
+  <ol>
+    <li><a href="#sec1">Why a microwave oven needs no magnetic field</a></li>
+    <li><a href="#sec2">2.45 GHz is not a resonance</a></li>
+    <li><a href="#sec3">The induction heating formula</a></li>
+    <li><a href="#sec4">Skin depth is not the decisive quantity</a></li>
+    <li><a href="#sec5">The real advantage of ferromagnets — two channels of $M$</a></li>
+    <li><a href="#sec6">Why aluminum doesn't work</a></li>
+    <li><a href="#sec7">Common misconceptions in summary</a></li>
+  </ol>
+</div>
+
+<!-- Section 1 -->
+<section id="sec1">
+  <div class="section-number">01 ─────</div>
+  <h2>Why a microwave oven needs no magnetic field</h2>
+
+  <p class="lead">A microwave oven uses microwaves, which <em>are</em> electromagnetic waves — they carry both an electric field $\mathbf{E}$ and a magnetic field $\mathbf{B}$. But heating water is done almost entirely by the <strong>electric field</strong>.</p>
+
+  <p>Water molecules carry a permanent electric dipole moment. The oscillating $\mathbf{E}$ keeps rotating them, while the viscosity of the H-bond network in liquid water resists that rotation. The polarization lags the field in phase — this is <em>dielectric relaxation</em> — and that phase lag is exactly what gets dissipated as heat.</p>
+
+  <div class="formula-box">
+    $$P/V = \tfrac{1}{2}\,\omega\,\varepsilon_0\,\varepsilon''(\omega)\,|\mathbf{E}|^2$$
+  </div>
+
+  <p>Why doesn't the magnetic field contribute? Two reasons:</p>
+
+  <p><strong>(1) In an EM wave, $|\mathbf{E}|/|\mathbf{B}| = c$.</strong> The magnetic force $q\mathbf{v}\times\mathbf{B}$ on a non-relativistic particle is smaller than the electric force $q\mathbf{E}$ by a factor of $v/c$. For water molecules at thermal speeds ($\sim 600$ m/s), $v/c \sim 10^{-6}$.</p>
+
+  <p><strong>(2) Water is diamagnetic.</strong> Its magnetic dipole coupling is intrinsically weak — there's almost nothing for the magnetic field to grab onto.</p>
+
+  <div class="insight">
+    <p style="margin-bottom: 0;"><strong>So the answer to "why no magnetic field?" is:</strong> there <em>is</em> one, but it's along for the ride. The $\mathbf{E}$ field does the work. For NMR-style heating you'd need a static $B_0$ to set up Larmor precession — which doesn't exist in a microwave oven, so no magnetic resonance.</p>
+  </div>
+</section>
+
+<!-- Section 2 -->
+<section id="sec2">
+  <div class="section-number">02 ─────</div>
+  <h2>2.45 GHz is not a resonance</h2>
+
+  <p class="lead">The single most common misconception about microwave ovens: "2.45 GHz is the resonant frequency of water." <strong>It's wrong.</strong></p>
+
+  <div class="warn">
+    <p style="margin-bottom: 0;">"2.45 GHz matches a rotational transition of water" — you see this in textbooks, popular media, and casual explanations. But 2.45 GHz is nowhere near water's absorption peak.</p>
+  </div>
+
+  <p>Liquid water's dielectric loss $\varepsilon''(\omega)$ is a <strong>broad Debye relaxation spectrum</strong>, with its peak around 17–20 GHz at room temperature (corresponding to the relaxation time $\tau \approx 8$ ps, so $1/(2\pi\tau)$). 2.45 GHz sits well below the peak, on the low-frequency tail.</p>
+
+  <p>So why 2.45 GHz?</p>
+
+  <div class="two-col">
+    <div class="col-card">
+      <div class="label">Reason 1</div>
+      <h4>ISM Band</h4>
+      <p>2.45 GHz is reserved for industrial, scientific, and medical use — no telecom license required. A practical engineering choice.</p>
+    </div>
+    <div class="col-card">
+      <div class="label">Reason 2</div>
+      <h4>Penetration Depth</h4>
+      <p>Heating at the absorption peak would cook only the surface. 2.45 GHz is deliberately chosen <em>away</em> from the peak to ensure ~1 cm penetration into food.</p>
+    </div>
+  </div>
+
+  <p>The truth is the opposite of the popular story: 2.45 GHz is <em>deliberately off-resonance</em> to secure penetration. Slightly inefficient absorption is the feature, not a bug.</p>
+
+  <div class="insight">
+    <p style="margin-bottom: 0;"><strong>Photon energy vs. heating:</strong> $\hbar\omega \approx 10\ \mu$eV is roughly $1/2500$ of $k_B T(300\text{ K}) \approx 25$ meV. A picture of "one photon exciting one molecule" simply doesn't apply. Heating here is macroscopic dielectric loss; even with $\hbar\omega \ll k_B T$, as long as $\varepsilon''(\omega) \neq 0$ the medium absorbs power $\frac{1}{2}\omega\varepsilon_0\varepsilon''|E|^2$.</p>
+  </div>
+</section>
+
+<div class="ornament">· · ·</div>
+
+<!-- Section 3 -->
+<section id="sec3">
+  <div class="section-number">03 ─────</div>
+  <h2>The induction heating formula</h2>
+
+  <p class="lead">If microwave ovens use $\mathbf{E}$, induction cooktops use $\mathbf{B}$. A coil carries an AC current at ~25 kHz, generating an oscillating magnetic field. That field induces eddy currents in the pan, which dissipate as $J^2/\sigma$ Joule heat. Simple in principle.</p>
+
+  <p>Let's start with the result:</p>
+
+  <div class="formula-box">
+    $$\boxed{\;\frac{P}{A} = \tfrac{1}{2}\,|\mathbf{H}_{\text{surf}}|^2 \cdot \text{Re}(Z_s) = \frac{|\mathbf{H}_{\text{surf}}|^2}{2\sigma\delta} = \tfrac{1}{2}|\mathbf{H}_{\text{surf}}|^2 \sqrt{\frac{\omega\mu}{2\sigma}}\;}$$
+  </div>
+
+  <p>Three forms of the same expression. The cast of characters:</p>
+
+  <ul style="list-style: none; padding-left: 20px; margin: 16px 0;">
+    <li style="margin-bottom: 8px;">• $|\mathbf{H}_{\text{surf}}|$ — tangential magnetic field at the pan's surface</li>
+    <li style="margin-bottom: 8px;">• $\sigma$ — electrical conductivity</li>
+    <li style="margin-bottom: 8px;">• $\mu = \mu_r \mu_0$ — permeability (the response of magnetization $M$ is packed into $\mu_r$)</li>
+    <li style="margin-bottom: 8px;">• $\delta = \sqrt{2/(\omega\mu\sigma)}$ — skin depth</li>
+    <li style="margin-bottom: 8px;">• $\text{Re}(Z_s) = 1/(\sigma\delta)$ — real part of the surface impedance (= sheet resistance)</li>
+  </ul>
+
+  <p>All three forms are the same quantity, but each one makes different variables visible and hides others. <strong>This is where most of the confusion starts.</strong></p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="6" stroke="#9a2617" stroke-width="0.6" opacity="0.3"/>
+        </pattern>
+      </defs>
+      <!-- Surface line -->
+      <line x1="50" y1="80" x2="550" y2="80" stroke="#1a1614" stroke-width="2"/>
+      <text x="50" y="70" font-family="JetBrains Mono, monospace" font-size="11" fill="#1a1614">surface (z = 0)</text>
+      <!-- Current density curve -->
+      <path d="M 50 80 Q 50 80 100 130 Q 200 200 350 215 L 550 215" stroke="#9a2617" stroke-width="2.5" fill="none"/>
+      <path d="M 50 80 Q 50 80 100 130 Q 200 200 350 215 L 550 215 L 550 80 Z" fill="url(#hatch)"/>
+      <!-- delta marker -->
+      <line x1="150" y1="80" x2="150" y2="155" stroke="#1a1614" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="155" y="125" font-family="Cormorant Garamond, serif" font-style="italic" font-size="18" fill="#1a1614">δ</text>
+      <!-- J0 marker -->
+      <line x1="50" y1="80" x2="40" y2="80" stroke="#9a2617" stroke-width="1"/>
+      <text x="10" y="84" font-family="Cormorant Garamond, serif" font-style="italic" font-size="16" fill="#9a2617">J₀</text>
+      <!-- z axis -->
+      <line x1="50" y1="80" x2="50" y2="225" stroke="#1a1614" stroke-width="1"/>
+      <text x="58" y="225" font-family="Cormorant Garamond, serif" font-style="italic" font-size="16" fill="#1a1614">z</text>
+      <!-- Equation -->
+      <text x="370" y="120" font-family="Cormorant Garamond, serif" font-style="italic" font-size="17" fill="#1a1614">J(z) = J₀ e</text>
+      <text x="465" y="113" font-family="Cormorant Garamond, serif" font-style="italic" font-size="12" fill="#1a1614">−z/δ</text>
+      <!-- Title -->
+      <text x="300" y="25" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="2" fill="#9a2617">CURRENT DENSITY WITHIN THE SKIN DEPTH</text>
+    </svg>
+    <div class="diagram-caption">Eddy current density decays exponentially with depth $z$. All heating happens in the hatched region.</div>
+  </div>
+</section>
+
+<!-- Section 4 -->
+<section id="sec4">
+  <div class="section-number">04 ─────</div>
+  <h2>Skin depth is not the decisive quantity</h2>
+
+  <p class="lead">"Skin depth is small in a ferromagnet, so the current is concentrated and it heats well." This intuition is half right — and half a trap.</p>
+
+  <div class="warn">
+    <p style="margin-bottom: 0;"><strong>"Small $\delta$ ⇒ good heating" does not hold in general.</strong> Aluminum has $\delta \approx 500\ \mu$m, tiny compared to the free-space wavelength (km scale), yet induction doesn't work on it. A superconductor has $\delta \to 0$ but absorbs zero power.</p>
+  </div>
+
+  <p>Why $\delta$ alone misleads: the surface current density is $J_0 = |\mathbf{H}|/\delta$, so smaller $\delta$ means larger $J_0$. But the heating is $\int J^2/\sigma\,dV$, and the integration volume also shrinks with $\delta$. The two effects multiply:</p>
+
+  <div class="formula-box">
+    $$\frac{P}{A} = \int_0^\infty \frac{|J(z)|^2}{2\sigma}\,dz = \frac{|\mathbf{H}|^2}{2\sigma\delta}$$
+  </div>
+
+  <p>The relevant combination is the <strong>product $\sigma\delta$</strong>. Its inverse $1/(\sigma\delta) = \text{Re}(Z_s)$ is nothing other than the <em>sheet resistance</em>. Heating scales with sheet resistance.</p>
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Material</th>
+        <th>$\delta$ (μm)</th>
+        <th>$\sigma$ (S/m)</th>
+        <th>$\sigma\delta$</th>
+        <th>$R_\square = 1/(\sigma\delta)$ (Ω)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Aluminum</td>
+        <td class="num">~500</td>
+        <td class="num">3.5×10⁷</td>
+        <td class="num">1.75×10⁴</td>
+        <td class="num">5.7×10⁻⁵</td>
+      </tr>
+      <tr>
+        <td>Iron ($\mu_r \approx 500$)</td>
+        <td class="num">~40</td>
+        <td class="num">1×10⁷</td>
+        <td class="num">400</td>
+        <td class="num">2.5×10⁻³</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Aluminum's $\delta$ is 12× larger, but the real story is in $\sigma\delta$ — which is <strong>44× larger</strong> for aluminum. So iron's sheet resistance is 44× higher, and the absorbed power scales accordingly. <strong>Looking at $\delta$ alone underestimates the gap.</strong></p>
+</section>
+
+<div class="ornament">· · ·</div>
+
+<!-- Section 5 -->
+<section id="sec5">
+  <div class="section-number">05 ─────</div>
+  <h2>The real advantage of ferromagnets — two channels of $M$</h2>
+
+  <p class="lead">Magnetization $\mathbf{M}$ contributes to heating through exactly two channels. Both originate from the same $\mu_r$, but they act in physically distinct ways.</p>
+
+  <div class="channels">
+    <div class="channel">
+      <div class="ch-label">CHANNEL 1 · STATIC</div>
+      <div class="ch-title">Magnetic circuit effect<br>(flux concentration)</div>
+      <div class="ch-body">With $M$, the magnetic circuit reluctance drops, and flux gets drawn into the pan. For the same coil current, <strong>$|\mathbf{H}_{\text{surf}}|$ itself becomes larger</strong>. In a non-magnetic pan, flux leaks out into the surrounding air.</div>
+    </div>
+    <div class="times">×</div>
+    <div class="channel">
+      <div class="ch-label">CHANNEL 2 · DYNAMIC</div>
+      <div class="ch-title">Time response of $M$<br>($\partial M/\partial t$)</div>
+      <div class="ch-body">$\partial \mathbf{B}/\partial t = \mu_r \mu_0\, \partial \mathbf{H}/\partial t$. The varying $M$ amplifies $\partial B/\partial t$ by $\mu_r$, strengthening the induced eddy current. As a result, <strong>$\delta$ shrinks and $1/(\sigma\delta)$ grows.</strong></div>
+    </div>
+  </div>
+
+  <p>Reading the heating formula as $P/A = \tfrac{1}{2}|\mathbf{H}_{\text{surf}}|^2 \cdot \text{Re}(Z_s)$, <strong>the left factor is Channel 1 and the right factor is Channel 2</strong>. Both effects multiply, and that's why ferromagnetic heating dominates so completely.</p>
+
+  <h3>Where is $M$ hiding in the equation?</h3>
+
+  <p>The letter $M$ doesn't appear explicitly, but it's hiding in both places:</p>
+
+  <ul class="bullet-list">
+    <li><strong>Hidden in $|\mathbf{H}_{\text{surf}}|$</strong> — the very existence of $M$ reorganizes the flux distribution, raising the surface $H$. Note: $M$ is not arithmetically added to $H$ (that's $\mathbf{B} = \mu_0(\mathbf{H}+\mathbf{M})$, not $H + M$ for $H$ itself). What happens is that $M$ reshapes the magnetic circuit, so the value of $|\mathbf{H}_{\text{surf}}|$ grows.</li>
+    <li><strong>Hidden in $\delta$</strong> — $\delta = \sqrt{2/(\omega \mu_r \mu_0 \sigma)}$. The $\mu_r$ here is precisely the response strength of $M$. The reason $\delta$ is small in a ferromagnet is exactly $M$.</li>
+  </ul>
+
+  <h3>Bonus — hysteresis loss</h3>
+
+  <p>On top of the eddy current loss, a ferromagnet has an additional irreversible loss per cycle: $\oint \mathbf{H}\cdot d\mathbf{B}$ (the area of the B-H loop).</p>
+
+  <div class="formula-box">
+    $$\frac{P_{\text{hyst}}}{V} = f \oint \mathbf{H}\cdot d\mathbf{B}$$
+  </div>
+
+  <p>This mechanism is unrelated to eddy currents — it's about the irreversibility of domain wall motion. Even an idealized $\sigma \to \infty$ ferromagnet would still have hysteresis loss. In practice it contributes 10–30% of total induction heating.</p>
+</section>
+
+<!-- Section 6 -->
+<section id="sec6">
+  <div class="section-number">06 ─────</div>
+  <h2>Why aluminum doesn't work</h2>
+
+  <p class="lead">"What if a non-magnetic material has small enough $\delta$ — couldn't that work?" It's a natural question, but the answer is no — at least at the standard 25–50 kHz of household induction.</p>
+
+  <p>Using the two-channel framework, the reason is sharp:</p>
+
+  <ul class="bullet-list">
+    <li><strong>Channel 1 (flux concentration) is absent</strong> — $\mu_r = 1$. Flux doesn't get drawn into aluminum; it spreads through the surrounding air. $|\mathbf{H}_{\text{surf}}|$ stays small.</li>
+    <li><strong>Channel 2 (sheet resistance) is weak</strong> — $\sigma$ is huge, so $\sigma\delta$ is large and $1/(\sigma\delta)$ is small. Surface absorptivity is poor. Macroscopically: aluminum is such a good conductor that it acts as a near-perfect magnetic shield — the surface eddy currents almost completely cancel the incoming magnetic field, leaving nothing to absorb. (This is the Lenz limit; in a superconductor it becomes perfect diamagnetism.)</li>
+    <li><strong>Hysteresis loss is zero</strong> — no $M$, no hysteresis.</li>
+  </ul>
+
+  <div class="insight">
+    <p style="margin-bottom: 0;"><strong>"All-metal" induction cooktops:</strong> push the frequency above a few MHz, and both $\delta \propto 1/\sqrt{\omega\sigma}$ and $|Z_s| \propto \sqrt{\omega/\sigma}$ improve enough to heat non-magnetic conductors. Such products exist, but coil losses grow with frequency and the absence of flux concentration weakens coupling intrinsically. Efficiency lags far behind ferromagnetic pans.</p>
+  </div>
+
+  <h3>What about impedance matching? Isn't $|Z_s| = \eta_0 \approx 377\ \Omega$ optimal?</h3>
+
+  <p>That rule applies only to <strong>plane-wave absorption in free space</strong>. At 25 kHz, the wavelength is ~12 km and $\lambda/2\pi \sim$2 km. Induction operates in the quasi-static <em>near-field</em> regime, with coil and pan separated by centimeters. In near-field there is no plane-wave $|\mathbf{E}|/|\mathbf{H}|$ ratio, and absorption is governed by $|\mathbf{H}_{\text{surf}}|^2 \cdot \text{Re}(Z_s)$ — $\eta_0$ does not appear anywhere. The intuition from free-space matching doesn't transfer.</p>
+</section>
+
+<!-- Section 7 -->
+<section id="sec7">
+  <div class="section-number">07 ─────</div>
+  <h2>Common misconceptions in summary</h2>
+
+  <div class="warn">
+    <p style="margin-bottom: 8px;"><strong>Misconception 1.</strong> "A microwave oven uses water's resonant frequency."</p>
+    <p style="margin-bottom: 0;"><strong>Reality:</strong> 2.45 GHz is an ISM band chosen for penetration depth — deliberately off-resonance. Liquid water's absorption peak is around 17–20 GHz.</p>
+  </div>
+
+  <div class="warn">
+    <p style="margin-bottom: 8px;"><strong>Misconception 2.</strong> "Small skin depth is itself the cause of heating."</p>
+    <p style="margin-bottom: 0;"><strong>Reality:</strong> Heating scales with $1/(\sigma\delta)$. Small $\delta$ alone isn't enough — aluminum is the counterexample. $\delta$ is a byproduct of the same cause ($\mu_r \uparrow$), not the cause itself.</p>
+  </div>
+
+  <div class="warn">
+    <p style="margin-bottom: 8px;"><strong>Misconception 3.</strong> "$M$ adds to $H$."</p>
+    <p style="margin-bottom: 0;"><strong>Reality:</strong> $\mathbf{B} = \mu_0(\mathbf{H} + \mathbf{M})$ — but $\mathbf{M}$ is not added to $\mathbf{H}$ itself. The source of $\mathbf{H}$ is the free current $\mathbf{J}_{\text{free}}$. $M$ acts indirectly by reshaping the magnetic circuit, which raises the value of $|\mathbf{H}_{\text{surf}}|$.</p>
+  </div>
+
+  <div class="warn">
+    <p style="margin-bottom: 8px;"><strong>Misconception 4.</strong> "Impedance matching $|Z_s| = \eta_0$ is optimal."</p>
+    <p style="margin-bottom: 0;"><strong>Reality:</strong> This is a plane-wave rule. In the near-field of induction, $\eta_0$ doesn't enter the formula at all. Larger $|Z_s|$ is better (within the good-conductor regime).</p>
+  </div>
+
+  <div class="warn">
+    <p style="margin-bottom: 8px;"><strong>Misconception 5.</strong> "Eddy currents raise the surface $H$ in a ferromagnet."</p>
+    <p style="margin-bottom: 0;"><strong>Reality:</strong> The opposite. By Lenz's law, eddy currents oppose the external change — they reduce $H$ inside the medium. The large surface $|H|$ comes from the static magnetic circuit effect (flux concentration).</p>
+  </div>
+</section>
+
+<!-- Conclusion -->
+<div class="conclusion">
+  <h3 style="color: var(--paper); margin-top: 0;">One-line summary</h3>
+  <p style="font-size: 18px; line-height: 1.7;">A <strong>microwave oven</strong> heats water by rotating its electric dipoles against viscous drag (Debye loss). An <strong>induction cooktop</strong> heats a ferromagnetic pan by shaking its magnetization $M$ (flux concentration × eddy current amplification × hysteresis bonus). <strong>Skin depth</strong> is the length scale that emerges from these mechanisms — never their cause.</p>
+</div>
+
+</div>
+
+</body>
+</html>

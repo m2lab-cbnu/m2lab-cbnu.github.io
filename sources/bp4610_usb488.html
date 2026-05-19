@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NF BP4610 (firmware 1.40) USB control on Windows 11 — M²Lab</title>
+<meta name="description" content="Notes on controlling the NF Corporation BP4610 Bipolar DC Power Supply (firmware 1.40) over USB on Windows 11 using the JEMIMA USB488 protocol.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:        #0e1014;
+  --bg-soft:   #161920;
+  --bg-card:   #1a1e26;
+  --rule:      #2a2f3a;
+  --rule-soft: #1f242d;
+  --text:      #e5e7eb;
+  --text-soft: #9ca3af;
+  --text-mute: #6b7280;
+  --amber:     #f59e0b;
+  --green:     #4ade80;
+  --red:       #f87171;
+  --code-bg:   #0a0c10;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection { background: var(--amber); color: var(--bg); }
+
+a { color: var(--amber); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+a:hover { border-bottom-color: var(--amber); }
+
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 28px; }
+main { padding-bottom: 100px; }
+
+.topbar {
+  border-bottom: 1px solid var(--rule);
+  padding: 16px 0;
+  background: rgba(14, 16, 20, 0.85);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.topbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.topbar-inner .lab { color: var(--text); font-weight: 600; }
+
+.hero { padding: 80px 0 56px; border-bottom: 1px solid var(--rule); }
+
+.tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--amber);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tag::before {
+  content: "";
+  width: 28px; height: 1px; background: var(--amber);
+}
+
+h1 {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: clamp(38px, 5.5vw, 60px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin-bottom: 22px;
+  color: var(--text);
+}
+
+.lede {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text-soft);
+  max-width: 680px;
+  margin-bottom: 40px;
+}
+
+.specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 36px;
+}
+.specs > div { background: var(--bg-soft); padding: 14px 16px; }
+.spec-k {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin-bottom: 4px;
+}
+.spec-v { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); }
+
+section { padding: 56px 0 36px; border-bottom: 1px solid var(--rule); }
+section:last-of-type { border-bottom: none; }
+
+.sec-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--amber);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: clamp(28px, 3.5vw, 38px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 32px;
+}
+
+.content > * + * { margin-top: 1em; }
+.content p { font-size: 15px; line-height: 1.7; color: var(--text); }
+.content p strong { color: var(--text); font-weight: 600; }
+
+.content h3 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--text);
+  margin-top: 1.8em;
+  margin-bottom: 0.6em;
+  letter-spacing: -0.005em;
+}
+
+.content h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+  font-weight: 600;
+}
+
+.points {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  margin: 1em 0 !important;
+}
+.pt {
+  padding: 16px 20px 16px 60px;
+  border-bottom: 1px solid var(--rule-soft);
+  position: relative;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.pt:last-child { border-bottom: none; }
+.pt-num {
+  position: absolute;
+  left: 20px;
+  top: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--amber);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.pt strong { color: var(--text); font-weight: 600; }
+.pt code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  background: var(--code-bg);
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: var(--amber);
+  border: 1px solid var(--rule);
+}
+
+pre {
+  background: var(--code-bg);
+  color: #e8e3d6;
+  padding: 22px 24px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 1.4em 0;
+  position: relative;
+}
+pre[data-label]::before {
+  content: attr(data-label);
+  position: absolute;
+  top: 0;
+  right: 14px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--amber);
+  color: var(--bg);
+  padding: 3px 9px;
+  border-radius: 0 0 3px 3px;
+  font-weight: 700;
+}
+
+pre .kw   { color: #c084fc; }
+pre .str  { color: #86efac; }
+pre .com  { color: #6b7280; font-style: italic; }
+pre .fn   { color: #60a5fa; }
+pre .num  { color: #fbbf24; }
+pre .cls  { color: #fcd34d; }
+pre .self { color: #f472b6; }
+
+p code, li code, td code, .pt-text code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88em;
+  background: var(--code-bg);
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: var(--amber);
+  border: 1px solid var(--rule);
+}
+
+.tbl-wrap { overflow-x: auto; margin: 1.5em 0; border-radius: 6px; border: 1px solid var(--rule); }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  font-family: 'Inter', sans-serif;
+}
+table thead th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 11px 14px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--rule);
+  color: var(--text-soft);
+  font-weight: 600;
+  white-space: nowrap;
+}
+table tbody td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: top;
+  color: var(--text);
+}
+table tbody tr:last-child td { border-bottom: none; }
+table tbody tr:hover { background: var(--bg-soft); }
+table td code {
+  font-size: 12.5px;
+  background: transparent;
+  padding: 0;
+  border: none;
+  color: var(--amber);
+  font-weight: 500;
+}
+.mono { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--text-soft); }
+.danger { color: var(--red); font-weight: 500; }
+.ok { color: var(--green); }
+
+.pill {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+.pill-ok { background: rgba(74, 222, 128, 0.15); color: var(--green); border: 1px solid rgba(74, 222, 128, 0.3); }
+.pill-no { background: rgba(248, 113, 113, 0.15); color: var(--red); border: 1px solid rgba(248, 113, 113, 0.3); }
+.pill-key { background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+
+.callout {
+  background: var(--bg-card);
+  border-left: 3px solid var(--amber);
+  padding: 14px 18px;
+  margin: 1.5em 0 !important;
+  font-size: 14px;
+  line-height: 1.6;
+  border-radius: 0 4px 4px 0;
+  color: var(--text-soft);
+}
+.callout strong { color: var(--text); }
+.callout-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--amber);
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+.callout.warn { border-left-color: var(--red); }
+.callout.warn .callout-label { color: var(--red); }
+
+.timeline {
+  margin: 1.4em 0 !important;
+  border-left: 1px solid var(--rule);
+  padding-left: 28px;
+}
+.tl { position: relative; padding-bottom: 20px; }
+.tl:last-child { padding-bottom: 0; }
+.tl::before {
+  content: "";
+  position: absolute;
+  left: -33px; top: 6px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--bg-soft);
+  border: 1.5px solid var(--text-mute);
+}
+.tl.no::before { background: var(--red); border-color: var(--red); }
+.tl.yes::before { background: var(--amber); border-color: var(--amber); }
+.tl-step {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin-bottom: 3px;
+}
+.tl-step .tag-fail { color: var(--red); }
+.tl-step .tag-ok { color: var(--amber); }
+.tl-content {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-soft);
+}
+.tl-content strong { color: var(--text); }
+.tl-content code {
+  font-size: 12.5px;
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  color: var(--amber);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.content ul, .content ol { padding-left: 22px; font-size: 15px; }
+.content li { margin-bottom: 0.4em; line-height: 1.65; color: var(--text); }
+.content li::marker { color: var(--amber); }
+
+.toc {
+  background: var(--bg-soft);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin: 36px 0 0;
+}
+.toc-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin-bottom: 12px;
+}
+.toc ol { list-style: none; padding: 0; counter-reset: toc; }
+.toc li {
+  counter-increment: toc;
+  padding: 4px 0;
+  font-size: 14px;
+  display: flex;
+  gap: 14px;
+}
+.toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-mute);
+  min-width: 24px;
+}
+.toc a { color: var(--text); border: none; }
+.toc a:hover { color: var(--amber); }
+
+footer {
+  padding: 40px 0 60px;
+  border-top: 1px solid var(--rule);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero h1, .hero .lede, .hero .tag, .hero .specs, .hero .toc {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+.hero .tag { animation-delay: 0.05s; }
+.hero h1 { animation-delay: 0.12s; }
+.hero .lede { animation-delay: 0.22s; }
+.hero .specs { animation-delay: 0.32s; }
+.hero .toc { animation-delay: 0.42s; }
+@keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 600px) {
+  .wrap { padding: 0 20px; }
+  .hero { padding: 56px 0 40px; }
+  section { padding: 40px 0 24px; }
+  .pt { padding: 14px 18px 14px 50px; }
+  .pt-num { left: 18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap topbar-inner">
+    <span class="lab">M²Lab</span>
+    <span>Instrumentation note · 2026·05·05</span>
+  </div>
+</div>
+
+<main>
+
+<header class="hero wrap">
+  <div class="tag">Instrumentation note</div>
+
+  <h1>Controlling the NF BP4610 over USB on Windows 11</h1>
+
+  <p class="lede">
+    A working setup for the BP4610 Bipolar DC Power Supply with firmware 1.40, which uses the JEMIMA USB488 protocol rather than USBTMC. The vendor's official position is that this firmware revision is not supported on Windows 8 or later. These notes record what we did to get it talking to Python on Windows 11.
+  </p>
+
+  <div class="specs">
+    <div><div class="spec-k">Device</div><div class="spec-v">NF BP4610</div></div>
+    <div><div class="spec-k">Firmware</div><div class="spec-v">v1.40</div></div>
+    <div><div class="spec-k">USB ID</div><div class="spec-v">0D4A : 0006</div></div>
+    <div><div class="spec-k">Protocol</div><div class="spec-v">JEMIMA USB488</div></div>
+    <div><div class="spec-k">Host OS</div><div class="spec-v">Windows 11</div></div>
+    <div><div class="spec-k">Stack</div><div class="spec-v">libusb · pyusb</div></div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-label">Contents</div>
+    <ol>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#why">Why USBTMC drivers don't work</a></li>
+      <li><a href="#setup">Driver and Python setup</a></li>
+      <li><a href="#protocol">Protocol notes</a></li>
+      <li><a href="#pitfalls">Pitfalls we hit</a></li>
+      <li><a href="#commands">Command reference</a></li>
+      <li><a href="#driver">Python driver</a></li>
+      <li><a href="#fmr">FMR field sweep example</a></li>
+    </ol>
+  </div>
+</header>
+
+<section class="wrap" id="summary">
+  <div class="content">
+    <div class="sec-num">01 — Summary</div>
+    <h2>What you need to know</h2>
+
+    <p>If you only read one section, read this one. Each point below was a separate failure mode we had to work through.</p>
+
+    <div class="points">
+      <div class="pt">
+        <div class="pt-num">01</div>
+        <div class="pt-text">BP4610 firmware 1.40 speaks <strong>JEMIMA USB488</strong>, a vendor-specific protocol (USB class FF) distinct from USBTMC. NI-VISA, Keysight IO Libraries, and similar stacks do not recognize it.</div>
+      </div>
+      <div class="pt">
+        <div class="pt-num">02</div>
+        <div class="pt-text">On Windows 11, bind <strong>libusb-win32</strong> via Zadig and talk to the device with <strong>pyusb</strong>. The vendor's <code>NFUSBTMC.inf</code> is signed only for Windows 7 and earlier.</div>
+      </div>
+      <div class="pt">
+        <div class="pt-num">03</div>
+        <div class="pt-text">Enter REMOTE via a USB control transfer: <code>bmRequestType=0x20, bRequest=0x03, wValue=0x0001</code>. The front panel does not display an "RMT" indicator on this model — verify with Get Remote/Local instead.</div>
+      </div>
+      <div class="pt">
+        <div class="pt-num">04</div>
+        <div class="pt-text">Send ASCII commands as <strong>raw bytes terminated only by a zero-length packet</strong>. Appending <code>\n</code> or <code>\r\n</code> sets ESR bit 5 (Command Error), which then cascades and looks like every subsequent query is timing out.</div>
+      </div>
+      <div class="pt">
+        <div class="pt-num">05</div>
+        <div class="pt-text">Send <code>*CLS</code> in its <strong>binary common-command form</strong> (<code>0x00 0x01</code>) to keep ESR clean.</div>
+      </div>
+      <div class="pt">
+        <div class="pt-num">06</div>
+        <div class="pt-text"><code>IOUT</code> is <strong>not</strong> the DC current setting. It controls the initial output state at power-on (0 or 1). The DC current setpoint command is <code>CURR</code>, with 0.001 A resolution over ±10 A.</div>
+      </div>
+      <div class="pt">
+        <div class="pt-num">07</div>
+        <div class="pt-text"><code>CURR</code> can be changed <strong>while the output is on</strong>. This makes continuous current sweeps practical without toggling OUTP between points.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="why">
+  <div class="content">
+    <div class="sec-num">02 — Background</div>
+    <h2>Why USBTMC drivers don't work</h2>
+
+    <p>The BP4610 enumerates as a vendor-specific USB device (class <code>0xFF</code>). Standard test-and-measurement stacks assume USBTMC framing on the bulk endpoints, and that framing is not what this firmware uses. Symptoms before figuring this out:</p>
+
+    <ul>
+      <li>Yellow exclamation mark in Device Manager after the vendor's driver fails to install on Windows 11.</li>
+      <li>Manually binding the device to "USB Test and Measurement Device (IVI)" succeeds, but <code>*IDN?</code> times out (BFFF0015) in NI-VISA Test Panel.</li>
+      <li>Generating an <code>.inf</code> with the NI-VISA Driver Wizard and using a <code>USB::RAW</code> resource lets writes succeed but reads time out — the framing on the IN endpoint is not what NI-VISA expects.</li>
+    </ul>
+
+    <p>The protocol the device actually uses is the JEMIMA USB488 stack defined around 1999–2000 under a NEDO project in Japan. It predates and is independent of the later USB-IF USBTMC standard. NF firmware 1.50 and later add USBTMC as well, but 1.40 is USB488-only. The full protocol specification is shipped, in English, inside NF's free <a href="https://www.nfcorp.co.jp/english/sup/download/driver/usbdriver/zip/Usb_eng.zip">USB driver package</a> as <code>Usb488ps.txt</code>; the JEMIMA license permits use with attribution.</p>
+  </div>
+</section>
+
+<section class="wrap" id="setup">
+  <div class="content">
+    <div class="sec-num">03 — Setup</div>
+    <h2>Driver and Python setup</h2>
+
+    <h3>Driver binding</h3>
+    <p>Run <a href="https://zadig.akeo.ie/">Zadig</a>, enable <em>Options → List All Devices</em>, select the BP4610 (VID <code>0x0D4A</code>, PID <code>0x0006</code>), choose <strong>libusb-win32</strong> as the target driver, and click <em>Replace Driver</em>. This replaces any previously installed NF driver, so if you also need NF's stock control software you'll have to swap back.</p>
+
+    <h3>Python environment</h3>
+    <pre data-label="shell">pip install pyusb numpy
+
+<span class="com"># libusb-1.0.dll must be reachable. Zadig usually places it; otherwise</span>
+<span class="com"># grab a Windows release of libusb and put the DLL on PATH.</span></pre>
+
+    <h3>Endpoint discovery</h3>
+    <pre data-label="python"><span class="kw">import</span> usb.core
+
+dev = usb.core.find(idVendor=<span class="num">0x0D4A</span>, idProduct=<span class="num">0x0006</span>)
+dev.set_configuration()
+<span class="kw">for</span> ep <span class="kw">in</span> dev.get_active_configuration()[(<span class="num">0</span>, <span class="num">0</span>)]:
+    <span class="fn">print</span>(<span class="fn">hex</span>(ep.bEndpointAddress), ep.wMaxPacketSize)
+
+<span class="com"># 0x01  64    OUT, bulk — host to device, commands</span>
+<span class="com"># 0x82  64    IN,  bulk — device to host, responses</span>
+<span class="com"># 0x83   8    IN,  interrupt — status (unused here)</span></pre>
+  </div>
+</section>
+
+<section class="wrap" id="protocol">
+  <div class="content">
+    <div class="sec-num">04 — Protocol</div>
+    <h2>Protocol notes</h2>
+
+    <h3>REMOTE entry</h3>
+    <p>USB488 maps the IEEE-488.1 interface messages (REMOTE, LOCAL, GTL, SDC, etc.) to USB control transfers. The most important one is Set Remote/Local:</p>
+
+    <pre data-label="control transfer"><span class="com"># bmRequestType  bRequest    wValue    wIndex   wLength</span>
+<span class="com">#     0x20         0x03      0x0001     0x00     0x00</span>
+<span class="com">#                            ^^^^^^</span>
+<span class="com">#                            0x0000  LOCAL</span>
+<span class="com">#                            0x0001  REMOTE</span>
+<span class="com">#                            0x0002  LOCAL LOCKOUT</span>
+
+dev.ctrl_transfer(<span class="num">0x20</span>, <span class="num">0x03</span>, <span class="num">0x0001</span>, <span class="num">0</span>, <span class="num">0</span>, timeout=<span class="num">2000</span>)</pre>
+
+    <div class="callout">
+      <span class="callout-label">Note</span>
+      The BP4610 does not display an "RMT" indicator on its front panel even when in REMOTE. Don't use the panel as a check; instead read the state back with Get Remote/Local (<code>bmRequestType=0xA0, bRequest=0x04</code>).
+    </div>
+
+    <h3>Bulk message format</h3>
+    <p>After REMOTE entry, commands go over the bulk OUT endpoint. The first byte of the first packet identifies the message type:</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Byte 0</th><th>Meaning</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>0x00</code></td><td>IEEE-488.2 common command (binary form)</td><td><code>0x00 0x01</code> = <code>*CLS</code></td></tr>
+          <tr><td><code>0x01</code></td><td>Binary data (e.g. arbitrary waveform)</td><td>—</td></tr>
+          <tr><td class="mono">0x20–0x7F</td><td>ASCII data (vendor command)</td><td><code>VOLT 5.0</code>, <code>MODE?</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Every message ends with a zero-length packet (ZLP) on the bulk OUT endpoint. This is standard USB bulk practice and the BP4610 relies on it to mark end-of-message.</p>
+
+    <h3>Terminator behavior</h3>
+    <p>The spec describes ASCII data as "<code>0x20–0x7F</code>, <code>0x0D</code>, and <code>0x0A</code> only", which reads as if line-feed terminators are fine. In practice on this firmware they are accepted but flagged:</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Payload</th><th>Executed?</th><th>ESR</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">LMCP 8.0</td><td><span class="pill pill-ok">yes</span></td><td><code>0</code> &nbsp; clean</td></tr>
+          <tr><td class="mono">LMCP 8.0;</td><td><span class="pill pill-ok">yes</span></td><td><code>0</code> &nbsp; clean</td></tr>
+          <tr><td class="mono">LMCP 8.0\n</td><td><span class="pill pill-ok">yes</span></td><td class="danger"><code>32</code> &nbsp; cmd error</td></tr>
+          <tr><td class="mono">LMCP 8.0\r\n</td><td><span class="pill pill-ok">yes</span></td><td class="danger"><code>32</code> &nbsp; cmd error</td></tr>
+          <tr><td class="mono">*CLS\n</td><td><span class="pill pill-no">no</span></td><td class="danger"><code>32</code> &nbsp; stays set</td></tr>
+          <tr><td class="mono">*CLS</td><td><span class="pill pill-ok">yes</span></td><td><code>0</code> &nbsp; clean</td></tr>
+          <tr><td class="mono">\x00\x01</td><td><span class="pill pill-key">canonical</span></td><td><code>0</code> &nbsp; clean</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>When ESR bit 5 stays set, subsequent queries can hang or return stale data, which is exactly the cascade-timeout symptom that initially looks like the set commands aren't working at all. The fix is to not append a terminator, and to use the binary form for common commands.</p>
+  </div>
+</section>
+
+<section class="wrap" id="pitfalls">
+  <div class="content">
+    <div class="sec-num">05 — Pitfalls</div>
+    <h2>Pitfalls we hit</h2>
+
+    <p>Things that cost us time and might cost yours, in roughly the order they came up.</p>
+
+    <div class="timeline">
+      <div class="tl no">
+        <div class="tl-step"><span class="tag-fail">×</span> NI-VISA USBTMC binding</div>
+        <div class="tl-content">Reads time out. The IN endpoint framing isn't USBTMC.</div>
+      </div>
+      <div class="tl no">
+        <div class="tl-step"><span class="tag-fail">×</span> NI-VISA <code>USB::RAW</code> resource</div>
+        <div class="tl-content">Writes go through, reads time out. Same underlying reason.</div>
+      </div>
+      <div class="tl no">
+        <div class="tl-step"><span class="tag-fail">×</span> Keysight IO Libraries Suite</div>
+        <div class="tl-content">Same — these stacks all assume USBTMC.</div>
+      </div>
+      <div class="tl yes">
+        <div class="tl-step"><span class="tag-ok">→</span> Found NF's free protocol spec</div>
+        <div class="tl-content"><code>Usb488ps.txt</code> in their USB driver zip is the full USB488 protocol stack reference.</div>
+      </div>
+      <div class="tl yes">
+        <div class="tl-step"><span class="tag-ok">→</span> pyusb + libusb-win32 worked for queries</div>
+        <div class="tl-content"><code>*IDN?</code> returned the device identification string.</div>
+      </div>
+      <div class="tl no">
+        <div class="tl-step"><span class="tag-fail">×</span> Set commands appeared to do nothing</div>
+        <div class="tl-content">They were actually executing; ESR bit 5 was sticking, which made follow-up queries return zero or hang.</div>
+      </div>
+      <div class="tl yes">
+        <div class="tl-step"><span class="tag-ok">→</span> Identified the terminator issue</div>
+        <div class="tl-content">Sending payloads with no <code>\n</code> and ZLP-only termination keeps ESR at 0.</div>
+      </div>
+      <div class="tl no">
+        <div class="tl-step"><span class="tag-fail">×</span> Assumed <code>IOUT</code> was DC current</div>
+        <div class="tl-content"><code>IOUT 0.5</code> got clamped to 0; <code>IOUT 2.0</code> to 1. It's a 0/1 boolean for power-on initial output state.</div>
+      </div>
+      <div class="tl yes">
+        <div class="tl-step"><span class="tag-ok">→</span> Found <code>CURR</code></div>
+        <div class="tl-content">The actual CC-mode DC current setpoint command. 0.001 A resolution.</div>
+      </div>
+      <div class="tl yes">
+        <div class="tl-step"><span class="tag-ok">→</span> Verified <code>CURR</code> changes with output ON</div>
+        <div class="tl-content">Bipolar setpoints update immediately, ESR stays clean — a continuous sweep is feasible.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="commands">
+  <div class="content">
+    <div class="sec-num">06 — Reference</div>
+    <h2>Command reference</h2>
+
+    <p>Commands we have personally verified on firmware 1.40. The BP4610 manual lists more; treat anything below as known-good and anything outside as needing a quick check.</p>
+
+    <h4>Identification & status</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Command</th><th>Form</th><th>Description</th><th>Example response</th></tr></thead>
+        <tbody>
+          <tr><td><code>*IDN?</code></td><td>ASCII</td><td>Device identification</td><td class="mono">NF Corporation,BP4610,…,1.40</td></tr>
+          <tr><td><code>*CLS</code></td><td class="ok">binary preferred</td><td>Clear status registers</td><td>—</td></tr>
+          <tr><td><code>*ESR?</code></td><td>ASCII</td><td>Event status register</td><td class="mono">0</td></tr>
+          <tr><td><code>*STB?</code></td><td>ASCII</td><td>Status byte</td><td class="mono">0</td></tr>
+          <tr><td><code>*OPC?</code></td><td>ASCII</td><td>Operation complete</td><td class="mono">1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Mode and output</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Command</th><th>Parameter</th><th>Description</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><code>MODE</code></td><td class="mono">0–5</td><td>Operation mode</td><td>0=CV-INT, 3=CC-INT, etc.</td></tr>
+          <tr><td><code>OUTP</code></td><td class="mono">0 / 1</td><td>Output ON/OFF</td><td>—</td></tr>
+          <tr><td class="danger"><code>IOUT</code></td><td class="mono">0 / 1</td><td>Initial output at power-on</td><td><span class="danger">Not a current setpoint</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Setpoints</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Command</th><th>Range</th><th>Description</th><th>Change with output ON?</th></tr></thead>
+        <tbody>
+          <tr><td><code>VOLT</code></td><td class="mono">−115.00 to +115.00 V</td><td>DC voltage (CV mode)</td><td class="danger">No — output must be OFF</td></tr>
+          <tr><td><code>CURR</code></td><td class="mono">−10.000 to +10.000 A</td><td>DC current (CC mode)</td><td class="ok">Yes</td></tr>
+          <tr><td><code>ACVL</code></td><td class="mono">0 to 120 Vp-p</td><td>Superimposed AC voltage</td><td>—</td></tr>
+          <tr><td><code>FREQ</code></td><td class="mono">1 Hz to 100 kHz</td><td>AC frequency</td><td>—</td></tr>
+          <tr><td><code>WAVE</code></td><td class="mono">0–17</td><td>Waveform select</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Limiters</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Command</th><th>Range</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>LMVP</code> / <code>LMVM</code></td><td class="mono">+7.0…+117.0 / −117.0…−7.0 V</td><td>± voltage limiter</td></tr>
+          <tr><td><code>LMCP</code> / <code>LMCM</code></td><td class="mono">+1.00…+26.00 / −26.00…−1.00 A</td><td>± current limiter</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Measurement</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Command</th><th>Description</th><th>Resolution</th></tr></thead>
+        <tbody>
+          <tr><td><code>MVLT?</code></td><td>DC voltage measurement</td><td>0.1 V</td></tr>
+          <tr><td><code>MACV?</code></td><td>AC voltage measurement (Vp-p)</td><td>1 Vp-p</td></tr>
+          <tr><td><code>MCUR?</code></td><td>DC current measurement</td><td>0.01 A</td></tr>
+          <tr><td><code>MACC?</code></td><td>AC current measurement (Ap-p)</td><td>0.1 Ap-p</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="driver">
+  <div class="content">
+    <div class="sec-num">07 — Code</div>
+    <h2>Python driver</h2>
+
+    <p>A minimal driver class implementing the protocol decisions above. Only dependency is <code>pyusb</code>.</p>
+
+    <pre data-label="bp4610.py"><span class="kw">import</span> usb.core
+<span class="kw">import</span> usb.util
+<span class="kw">import</span> time
+
+
+<span class="kw">class</span> <span class="cls">BP4610</span>:
+    <span class="str">"""NF BP4610 bipolar DC power supply, JEMIMA USB488.
+
+    Tested on Windows 11 with firmware 1.40.
+
+    Implementation notes:
+      - ASCII commands carry no \\n / \\r\\n terminator; ZLP only.
+      - *CLS uses the binary common-command form (0x00 0x01).
+      - REMOTE entry via control transfer (0x20, 0x03, wValue=1).
+    """</span>
+
+    VID = <span class="num">0x0D4A</span>
+    PID = <span class="num">0x0006</span>
+    EP_OUT = <span class="num">0x01</span>
+    EP_IN  = <span class="num">0x82</span>
+
+    MODE_CV_INT, MODE_CV_EXT, MODE_CV_ADD = <span class="num">0</span>, <span class="num">1</span>, <span class="num">2</span>
+    MODE_CC_INT, MODE_CC_EXT, MODE_CC_ADD = <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="self">self</span>, timeout_ms=<span class="num">2000</span>):
+        <span class="self">self</span>.dev = usb.core.find(idVendor=<span class="self">self</span>.VID, idProduct=<span class="self">self</span>.PID)
+        <span class="kw">if</span> <span class="self">self</span>.dev <span class="kw">is</span> <span class="kw">None</span>:
+            <span class="kw">raise</span> <span class="cls">RuntimeError</span>(<span class="str">'BP4610 not found'</span>)
+        <span class="kw">try</span>:
+            <span class="self">self</span>.dev.set_configuration()
+        <span class="kw">except</span> usb.core.USBError:
+            <span class="kw">pass</span>
+        <span class="self">self</span>.timeout = timeout_ms
+        <span class="self">self</span>._drain_input()
+        <span class="self">self</span>.set_remote(<span class="kw">True</span>)
+        <span class="self">self</span>.cls()
+
+    <span class="kw">def</span> <span class="fn">_drain_input</span>(<span class="self">self</span>):
+        <span class="kw">try</span>:
+            <span class="kw">while</span> <span class="kw">True</span>:
+                <span class="self">self</span>.dev.read(<span class="self">self</span>.EP_IN, <span class="num">64</span>, timeout=<span class="num">50</span>)
+        <span class="kw">except</span> usb.core.USBError:
+            <span class="kw">pass</span>
+
+    <span class="kw">def</span> <span class="fn">set_remote</span>(<span class="self">self</span>, remote=<span class="kw">True</span>):
+        ren = <span class="num">0x0001</span> <span class="kw">if</span> remote <span class="kw">else</span> <span class="num">0x0000</span>
+        <span class="self">self</span>.dev.ctrl_transfer(<span class="num">0x20</span>, <span class="num">0x03</span>, ren, <span class="num">0</span>, <span class="num">0</span>, timeout=<span class="self">self</span>.timeout)
+
+    <span class="kw">def</span> <span class="fn">cls</span>(<span class="self">self</span>):
+        <span class="self">self</span>.dev.write(<span class="self">self</span>.EP_OUT, <span class="str">b'\x00\x01'</span>, timeout=<span class="self">self</span>.timeout)
+        <span class="self">self</span>.dev.write(<span class="self">self</span>.EP_OUT, <span class="str">b''</span>, timeout=<span class="self">self</span>.timeout)
+
+    <span class="kw">def</span> <span class="fn">write</span>(<span class="self">self</span>, command):
+        <span class="kw">if</span> <span class="fn">isinstance</span>(command, <span class="cls">str</span>):
+            command = command.encode(<span class="str">'ascii'</span>)
+        command = command.rstrip(<span class="str">b'\r\n'</span>)
+        <span class="self">self</span>.dev.write(<span class="self">self</span>.EP_OUT, command, timeout=<span class="self">self</span>.timeout)
+        <span class="self">self</span>.dev.write(<span class="self">self</span>.EP_OUT, <span class="str">b''</span>, timeout=<span class="self">self</span>.timeout)  <span class="com"># ZLP</span>
+
+    <span class="kw">def</span> <span class="fn">read</span>(<span class="self">self</span>, max_bytes=<span class="num">1024</span>):
+        chunks = []
+        <span class="kw">try</span>:
+            <span class="kw">while</span> <span class="kw">True</span>:
+                data = <span class="self">self</span>.dev.read(<span class="self">self</span>.EP_IN, <span class="num">64</span>, timeout=<span class="self">self</span>.timeout)
+                <span class="kw">if</span> <span class="fn">len</span>(data) == <span class="num">0</span>:
+                    <span class="kw">break</span>
+                chunks.append(<span class="fn">bytes</span>(data))
+                <span class="kw">if</span> <span class="fn">len</span>(data) &lt; <span class="num">64</span>:
+                    <span class="kw">break</span>
+                <span class="kw">if</span> <span class="fn">sum</span>(<span class="fn">len</span>(c) <span class="kw">for</span> c <span class="kw">in</span> chunks) &gt;= max_bytes:
+                    <span class="kw">break</span>
+        <span class="kw">except</span> usb.core.USBError <span class="kw">as</span> e:
+            <span class="kw">if</span> <span class="str">'timeout'</span> <span class="kw">not in</span> <span class="fn">str</span>(e).lower() <span class="kw">or not</span> chunks:
+                <span class="kw">raise</span>
+        full = <span class="str">b''</span>.join(chunks)
+        <span class="kw">if</span> <span class="fn">len</span>(full) &gt; <span class="num">0</span> <span class="kw">and</span> <span class="num">0x20</span> &lt;= full[<span class="num">0</span>] &lt;= <span class="num">0x7F</span>:
+            <span class="kw">return</span> full.decode(<span class="str">'ascii'</span>, errors=<span class="str">'replace'</span>).strip().strip(<span class="str">'"'</span>)
+        <span class="kw">return</span> full
+
+    <span class="kw">def</span> <span class="fn">query</span>(<span class="self">self</span>, command):
+        <span class="self">self</span>.write(command)
+        <span class="kw">return</span> <span class="self">self</span>.read()
+
+    <span class="kw">def</span> <span class="fn">close</span>(<span class="self">self</span>):
+        <span class="kw">try</span>:
+            <span class="self">self</span>.write(<span class="str">'CURR 0'</span>); time.sleep(<span class="num">0.1</span>)
+            <span class="self">self</span>.write(<span class="str">'OUTP 0'</span>); time.sleep(<span class="num">0.2</span>)
+            <span class="self">self</span>.set_remote(<span class="kw">False</span>)
+        <span class="kw">except</span>: <span class="kw">pass</span>
+        usb.util.dispose_resources(<span class="self">self</span>.dev)
+
+    <span class="com"># ----- high-level helpers -----</span>
+    <span class="kw">def</span> <span class="fn">set_mode</span>(<span class="self">self</span>, m):  <span class="self">self</span>.write(<span class="fn">f</span><span class="str">'MODE {m}'</span>)
+    <span class="kw">def</span> <span class="fn">output</span>(<span class="self">self</span>, on=<span class="kw">True</span>): <span class="self">self</span>.write(<span class="fn">f</span><span class="str">'OUTP {1 if on else 0}'</span>)
+    <span class="kw">def</span> <span class="fn">set_voltage</span>(<span class="self">self</span>, v): <span class="self">self</span>.write(<span class="fn">f</span><span class="str">'VOLT {v}'</span>)   <span class="com"># OFF only</span>
+    <span class="kw">def</span> <span class="fn">set_current</span>(<span class="self">self</span>, i): <span class="self">self</span>.write(<span class="fn">f</span><span class="str">'CURR {i}'</span>)   <span class="com"># ON ok</span>
+
+    <span class="kw">def</span> <span class="fn">set_v_limits</span>(<span class="self">self</span>, vmax, vmin):
+        <span class="self">self</span>.write(<span class="fn">f</span><span class="str">'LMVP {vmax}'</span>); <span class="self">self</span>.write(<span class="fn">f</span><span class="str">'LMVM {vmin}'</span>)
+
+    <span class="kw">def</span> <span class="fn">set_i_limits</span>(<span class="self">self</span>, imax, imin):
+        <span class="self">self</span>.write(<span class="fn">f</span><span class="str">'LMCP {imax}'</span>); <span class="self">self</span>.write(<span class="fn">f</span><span class="str">'LMCM {imin}'</span>)
+
+    <span class="kw">def</span> <span class="fn">measure</span>(<span class="self">self</span>):
+        <span class="kw">return</span> {
+            <span class="str">'V_dc'</span>: <span class="fn">float</span>(<span class="self">self</span>.query(<span class="str">'MVLT?'</span>)),
+            <span class="str">'V_ac'</span>: <span class="fn">float</span>(<span class="self">self</span>.query(<span class="str">'MACV?'</span>)),
+            <span class="str">'I_dc'</span>: <span class="fn">float</span>(<span class="self">self</span>.query(<span class="str">'MCUR?'</span>)),
+            <span class="str">'I_ac'</span>: <span class="fn">float</span>(<span class="self">self</span>.query(<span class="str">'MACC?'</span>)),
+        }</pre>
+
+    <h4>Basic usage</h4>
+    <pre data-label="example.py"><span class="kw">from</span> bp4610 <span class="kw">import</span> BP4610
+
+bp = BP4610()
+<span class="fn">print</span>(bp.query(<span class="str">'*IDN?'</span>))
+
+bp.set_i_limits(<span class="num">5.0</span>, -<span class="num">5.0</span>)
+bp.set_v_limits(<span class="num">30.0</span>, -<span class="num">30.0</span>)
+bp.set_mode(BP4610.MODE_CC_INT)
+
+bp.set_current(<span class="num">0</span>)
+bp.output(<span class="kw">True</span>)
+bp.set_current(<span class="num">2.5</span>)              <span class="com"># changes immediately</span>
+
+<span class="fn">print</span>(bp.measure())
+bp.close()</pre>
+  </div>
+</section>
+
+<section class="wrap" id="fmr">
+  <div class="content">
+    <div class="sec-num">08 — Application</div>
+    <h2>FMR field sweep example</h2>
+
+    <p>Using the BP4610 as the current source for an electromagnet and a lock-in amplifier (here, an SR844) for detection. Because <code>CURR</code> updates while the output is on, the loop is straightforward.</p>
+
+    <pre data-label="fmr_sweep.py"><span class="kw">import</span> numpy <span class="kw">as</span> np, time, pyvisa
+<span class="kw">from</span> bp4610 <span class="kw">import</span> BP4610
+
+
+<span class="kw">def</span> <span class="fn">fmr_sweep</span>(bp, lockin, i_start, i_stop, n,
+              dwell_s=<span class="num">0.5</span>, settle_s=<span class="num">0.1</span>):
+    <span class="kw">if</span> <span class="fn">max</span>(<span class="fn">abs</span>(i_start), <span class="fn">abs</span>(i_stop)) &gt; <span class="num">10</span>:
+        <span class="kw">raise</span> <span class="cls">ValueError</span>(<span class="str">"|I| exceeds 10 A spec"</span>)
+
+    currents = np.linspace(i_start, i_stop, n)
+    I_meas = np.zeros(n); X = np.zeros(n); Y = np.zeros(n)
+
+    <span class="kw">try</span>:
+        bp.set_mode(BP4610.MODE_CC_INT); time.sleep(<span class="num">0.2</span>); bp.cls()
+        bp.set_current(<span class="num">0</span>); bp.output(<span class="kw">True</span>); time.sleep(<span class="num">0.3</span>)
+
+        <span class="com"># soft ramp to start to avoid back-EMF kicks on inductive loads</span>
+        <span class="kw">for</span> i_pre <span class="kw">in</span> np.linspace(<span class="num">0</span>, i_start, <span class="num">20</span>):
+            bp.set_current(i_pre); time.sleep(<span class="num">0.05</span>)
+        time.sleep(<span class="num">0.5</span>)
+
+        <span class="kw">for</span> k, i_t <span class="kw">in</span> <span class="fn">enumerate</span>(currents):
+            bp.set_current(i_t)
+            time.sleep(settle_s + dwell_s)
+            I_meas[k] = <span class="fn">float</span>(bp.query(<span class="str">'MCUR?'</span>))
+            X[k] = <span class="fn">float</span>(lockin.query(<span class="str">'OUTP? 1'</span>))
+            Y[k] = <span class="fn">float</span>(lockin.query(<span class="str">'OUTP? 2'</span>))
+    <span class="kw">finally</span>:
+        last = <span class="fn">float</span>(bp.query(<span class="str">'CURR?'</span>))
+        <span class="kw">for</span> i_post <span class="kw">in</span> np.linspace(last, <span class="num">0</span>, <span class="num">20</span>):
+            bp.set_current(i_post); time.sleep(<span class="num">0.05</span>)
+        bp.output(<span class="kw">False</span>)
+
+    <span class="kw">return</span> currents, I_meas, X, Y
+
+
+<span class="kw">if</span> __name__ == <span class="str">'__main__'</span>:
+    rm = pyvisa.ResourceManager()
+    sr844 = rm.open_resource(<span class="str">'GPIB0::8::INSTR'</span>)
+
+    bp = BP4610()
+    bp.set_i_limits(<span class="num">6.0</span>, -<span class="num">6.0</span>)
+    bp.set_v_limits(<span class="num">40.0</span>, -<span class="num">40.0</span>)
+
+    I, I_m, X, Y = fmr_sweep(bp, sr844,
+                             i_start=-<span class="num">3.0</span>, i_stop=+<span class="num">3.0</span>,
+                             n=<span class="num">301</span>, dwell_s=<span class="num">0.5</span>)
+    bp.close()
+
+    np.savetxt(<span class="str">'fmr_sweep.txt'</span>,
+               np.column_stack([I, I_m, X, Y]),
+               header=<span class="str">'I_set[A] I_meas[A] X[V] Y[V]'</span>)</pre>
+
+    <div class="callout warn">
+      <span class="callout-label">Safety</span>
+      Always soft-ramp to the start point and back to zero. A sudden current change into an inductive load produces a back-EMF spike that can hit the voltage limiter or trip protection.
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <span>M²Lab · Chungbuk National University</span>
+  <span>Last updated 2026·05·05</span>
+</footer>
+
+</body>
+</html>
