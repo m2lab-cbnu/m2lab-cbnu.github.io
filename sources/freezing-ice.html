@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Water Becomes Ice — A Note from the Freezer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #08080a;
+    --bg-2: #111114;
+    --bg-3: #1a1a1f;
+    --ink: #e8e8ea;
+    --ink-mid: #a8a8ad;
+    --ink-dim: #6b6b72;
+    --accent: #7dd3fc;
+    --accent-deep: #38bdf8;
+    --warm: #f59e0b;
+    --rose: #fb7185;
+    --line: rgba(255, 255, 255, 0.06);
+    --line-2: rgba(255, 255, 255, 0.1);
+
+    --font-serif: 'Fraunces', Georgia, serif;
+    --font-sans: 'Manrope', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.72;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: rgba(125, 211, 252, 0.25); color: var(--ink); }
+  a { color: inherit; text-decoration: none; }
+
+  /* ===== STICKY HEADER ===== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8, 8, 10, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--line);
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  header .container {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.08em;
+  }
+  .nav-logo { color: var(--ink); font-weight: 500; }
+  .nav-logo::before { content: '◇'; color: var(--accent); margin-right: 8px; font-size: 13px; }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 140px 0 100px;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    margin-bottom: 36px;
+  }
+  .hero-tag::before { content: '— '; }
+  .hero h1 {
+    font-family: var(--font-serif);
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+    font-weight: 400;
+    font-size: clamp(56px, 8vw, 120px);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    margin-bottom: 36px;
+    max-width: 1000px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+  .hero-sub {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-variation-settings: "opsz" 24;
+    font-weight: 400;
+    font-size: clamp(20px, 1.7vw, 26px);
+    color: var(--ink-mid);
+    line-height: 1.45;
+    max-width: 720px;
+  }
+
+  /* ===== SECTION ===== */
+  section {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  .sec-head { margin-bottom: 60px; }
+  .sec-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.22em;
+    margin-bottom: 22px;
+  }
+  .sec-num span { color: var(--accent); }
+  h2 {
+    font-family: var(--font-serif);
+    font-variation-settings: "opsz" 96, "SOFT" 50;
+    font-weight: 400;
+    font-size: clamp(40px, 4.5vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    max-width: 1000px;
+  }
+  h2 em {
+    font-style: italic;
+    color: var(--accent);
+    font-variation-settings: "opsz" 96, "SOFT" 100;
+  }
+  h3 {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    margin: 32px 0 16px;
+    color: var(--ink);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  h3:first-child { margin-top: 0; }
+
+  /* ===== BLOCKS ===== */
+  .block { margin-bottom: 56px; }
+  .block:last-child { margin-bottom: 0; }
+  .block.split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  /* Non-split blocks: constrain to readable width */
+  .block:not(.split) { max-width: 760px; }
+  .block.wide { max-width: none; }
+
+  /* Paragraphs */
+  p {
+    font-size: 17px;
+    line-height: 1.78;
+    color: var(--ink-mid);
+    margin-bottom: 22px;
+  }
+  p:last-child { margin-bottom: 0; }
+  p strong { color: var(--ink); font-weight: 600; }
+  p em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-variation-settings: "opsz" 24;
+    color: var(--ink);
+    font-size: 1.05em;
+  }
+
+  /* Drop cap */
+  .drop-cap::first-letter {
+    font-family: var(--font-serif);
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+    font-style: italic;
+    font-size: 68px;
+    float: left;
+    line-height: 0.82;
+    margin: 8px 14px -4px 0;
+    color: var(--accent);
+  }
+
+  /* ===== PULL QUOTE ===== */
+  .pullquote {
+    margin: 8px 0;
+    padding: 4px 0 4px 28px;
+    border-left: 3px solid var(--accent);
+    font-family: var(--font-serif);
+    font-variation-settings: "opsz" 48, "SOFT" 50;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 27px;
+    line-height: 1.32;
+    color: var(--ink);
+  }
+  .pullquote-cite {
+    display: block;
+    margin-top: 18px;
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* ===== DIAGRAM ===== */
+  .diagram {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 32px 28px 22px;
+  }
+  .diagram svg { width: 100%; height: auto; display: block; }
+  .diagram-cap {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-dim);
+    text-align: center;
+    margin-top: 18px;
+    letter-spacing: 0.18em;
+  }
+
+  /* ===== CALC ===== */
+  .calc {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 22px 26px;
+    margin-bottom: 14px;
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    line-height: 1.95;
+    overflow-x: auto;
+  }
+  .calc:last-child { margin-bottom: 0; }
+  .calc-title {
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--line-2);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .calc-title-r { color: var(--ink-dim); }
+  .calc-eq .v { color: var(--accent); }
+  .calc-eq .n { color: var(--warm); }
+  .calc-comm { color: var(--ink-dim); }
+  .calc-result {
+    margin-top: 10px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    color: var(--ink);
+  }
+  .calc-result .arrow { color: var(--accent); margin-right: 6px; }
+  .calc-result .val { color: var(--accent); font-weight: 600; font-size: 15px; }
+
+  /* ===== ENERGY BAR ===== */
+  .ebar-wrap {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 30px 34px;
+  }
+  .ebar-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 0.18em;
+    margin-bottom: 16px;
+  }
+  .ebar { height: 46px; border-radius: 4px; overflow: hidden; display: flex; margin-bottom: 12px; }
+  .ebar-1 {
+    background: rgba(125, 211, 252, 0.22);
+    border-right: 2px solid var(--bg-2);
+    flex: 0 0 20%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 12px;
+    color: var(--ink);
+  }
+  .ebar-2 {
+    background: var(--accent-deep);
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 12px;
+    color: var(--bg); font-weight: 600;
+  }
+  .ebar-legend {
+    display: flex; justify-content: space-between;
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--ink-dim); letter-spacing: 0.05em;
+  }
+
+  /* ===== CALLOUT ===== */
+  .callout {
+    background: linear-gradient(135deg, rgba(125, 211, 252, 0.07), rgba(125, 211, 252, 0.01));
+    border: 1px solid rgba(125, 211, 252, 0.22);
+    border-radius: 8px;
+    padding: 44px 36px;
+    text-align: center;
+  }
+  .callout-label {
+    font-family: var(--font-mono);
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.22em; margin-bottom: 14px;
+  }
+  .callout-value {
+    font-family: var(--font-serif);
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+    font-weight: 400;
+    font-size: 64px; line-height: 1;
+    color: var(--ink); margin-bottom: 14px;
+    letter-spacing: -0.03em;
+  }
+  .callout-value em {
+    font-style: italic;
+    color: var(--accent);
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+  .callout-note {
+    font-family: var(--font-mono);
+    font-size: 11px; color: var(--ink-dim); letter-spacing: 0.06em;
+  }
+
+  /* ===== TWO COL CARDS ===== */
+  .col-card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 32px 30px;
+  }
+  .col-card-tag {
+    font-family: var(--font-mono);
+    font-size: 10px; color: var(--accent);
+    letter-spacing: 0.18em; margin-bottom: 16px;
+  }
+  .col-card h4 {
+    font-family: var(--font-serif);
+    font-variation-settings: "opsz" 48, "SOFT" 50;
+    font-weight: 400;
+    font-size: 26px;
+    margin-bottom: 14px; line-height: 1.22;
+  }
+  .col-card h4 em {
+    font-style: italic; color: var(--accent);
+    font-variation-settings: "opsz" 48, "SOFT" 100;
+  }
+  .col-card p {
+    font-size: 15.5px; color: var(--ink-mid);
+    margin: 0; line-height: 1.7;
+  }
+
+  /* ===== NOTE ===== */
+  .note {
+    background: rgba(245, 158, 11, 0.04);
+    border-left: 2px solid var(--warm);
+    padding: 20px 24px;
+    border-radius: 0 6px 6px 0;
+  }
+  .note-tag {
+    font-family: var(--font-mono);
+    font-size: 10px; color: var(--warm);
+    letter-spacing: 0.18em; margin-bottom: 8px;
+  }
+  .note p { font-size: 15px; color: var(--ink-mid); margin: 0; line-height: 1.65; }
+
+  /* ===== MPEMBA HERO ===== */
+  .mpemba-hero {
+    padding: 64px 40px;
+    background: linear-gradient(135deg, rgba(251, 113, 133, 0.06), rgba(125, 211, 252, 0.04));
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+    text-align: center;
+  }
+  .mpemba-year {
+    font-family: var(--font-mono);
+    font-size: 12px; color: var(--rose);
+    letter-spacing: 0.24em; margin-bottom: 18px;
+  }
+  .mpemba-name {
+    font-family: var(--font-serif);
+    font-variation-settings: "opsz" 96, "SOFT" 100;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(36px, 4vw, 52px);
+    color: var(--ink);
+    margin-bottom: 12px; line-height: 1.05;
+  }
+  .mpemba-where {
+    font-family: var(--font-mono);
+    font-size: 11px; color: var(--ink-dim); letter-spacing: 0.14em;
+  }
+
+  /* ===== TIMELINE (full width, not in split) ===== */
+  .timeline-block {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 36px;
+  }
+  .timeline { list-style: none; }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 140px 1fr 2fr;
+    gap: 32px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-year {
+    font-family: var(--font-mono);
+    font-size: 13px; color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+  .tl-who {
+    font-family: var(--font-serif);
+    font-variation-settings: "opsz" 24, "SOFT" 50;
+    font-style: italic;
+    font-size: 19px;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .tl-what {
+    font-size: 15px;
+    color: var(--ink-mid);
+    line-height: 1.6;
+  }
+
+  /* ===== FACTS GRID (responsive) ===== */
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  .fact-card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 36px 32px;
+  }
+  .fact-num {
+    font-family: var(--font-serif);
+    font-variation-settings: "opsz" 96, "SOFT" 100;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 42px; color: var(--accent);
+    line-height: 1; margin-bottom: 22px;
+  }
+  .fact-card h4 {
+    font-family: var(--font-serif);
+    font-variation-settings: "opsz" 48, "SOFT" 50;
+    font-weight: 400;
+    font-size: 26px;
+    margin-bottom: 16px; line-height: 1.2;
+    color: var(--ink);
+  }
+  .fact-card h4 em {
+    font-style: italic; color: var(--accent);
+    font-variation-settings: "opsz" 48, "SOFT" 100;
+  }
+  .fact-card p { font-size: 15px; color: var(--ink-mid); margin: 0; line-height: 1.7; }
+
+  /* ===== TIPS ===== */
+  .tips { list-style: none; }
+  .tips li {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 14px;
+    color: var(--ink-mid);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .tips li:last-child { border-bottom: none; }
+  .tips li::before {
+    content: '→';
+    color: var(--accent);
+    font-family: var(--font-mono);
+  }
+  .tips li strong { color: var(--ink); font-weight: 600; }
+
+  /* Two-col tips list */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    column-gap: 56px;
+    row-gap: 0;
+  }
+  .tips-grid li { border-bottom: 1px solid var(--line); }
+
+  /* Mechanisms list inside a split — single col */
+  .mech-list .tips li { font-size: 15.5px; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    padding: 80px 0;
+    border-top: 1px solid var(--line);
+    margin-top: 60px;
+  }
+  footer .container {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    text-align: center;
+    line-height: 2;
+    letter-spacing: 0.08em;
+  }
+  footer .container em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--accent);
+    font-size: 15px;
+    font-variation-settings: "opsz" 24, "SOFT" 100;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 880px) {
+    .container { padding: 0 24px; }
+    .hero { padding: 80px 0 60px; }
+    section { padding: 64px 0; }
+    .block { margin-bottom: 40px; }
+    .block.split { grid-template-columns: 1fr; gap: 32px; }
+    .mpemba-hero { padding: 40px 24px; }
+    .callout-value { font-size: 48px; }
+    .callout { padding: 32px 24px; }
+    .pullquote { font-size: 22px; padding-left: 22px; }
+    .calc { font-size: 12.5px; padding: 18px 20px; }
+    .timeline-block { padding: 8px 22px; }
+    .tl-item {
+      grid-template-columns: 80px 1fr;
+      gap: 12px 18px;
+    }
+    .tl-what { grid-column: 1 / -1; grid-row: 2; margin-top: 4px; }
+    .tl-year { grid-row: 1; }
+    .tl-who { grid-row: 1; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="nav-logo">FREEZE.NOTE</div>
+    <div>VOL. 01 · KITCHEN PHYSICS</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-tag">A KITCHEN PHYSICS NOTE</div>
+    <h1>How water becomes <em>ice</em>.</h1>
+    <p class="hero-sub">A short walk through the strange five hours that pass between a cup of water and a cup of ice — including the case of a Tanzanian schoolboy who noticed something nobody believed.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-num"><span>01</span> &nbsp;/&nbsp; SURFACE AREA</div>
+      <h2>Why two cups beat <em>one</em>.</h2>
+    </div>
+    <div class="block split">
+      <div>
+        <p class="drop-cap">Pour a liter of water into one big cup, or split it into two smaller ones — same volume, same freezer. The two cups will freeze noticeably faster. The reason is geometry.</p>
+        <p>When you split a volume <em>V</em> into <em>n</em> equal pieces of similar shape, the total surface area scales as <strong>n^(1/3)</strong>. For two cups, that's about <strong>1.26×</strong>, or +26%.</p>
+        <p>More surface means more channels for heat to escape. It also means the warmest molecules — the ones in the center — sit closer to the cold edge. Both effects shorten the time to ice.</p>
+      </div>
+      <div>
+        <div class="diagram">
+          <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(60, 50)">
+              <rect x="0" y="0" width="50" height="100" fill="rgba(125,211,252,0.18)" stroke="#7dd3fc" stroke-width="1.2" rx="2"/>
+              <rect x="70" y="0" width="50" height="100" fill="rgba(125,211,252,0.18)" stroke="#7dd3fc" stroke-width="1.2" rx="2"/>
+              <text x="60" y="125" text-anchor="middle" fill="#e8e8ea" font-family="Manrope" font-size="13" font-weight="500">500ml × 2</text>
+              <text x="60" y="142" text-anchor="middle" fill="#a8a8ad" font-family="JetBrains Mono" font-size="10">surface ≈ 610 cm²</text>
+              <text x="60" y="158" text-anchor="middle" fill="#7dd3fc" font-family="JetBrains Mono" font-size="10">+26%</text>
+            </g>
+            <text x="250" y="105" text-anchor="middle" fill="#6b6b72" font-family="Fraunces" font-style="italic" font-size="18">vs.</text>
+            <g transform="translate(330, 30)">
+              <rect x="20" y="0" width="80" height="120" fill="rgba(125,211,252,0.08)" stroke="#6b6b72" stroke-width="1.2" rx="2"/>
+              <text x="60" y="145" text-anchor="middle" fill="#e8e8ea" font-family="Manrope" font-size="13" font-weight="500">1L × 1</text>
+              <text x="60" y="162" text-anchor="middle" fill="#a8a8ad" font-family="JetBrains Mono" font-size="10">surface ≈ 484 cm²</text>
+              <text x="60" y="178" text-anchor="middle" fill="#6b6b72" font-family="JetBrains Mono" font-size="10">baseline</text>
+            </g>
+          </svg>
+          <div class="diagram-cap">SAME VOLUME · DIFFERENT EXPOSURE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-num"><span>02</span> &nbsp;/&nbsp; CALCULATION</div>
+      <h2>The math of a frozen cup.</h2>
+    </div>
+    <div class="block">
+      <p>Imagine 500g of water at room temperature (20°C) placed in a freezer at −18°C. We need to figure out how much energy must leave the water before it becomes solid — and roughly how long that takes.</p>
+    </div>
+    <div class="block split">
+      <div>
+        <h3>How much energy?</h3>
+        <p>First we cool the water from room temperature down to the freezing point. That uses the standard heat-capacity equation: <strong>Q = m·c·ΔT</strong>.</p>
+        <p>Then comes the harder part — the phase change at 0°C. Water doesn't get colder during this step; instead, energy goes into rearranging molecules into a crystal. That's the <em>latent heat of fusion</em>, 334 J per gram.</p>
+        <p>Out of the total 209 kJ, 80% goes into the phase change, not the cooling. Freezing isn't slow because water is hard to cool — it's slow because crystallization is energetically expensive.</p>
+      </div>
+      <div>
+        <div class="calc">
+          <div class="calc-title"><span>STEP 1 · COOLING</span><span class="calc-title-r">20°C → 0°C</span></div>
+          <div class="calc-eq">Q₁ = <span class="v">m</span> · <span class="v">c</span> · <span class="v">ΔT</span></div>
+          <div class="calc-eq">&nbsp;&nbsp;&nbsp;= <span class="n">500</span> g × <span class="n">4.18</span> J/g·K × <span class="n">20</span> K</div>
+          <div class="calc-result"><span class="arrow">→</span> Q₁ = <span class="val">41,800 J</span></div>
+        </div>
+        <div class="calc">
+          <div class="calc-title"><span>STEP 2 · FREEZING</span><span class="calc-title-r">phase change at 0°C</span></div>
+          <div class="calc-eq">Q₂ = <span class="v">m</span> · <span class="v">L_f</span></div>
+          <div class="calc-eq">&nbsp;&nbsp;&nbsp;= <span class="n">500</span> g × <span class="n">334</span> J/g <span class="calc-comm">// latent heat</span></div>
+          <div class="calc-result"><span class="arrow">→</span> Q₂ = <span class="val">167,000 J</span></div>
+        </div>
+        <div class="calc">
+          <div class="calc-title"><span>TOTAL</span><span class="calc-title-r">Q₁ + Q₂</span></div>
+          <div class="calc-eq">Q_total = 41,800 + 167,000</div>
+          <div class="calc-result"><span class="arrow">→</span> <span class="val">208,800 J ≈ 209 kJ</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="block wide">
+      <div class="ebar-wrap">
+        <div class="ebar-label">WHERE THE ENERGY GOES</div>
+        <div class="ebar">
+          <div class="ebar-1">20%</div>
+          <div class="ebar-2">80% — phase change</div>
+        </div>
+        <div class="ebar-legend">
+          <span>cooling Q₁</span>
+          <span>freezing Q₂ (4× more)</span>
+        </div>
+      </div>
+    </div>
+    <div class="block">
+      <p class="pullquote">Most of the wait isn't the cooling. It's the slow choreography of molecules locking into a crystal — at exactly 0°C, while nothing seems to be happening.</p>
+    </div>
+    <div class="block split">
+      <div>
+        <h3>How long does it take?</h3>
+        <p>To turn energy into time, we use Newton's law of cooling: <strong>P = h · A · ΔT</strong>. Power equals a heat-transfer coefficient times surface area times the temperature gap between water and air.</p>
+        <p>For a 500ml cup with natural convection (h ≈ 15 W/m²·K) and a freezer at −18°C, the cooling phase takes about 40 minutes. The freezing phase — same surface, smaller gap — takes another four-plus hours.</p>
+        <p>Total: roughly five hours. Real freezers do better, around 2–4 hours, because they have forced convection and better thermal contact through metal shelves.</p>
+      </div>
+      <div>
+        <div class="calc">
+          <div class="calc-title"><span>ASSUMPTIONS</span><span class="calc-title-r">first-order estimate</span></div>
+          <div class="calc-eq">h ≈ <span class="n">15</span> W/m²·K <span class="calc-comm">// nat. convection</span></div>
+          <div class="calc-eq">A ≈ <span class="n">0.04</span> m² <span class="calc-comm">// 500ml cup</span></div>
+          <div class="calc-eq">T_freezer = <span class="n">−18</span>°C</div>
+        </div>
+        <div class="calc">
+          <div class="calc-title"><span>PHASE 1 · COOLING</span><span class="calc-title-r">avg ΔT ≈ 28°C</span></div>
+          <div class="calc-eq">P = 15 × 0.04 × 28 ≈ 16.8 W</div>
+          <div class="calc-eq">t₁ = 41,800 / 16.8</div>
+          <div class="calc-result"><span class="arrow">→</span> t₁ ≈ <span class="val">~40 minutes</span></div>
+        </div>
+        <div class="calc">
+          <div class="calc-title"><span>PHASE 2 · FREEZING</span><span class="calc-title-r">ΔT = 18°C</span></div>
+          <div class="calc-eq">P = 15 × 0.04 × 18 ≈ 10.8 W</div>
+          <div class="calc-eq">t₂ = 167,000 / 10.8</div>
+          <div class="calc-result"><span class="arrow">→</span> t₂ ≈ <span class="val">~4 hr 17 min</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="block split">
+      <div>
+        <div class="callout">
+          <div class="callout-label">THEORETICAL ESTIMATE</div>
+          <div class="callout-value">≈ <em>5</em> hours</div>
+          <div class="callout-note">REAL WORLD: 2–4 HOURS</div>
+        </div>
+      </div>
+      <div>
+        <div class="note">
+          <div class="note-tag">CAVEAT</div>
+          <p>This is a back-of-the-envelope calculation. Real freezers have forced convection; cup material, shape, and air circulation matter a lot. Treat the number as a feel for the physics, not a stopwatch.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-num"><span>03</span> &nbsp;/&nbsp; THE PLATEAU</div>
+      <h2>The <em>flat line</em> at zero.</h2>
+    </div>
+    <div class="block split">
+      <div>
+        <p>If you actually plotted the water's temperature over time, you'd see something strange: a long, flat plateau right at 0°C. The water stops cooling, even though it's still losing heat.</p>
+        <p>That heat is going into rearranging molecules into crystals — not into temperature. The thermometer reads zero for hours while the freezer is doing the bulk of its work, invisible.</p>
+        <p>This plateau is why a thermometer alone can't tell you how much ice has formed. The reading is the same at 5% frozen and 95% frozen.</p>
+      </div>
+      <div>
+        <div class="diagram">
+          <svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+            <line x1="60" y1="40" x2="60" y2="270" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <line x1="60" y1="270" x2="560" y2="270" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <text x="50" y="65" text-anchor="end" fill="#a8a8ad" font-family="JetBrains Mono" font-size="11">20°C</text>
+            <text x="50" y="160" text-anchor="end" fill="#a8a8ad" font-family="JetBrains Mono" font-size="11">0°C</text>
+            <text x="50" y="270" text-anchor="end" fill="#a8a8ad" font-family="JetBrains Mono" font-size="11">−18°C</text>
+            <line x1="60" y1="155" x2="560" y2="155" stroke="rgba(125,211,252,0.2)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M 60 60 Q 100 90 140 155" fill="none" stroke="#7dd3fc" stroke-width="2.2"/>
+            <line x1="140" y1="155" x2="490" y2="155" stroke="#7dd3fc" stroke-width="2.2"/>
+            <path d="M 490 155 Q 520 175 560 200" fill="none" stroke="#7dd3fc" stroke-width="2.2"/>
+            <line x1="140" y1="40" x2="140" y2="280" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="2 2"/>
+            <line x1="490" y1="40" x2="490" y2="280" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="2 2"/>
+            <text x="60" y="290" text-anchor="middle" fill="#6b6b72" font-family="JetBrains Mono" font-size="10">0</text>
+            <text x="140" y="290" text-anchor="middle" fill="#6b6b72" font-family="JetBrains Mono" font-size="10">~40 min</text>
+            <text x="490" y="290" text-anchor="middle" fill="#6b6b72" font-family="JetBrains Mono" font-size="10">~5 hr</text>
+            <text x="100" y="22" text-anchor="middle" fill="#7dd3fc" font-family="JetBrains Mono" font-size="10">Cooling</text>
+            <text x="315" y="22" text-anchor="middle" fill="#7dd3fc" font-family="JetBrains Mono" font-size="10">Phase change · 80% of total time</text>
+            <text x="525" y="22" text-anchor="middle" fill="#7dd3fc" font-family="JetBrains Mono" font-size="10">Sub-zero</text>
+            <text x="310" y="312" text-anchor="middle" fill="#6b6b72" font-family="JetBrains Mono" font-size="10">time →</text>
+            <text x="20" y="160" text-anchor="middle" fill="#6b6b72" font-family="JetBrains Mono" font-size="10" transform="rotate(-90, 20, 160)">temperature</text>
+          </svg>
+          <div class="diagram-cap">TEMPERATURE vs. TIME · SCHEMATIC</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-num"><span>04</span> &nbsp;/&nbsp; TWO ΔT</div>
+      <h2>Same symbol, two <em>meanings</em>.</h2>
+    </div>
+    <div class="block">
+      <p>A common confusion: <em>"If water stays at 0°C while freezing, why do we use ΔT = 18°C in the heat-transfer formula?"</em> The answer is that there are <strong>two different ΔTs</strong> in this problem, doing two different jobs.</p>
+    </div>
+    <div class="block split">
+      <div class="col-card">
+        <div class="col-card-tag">ΔT · TYPE A</div>
+        <h4>Water's own <em>change</em></h4>
+        <p>Used in Q = m·c·ΔT. During freezing this is zero — water sits at 0°C the whole time. That's why we switch to latent heat for that phase.</p>
+      </div>
+      <div class="col-card">
+        <div class="col-card-tag">ΔT · TYPE B</div>
+        <h4>The <em>gap</em> with the air</h4>
+        <p>Used in P = h·A·ΔT. Sets the speed of heat flow. Water at 0°C facing air at −18°C still gives an 18°C gap. Without that gap, no heat moves, and ice never forms.</p>
+      </div>
+    </div>
+    <div class="block">
+      <p>The water can stay at one temperature while heat keeps streaming out — because the gap with the freezer air is what drives the flow, not the change in the water itself.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-num"><span>05</span> &nbsp;/&nbsp; FREEZER BUDGET</div>
+      <h2>Like a microwave, but in <em>reverse</em>.</h2>
+    </div>
+    <div class="block split">
+      <div>
+        <p>A microwave has a fixed wattage; load it with more food and each item gets a smaller share of energy. A freezer is similar — except instead of pumping energy <em>in</em>, it pumps energy <em>out</em>.</p>
+        <p>Most home freezers run on compressors rated around 100–250W. That's the upper limit on how fast heat can leave, no matter how many cups you stuff inside.</p>
+        <p>One or two cups? Barely matters. Five warm cups all at once? You'll feel it.</p>
+      </div>
+      <div>
+        <ul class="tips">
+          <li>The internal air temperature rises temporarily — your −18°C freezer might briefly become a −10°C freezer.</li>
+          <li>That smaller ΔT means heat flows out of every cup more slowly.</li>
+          <li>If cups are packed tight, the cold air can't circulate, so <strong>h</strong> (the heat-transfer coefficient) also drops.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-num"><span>06</span> &nbsp;/&nbsp; THE MPEMBA EFFECT</div>
+      <h2>The case of the <em>hot ice cream</em>.</h2>
+    </div>
+    <div class="block wide">
+      <div class="mpemba-hero">
+        <div class="mpemba-year">1963</div>
+        <div class="mpemba-name">Erasto B. Mpemba</div>
+        <div class="mpemba-where">MAGAMBA SECONDARY SCHOOL · TANZANIA</div>
+      </div>
+    </div>
+    <div class="block split">
+      <div>
+        <p class="drop-cap">A thirteen-year-old boy in Tanzania was making ice cream in cooking class. The recipe said: boil milk and sugar, let it cool, then put it in the freezer. But on this day, the freezer was filling up fast. Mpemba skipped the cooling step and shoved his still-hot mixture in alongside everyone else's already-cooled ones.</p>
+        <p>Ninety minutes later, his was frozen. The cooled ones weren't.</p>
+        <p>He told his physics teacher. The teacher was unimpressed: <em>"That's Mpemba's physics, not real physics."</em> The classroom laughed. The boy didn't forget.</p>
+        <p>Years later, a visiting professor named Denis Osborne came to Mpemba's school. Mpemba asked him the question that had nagged him for years. Osborne, intrigued, ran the experiment back at his lab. The effect was real — under certain conditions, hot water did seem to freeze faster than cold. They published together in 1969.</p>
+        <p>The strangest part? Aristotle had noticed it. So had Francis Bacon and René Descartes. The phenomenon had been written about for two thousand years and quietly ignored.</p>
+      </div>
+      <div>
+        <p class="pullquote">"I have come, sir, to ask you a question about physics — but the boys are laughing at me."<span class="pullquote-cite">— MPEMBA TO DR. DENIS OSBORNE, 1969</span></p>
+      </div>
+    </div>
+    <div class="block split">
+      <div>
+        <h3>Why does it happen?</h3>
+        <p>Nobody knows for sure. Several mechanisms have been proposed, and they're probably all true in different situations.</p>
+      </div>
+      <div class="mech-list">
+        <ul class="tips">
+          <li><strong>Evaporation.</strong> Hot water loses some mass as steam.</li>
+          <li><strong>Convection.</strong> Stronger internal currents distribute temperature more evenly.</li>
+          <li><strong>Dissolved gases.</strong> Hot water has fewer dissolved gases, changing crystallization.</li>
+          <li><strong>The frost layer.</strong> A hot container melts the frost beneath it.</li>
+          <li><strong>Supercooling.</strong> Cold water can drop below 0°C without freezing; hot water tends to crystallize once it gets there.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="block wide">
+      <h3 style="margin-bottom: 24px;">A 2000-year timeline</h3>
+      <div class="timeline-block">
+        <ul class="timeline">
+          <li class="tl-item">
+            <div class="tl-year">~350 BC</div>
+            <div class="tl-who">Aristotle</div>
+            <div class="tl-what">Notes that water previously warmed contributes to its freezing quickly. Files it away.</div>
+          </li>
+          <li class="tl-item">
+            <div class="tl-year">1963</div>
+            <div class="tl-who">Mpemba</div>
+            <div class="tl-what">Notices it in cooking class. Gets laughed at.</div>
+          </li>
+          <li class="tl-item">
+            <div class="tl-year">1969</div>
+            <div class="tl-who">Mpemba & Osborne</div>
+            <div class="tl-what">Publish formal results. The effect gets a name.</div>
+          </li>
+          <li class="tl-item">
+            <div class="tl-year">2016</div>
+            <div class="tl-who">Burridge & Linden</div>
+            <div class="tl-what">Cannot reliably reproduce the effect. Suggest earlier studies hinged on imprecise definitions of "freezing time."</div>
+          </li>
+          <li class="tl-item">
+            <div class="tl-year">Today</div>
+            <div class="tl-who">Open question</div>
+            <div class="tl-what">Quantum analogues of Mpemba-like relaxation have been observed. The classical kitchen version remains contested.</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="block">
+      <p>So is it real? Sometimes, probably, under conditions that haven't been pinned down. It's the rare physics question where the right answer might still be: <em>"It depends, and we're not sure on what."</em></p>
+      <div class="note" style="margin-top:24px;">
+        <div class="note-tag">DON'T TRY THIS AT HOME (FOR SPEED)</div>
+        <p>The Mpemba effect is fascinating, but it's not a reliable trick. If you want fast ice, use the geometry tricks below — they work every time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-num"><span>07</span> &nbsp;/&nbsp; OTHER STRANGENESS</div>
+      <h2>Three more things water <em>shouldn't</em> do.</h2>
+    </div>
+    <div class="block wide">
+      <div class="facts-grid">
+        <div class="fact-card">
+          <div class="fact-num">i</div>
+          <h4>Stays liquid below <em>zero</em></h4>
+          <p>Pure water, cooled gently and undisturbed, doesn't freeze at 0°C. It can stay liquid down to roughly −38 to −42°C — the limit of homogeneous nucleation. Any small disturbance and the whole cup turns to slush in under a second. Search "supercooled water" on YouTube; it looks like a magic trick.</p>
+        </div>
+        <div class="fact-card">
+          <div class="fact-num">ii</div>
+          <h4>Grows little <em>spikes</em></h4>
+          <p>Sometimes an ice cube has a thin spike rising from its top, like a tiny obelisk. Water expands by about 9% when it freezes. If the surface freezes first and the inside expands, liquid water gets squeezed up through a small hole, freezing as it goes and building a tube.</p>
+        </div>
+        <div class="fact-card">
+          <div class="fact-num">iii</div>
+          <h4>Traps its own <em>breath</em></h4>
+          <p>Tap water has dissolved gases. As ice forms inward from the edges, those gases get pushed toward the center, ending up as tiny bubbles. That's why home ice is cloudy. Bartenders use <em>directional freezing</em>: insulate sides and bottom, freeze only from the top. The top half ends up glass-clear.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-num"><span>08</span> &nbsp;/&nbsp; FOR THE FREEZER</div>
+      <h2>How to actually freeze <em>fast</em>.</h2>
+    </div>
+    <div class="block wide">
+      <ul class="tips tips-grid">
+        <li><strong>Spread thin and wide.</strong> A flat tray beats a deep cup every time. More surface, shorter distance to the center.</li>
+        <li><strong>Use metal.</strong> Stainless steel and aluminum conduct heat hundreds of times better than plastic.</li>
+        <li><strong>Leave space between cups.</strong> Cold air needs to circulate around every face.</li>
+        <li><strong>Don't load too much warm stuff at once.</strong> The internal air warms up and slows everything else down.</li>
+        <li><strong>Push it to the back.</strong> The door area swings most in temperature.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <em>FREEZE.NOTE</em><br>
+    ESTIMATES ARE FIRST-ORDER · REALITY VARIES<br>
+    VOL. 01 / KITCHEN PHYSICS
+  </div>
+</footer>
+
+</body>
+</html>
