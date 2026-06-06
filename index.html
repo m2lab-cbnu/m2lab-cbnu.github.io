@@ -76,6 +76,7 @@
     .photo-scroll::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
     .photo-card { flex:0 0 280px; scroll-snap-align:start; border-radius:12px; overflow:hidden; position:relative; border:1px solid var(--border); }
     .photo-card img { width:100%; height:200px; object-fit:cover; display:block; }
+    .photo-card object { width:100%; height:200px; display:block; background:#fff; border:none; }
     .photo-card .caption { padding:10px 12px; font-size:12px; color:var(--text-dim); background:var(--surface); }
 
     /* RESEARCH */
@@ -159,6 +160,7 @@
       .people-grid { grid-template-columns:repeat(3,1fr); gap:24px; }
       .photo-card { flex:0 0 340px; }
       .photo-card img { height:240px; }
+      .photo-card object { height:240px; }
     }
     @media(min-width:1600px){
       .research-card { grid-template-columns:420px 1fr; }
@@ -211,7 +213,7 @@
       </div>
       <div>
         <span class="news-badge">Update</span>
-        <div class="news-date">September 18, 2025</div>
+        <div class="news-date">June 5, 2026</div>
         <h3>Lab Setup Complete — Experiments Underway</h3>
         <p>Key microwave equipment and electromagnets have been installed. The lab is now equipped with RF source &amp; analyzer, lock-in measurement systems, electromagnet, sample stages, and an optical table area. Active measurements are in progress.</p>
       </div>
@@ -221,7 +223,7 @@
       <span class="news-badge">Recruiting</span>
       <div class="news-date">June 2026</div>
       <h3>2026 Summer Internship Program Begins</h3>
-      <p>Our summer internship program kicks off this month, bringing students into hands-on research on microwave magnonics, spin-wave devices, and quantum interfaces. <a href="sources/2026_summer_intern_poster.pdf" target="_blank" style="color:var(--accent);">View the program poster →</a></p>
+      <p>Our summer internship program kicks off this month, bringing students into hands-on research on microwave magnonics, spin-wave devices, and quantum interfaces.</p>
     </div>
 
     <div class="news-card">
@@ -249,6 +251,18 @@
     <!-- Replace these src paths with your actual conference/activity photos -->
 
     <div class="photo-card">
+      <img src="images/Arduino_rotation_control.jpg" alt="Arduino-controlled rotation stage"/>
+      <div class="caption">In-house Arduino control of the rotation stage, 2026</div>
+    </div>
+
+    <div class="photo-card poster-card">
+      <object data="images/2026_summer_intern_poster.pdf#toolbar=0&amp;navpanes=0&amp;view=Fit" type="application/pdf" title="2026 Summer Internship poster">
+        <a href="images/2026_summer_intern_poster.pdf" target="_blank">Open the 2026 summer internship poster (PDF)</a>
+      </object>
+      <div class="caption">2026 Summer Internship — program poster · <a href="images/2026_summer_intern_poster.pdf" target="_blank" style="color:var(--accent);">open ↗</a></div>
+    </div>
+
+    <div class="photo-card">
       <img src="images/Crystal_Denver_photo.jpg" alt="Lab setup"/>
       <div class="caption">Huge Crystal in Denver Museum of Nature and Science, Mar 2026</div>
     </div>
@@ -261,11 +275,6 @@
     <div class="photo-card">
       <img src="images/DE_antenna.jpg" alt="Lab work"/>
       <div class="caption">New antenna for DE magnon propagation experiment, 2026</div>
-    </div>
-
-    <div class="photo-card">
-      <img src="images/Arduino_rotation_control.jpg" alt="Arduino-controlled rotation stage"/>
-      <div class="caption">In-house Arduino control of the rotation stage, 2026</div>
     </div>
     
     <div class="photo-card">
