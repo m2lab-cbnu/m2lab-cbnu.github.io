@@ -20,6 +20,11 @@ const panel = new Panel(main, {
 });
 
 const flat = new URLSearchParams(location.search).has('flat');
+// the building upstairs gives a stamp for visiting this room
+try {
+  const k = 'm2lab-building-v1', s = JSON.parse(localStorage.getItem(k) || 'null');
+  if (s && s.v === 1) { s.flags = s.flags || {}; s.flags.visitedHolo = true; localStorage.setItem(k, JSON.stringify(s)); }
+} catch (_) {}
 window.__vlabStations = STATIONS;
 let app = null;
 setupMenu();
@@ -204,7 +209,7 @@ function fallback(err) {
   panel.flat = true;
   if (!err) {
     box.querySelector('h2').textContent = 'The instruments, without the 3D room';
-    box.querySelector('p').innerHTML = 'Pick an instrument below, or <a href="lab.html">walk around the 3D room</a> instead.';
+    box.querySelector('p').innerHTML = 'Pick an instrument below, or <a href="lab3d.html">walk around the 3D room</a> instead.';
     document.getElementById('vl-intro').hidden = true;
   }
   const list = el('div', { class: 'vp-row', style: { justifyContent: 'center', marginTop: '16px' } },

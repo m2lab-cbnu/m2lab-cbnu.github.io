@@ -324,25 +324,23 @@ export function buildRoom(renderer, { invalidate = () => {} } = {}) {
   K.boxB(M.whitePlastic, 4.3, 0.75, 2.75, 4.75, 0.86, 3.05); K.boxB(M.blackMatte, 4.85, 0.75, 2.8, 5.25, 0.77, 3.05);
   solid(4.15, 2.6, 5.35, 3.3);
 
-  // ---- white stand TV beside the PC desk, showing a photo of the team
+  // ---- white stand TV beside the PC desk, showing the lab's name over a spin wave
   const tvx = 4.72, tvz = 8.05;
   K.cylY(M.tvWhite, tvx, tvz, 0.21, 0, 0.035); K.cylY(M.tvWhite, tvx, tvz, 0.022, 0.035, 1.02);
   K.box(M.tvWhite, tvx + 0.03, 1.3, tvz, 0.05, 0.6, 1.02, 0.35);
   const tvC = T.canvas(1024, 576), tg = tvC.getContext('2d');
-  tg.fillStyle = '#0E2A4D'; tg.fillRect(0, 0, 1024, 576);
-  tg.fillStyle = '#FFFFFF'; tg.font = '600 64px "Plex", sans-serif'; tg.textAlign = 'center'; tg.fillText('M² Lab', 512, 300);
+  const bg = tg.createLinearGradient(0, 0, 0, 576); bg.addColorStop(0, '#0E2A4D'); bg.addColorStop(1, '#0B2140');
+  tg.fillStyle = bg; tg.fillRect(0, 0, 1024, 576);
+  tg.lineWidth = 6; tg.strokeStyle = '#00D4FF'; tg.beginPath();
+  for (let x = 0; x <= 1024; x += 4) { const y = 400 + 46 * Math.exp(-(((x - 512) / 300) ** 2)) * Math.sin(x / 28); if (x === 0) tg.moveTo(x, y); else tg.lineTo(x, y); }
+  tg.stroke();
+  tg.fillStyle = '#FFFFFF'; tg.font = '600 92px "Plex", sans-serif'; tg.textAlign = 'center'; tg.fillText('M² Lab', 512, 250);
+  tg.fillStyle = '#A8ECFF'; tg.font = '500 40px "Plex", sans-serif'; tg.fillText('Microwave Magnonics', 512, 320);
   const tvMat = screenMaterial(tvC);
   const tvScreen = new THREE.Mesh(new THREE.PlaneGeometry(0.98, 0.552), tvMat);
-  tvScreen.position.set(tvx - Math.cos(0.35) * 0.0, 1.3, tvz); tvScreen.rotation.y = -Math.PI / 2 + 0.35;
-  tvScreen.position.x -= 0.0; tvScreen.translateZ(0.001 + 0.0); scene.add(tvScreen);
+  tvScreen.rotation.y = -Math.PI / 2 + 0.35;
+  scene.add(tvScreen);
   tvScreen.position.set(tvx + 0.03 - 0.026 * Math.cos(0.35), 1.3, tvz + 0.026 * Math.sin(0.35));
-  const photo = new Image();
-  photo.onload = () => {
-    const s = Math.max(1024 / photo.width, 576 / photo.height), w = photo.width * s, h = photo.height * s;
-    tg.drawImage(photo, (1024 - w) / 2, (576 - h) / 2, w, h);
-    tvMat.map.needsUpdate = true; invalidate();
-  };
-  photo.src = 'images/kps2026-team.jpg';
   solid(tvx - 0.22, tvz - 0.22, tvx + 0.22, tvz + 0.22);
 
   // ---- optical table B (BLS / Kerr) in the south-east

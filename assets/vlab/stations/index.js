@@ -7,8 +7,8 @@ import micromag from './micromag.js';
 import bls from './bls.js';
 
 const exit = {
-  id: 'exit', title: 'Back to the homepage', icon: '←', blurb: 'Leave the virtual lab.', separator: true,
-  action: () => { location.href = './'; },
+  id: 'exit', title: 'Back to the building', icon: '←', blurb: 'Leave the holo room for the virtual building.', separator: true,
+  action: () => { location.href = 'lab.html'; },
   build3D(w) {
     const d = w.spots.door;
     w.proxy(exit, d.x - 0.8, 0, d.z - 0.12, d.x + 0.8, 2.15, d.z + 0.02);

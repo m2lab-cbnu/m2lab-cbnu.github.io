@@ -1,7 +1,7 @@
 // The sample editor used by every station. Changing it changes the sample for the whole lab.
 
 import { el, slider, select } from './widgets.js';
-import { MATERIALS, material } from '../physics/materials.js';
+import { MATERIALS, material, filmAccess } from '../physics/materials.js';
 import { lab } from '../state.js';
 
 const FIELDS = {
@@ -17,14 +17,22 @@ const FIELDS = {
   D:     { label: 'Interfacial DMI D', unit: 'mJ/m²', min: -3, max: 3, step: 0.01, get: (s) => (s.D || 0) * 1e3, set: (v) => ({ D: v * 1e-3 }), digits: 3 },
 };
 
+const editors = new Set();
+// call when the list of films you may use has changed
+export function refreshFilmMenus() { for (const e of editors) e.refresh(); }
+
 export function sampleEditor({ fields = ['d', 'Ms', 'gamma', 'alpha', 'dB0', 'Kp', 'Ku', 'phiU'], title = 'Sample', open = false } = {}) {
   const me = {};
-  const opts = Object.values(MATERIALS).map((m) => ({ value: m.key, label: m.name }));
-  opts.push({ value: 'custom', label: 'Your own (edited)' });
+  const filmOpts = () => {
+    const o = Object.values(MATERIALS).filter((m) => filmAccess.allow(m.key) || m.key === lab.sample.key).map((m) => ({ value: m.key, label: m.name }));
+    o.push({ value: 'custom', label: 'Your own (edited)' });
+    return o;
+  };
   const sel = select({
-    label: 'Film on the bench', options: opts, value: lab.sample.edited ? 'custom' : lab.sample.key,
+    label: 'Film on the bench', options: filmOpts(), value: lab.sample.edited ? 'custom' : lab.sample.key,
     onChange: (v) => { if (v !== 'custom') lab.setSample({ ...material(v), D: 0, edited: false }, me); refresh(); },
   });
+  const secret = el('p', { class: 'note', text: 'This film’s numbers are what you are here to measure, so they stay hidden.' });
   const ctl = {};
   const box = el('div', { class: 'vp-side' });
   for (const k of fields) {
@@ -37,11 +45,19 @@ export function sampleEditor({ fields = ['d', 'Ms', 'gamma', 'alpha', 'dB0', 'Kp
   }
   const details = el('details', { class: 'sample-more', open: open || undefined }, el('summary', { text: 'Edit the film’s properties' }), box);
   function refresh() {
+    const s = sel.querySelector('select'), want = filmOpts();
+    if (s.options.length !== want.length || want.some((o, i) => s.options[i].value !== o.value)) {
+      s.replaceChildren(...want.map((o) => el('option', { value: o.value, text: o.label })));
+    }
     sel.set(lab.sample.edited ? 'custom' : lab.sample.key);
-    for (const k of fields) ctl[k].set(FIELDS[k].get(lab.sample), false);
+    const hidden = !!lab.sample.hidden;
+    details.hidden = hidden; secret.hidden = !hidden;
+    if (!hidden) for (const k of fields) ctl[k].set(FIELDS[k].get(lab.sample), false);
   }
   lab.onSample((s, src) => { if (src !== me) refresh(); });
-  const wrap = el('fieldset', { class: 'grp' }, el('legend', { text: title }), sel, details);
+  const wrap = el('fieldset', { class: 'grp' }, el('legend', { text: title }), sel, details, secret);
   wrap.refresh = refresh;
+  editors.add(wrap);
+  refresh();
   return wrap;
 }

@@ -66,6 +66,8 @@ export class Panel {
       entry = { wrap: el('div', { class: 'vpanel-station', 'data-station': station.id }), panes: new Map(), current: null };
       this.cache.set(station.id, entry);
       this.body.append(entry.wrap);
+      // optional strip above the tabs' content (the building uses it for samples and equipment)
+      if (station.header) { try { station.header(entry.wrap); } catch (err) { console.error(err); } }
     }
     for (const [id, e] of this.cache) e.wrap.hidden = id !== station.id;
     // tabs
@@ -75,7 +77,7 @@ export class Panel {
     })));
     this.tabs.hidden = station.tabs.length < 2;
     this.wideBtn.hidden = !!this.flat;
-    this.closeBtn.lastChild.textContent = this.flat ? 'All instruments' : 'Back to lab';
+    this.closeBtn.lastChild.textContent = this.flat ? 'All instruments' : (this.backLabel || 'Back to lab');
     this.showTab(tabId || entry.current || station.tabs[0].id);
     const focusTab = () => (this.tabs.hidden ? this.closeBtn : this.tabs.querySelector('[aria-selected="true"]')).focus({ preventScroll: true });
     if (!this.isOpen) {

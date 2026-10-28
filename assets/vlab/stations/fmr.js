@@ -327,9 +327,9 @@ function tabMap(pane) {
     plot2.setSeries([{ x: cache.lf, y: cache.lw, points: true, r: 4, color: COLORS.signal, label: 'linewidth from the model' }, ...fit]).draw();
     const m = lab.sample;
     // in plane: FWHM = 2ΔB0 + (2α/γ) f  -> α = slope·γ/2 (slope in mT/GHz -> T/Hz)
-    ro.a.set(Number.isFinite(cache.a) ? `α ≈ ${fmtNum(cache.a * 1e-3 / 1e9 * m.gamma / 2, 3)} (set: ${fmtNum(m.alpha, 3)})` : '–');
+    ro.a.set(Number.isFinite(cache.a) ? `α ≈ ${fmtNum(cache.a * 1e-3 / 1e9 * m.gamma / 2, 3)}${m.hidden ? '' : ` (set: ${fmtNum(m.alpha, 3)})`}` : '–');
     ro.b.set(Number.isFinite(cache.b) ? `${fmtNum(cache.b, 3)} mT` : '–');
-    ro.meff.set(`${fmtNum(mu0Meff(m) * 1e3, 4)} mT`);
+    ro.meff.set(m.hidden ? 'hidden: measure it!' : `${fmtNum(mu0Meff(m) * 1e3, 4)} mT`);
   }
   let t = 0; subs.add(() => { if (!pane.hidden) { cancelAnimationFrame(t); t = requestAnimationFrame(draw); } });
   return { show: draw, resize: () => { drawOverlay(); plot2.draw(); } };
@@ -368,7 +368,7 @@ function tabAngle(pane) {
     plot2.setSeries([{ x: angs, y: thM, color: COLORS.violet, width: 2.5 }, { x: [angs[0], angs[angs.length - 1]], y: [angs[0], angs[angs.length - 1]], color: COLORS.signal, dash: [4, 4], width: 1.2, label: 'θ_M = θ_H' }]).setVLines([{ x: cur, color: COLORS.gold, dash: [5, 4] }]).draw();
     ro.para.set(`${fmtNum(mT(fmr.resonanceField(m, fmr.dirFromAngles(90, S.phiH), S.f, bmaxFor(m, S.f))), 5)} mT`);
     ro.perp.set(`${fmtNum(mT(fmr.resonanceField(m, [0, 0, 1], S.f, bmaxFor(m, S.f))), 5)} mT`);
-    ro.meff.set(`${fmtNum(mu0Meff(m) * 1e3, 4)} mT`);
+    ro.meff.set(m.hidden ? 'hidden: measure it!' : `${fmtNum(mu0Meff(m) * 1e3, 4)} mT`);
   }
   let t = 0; subs.add(() => { if (!pane.hidden) { cancelAnimationFrame(t); t = requestAnimationFrame(draw); } });
   return { show: draw, resize: draw };
