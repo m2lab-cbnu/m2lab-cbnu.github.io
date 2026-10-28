@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>M² Lab | Microwave Magnonics Lab, Chungbuk National University</title>
-<meta name="description" content="M² Lab (Microwave Magnonics Lab) at Chungbuk National University couples spin waves to phonons, microwave photons and superconducting circuits for quantum transduction, quantum sensing and neuromorphic computing. Principal investigator: Kyongmo An.">
+<meta name="description" content="M² Lab (Microwave Magnonics Lab) at Chungbuk National University studies spin waves, the ripples in magnets, and how they couple to sound, microwaves and superconducting circuits.">
 <link rel="canonical" href="https://m2lab-cbnu.github.io/">
 <meta name="theme-color" content="#0E2A4D">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="M² Lab">
 <meta property="og:title" content="M² Lab | Microwave Magnonics Lab, Chungbuk National University">
-<meta property="og:description" content="Hybrid magnonics at microwave frequencies: spin waves coupled to phonons, microwave photons and superconducting circuits.">
+<meta property="og:description" content="Making waves in magnets: we study spin waves and how they couple to sound, microwaves and superconducting circuits.">
 <meta property="og:url" content="https://m2lab-cbnu.github.io/">
 <meta property="og:image" content="https://m2lab-cbnu.github.io/images/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="M² Lab: a microwave antenna launching spin waves along a magnetic waveguide">
+<meta property="og:image:alt" content="M² Lab: spin waves rippling along a chain of magnetic moments">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="images/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="images/favicon-48.png" sizes="48x48" type="image/png">
@@ -32,7 +32,7 @@
   "url": "https://m2lab-cbnu.github.io/",
   "logo": "https://m2lab-cbnu.github.io/images/logo-144.png",
   "email": "kman@cbnu.ac.kr",
-  "description": "Research group studying hybrid magnonics at microwave frequencies: magnon–phonon coupling, quantum magnonics, spin-wave devices and spin caloritronics.",
+  "description": "Research group at Chungbuk National University studying spin waves (magnons) and their coupling to phonons, microwave photons and superconducting circuits.",
   "parentOrganization": { "@type": "CollegeOrUniversity", "name": "Chungbuk National University", "url": "https://www.chungbuk.ac.kr" },
   "address": { "@type": "PostalAddress", "streetAddress": "E1-1-313, Department of Physics Education", "addressLocality": "Cheongju", "addressCountry": "KR" },
   "member": {
@@ -57,13 +57,13 @@
     <ul id="nav-links" class="nav-links">
       <li><a href="#research">Research</a></li>
       <li><a href="#projects">Projects</a></li>
-      <li><a href="#facilities">Facilities</a></li>
+      <li><a href="#lab">Lab</a></li>
       <li><a href="#publications">Publications</a></li>
       <li><a href="#people">People</a></li>
       <li><a href="#news">News</a></li>
       <li><a href="#teaching">Teaching</a></li>
       <li><a href="resources.html">Resources</a></li>
-      <li><a class="nav-cta" href="#join">Join us</a></li>
+      <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
 </header>
@@ -74,47 +74,47 @@
 <section class="hero" id="top" aria-labelledby="hero-title">
   <div class="wrap hero-text">
     <p class="hero-kicker">Microwave Magnonics Lab, Chungbuk National University</p>
-    <h1 id="hero-title">Hybrid magnonics at microwave frequencies</h1>
-    <p class="hero-lede">We couple spin waves (magnons) to phonons, microwave photons and superconducting circuits, and turn those couplings into devices for quantum transduction, quantum sensing and neuromorphic computing.</p>
-    <p class="hero-pi">Led by Kyongmo An, formerly a Marie Skłodowska-Curie Fellow at EPFL, a postdoctoral researcher at SPINTEC and a Sejong Science Fellow at KRISS.</p>
+    <h1 id="hero-title">Making waves in magnets</h1>
+    <p class="hero-lede">Spin waves, or magnons, are ripples in the magnetization of a material. They can carry information without moving any electric charge. We study how they talk to sound, microwaves and superconducting circuits, and how to build useful devices from them.</p>
     <div class="hero-actions">
-      <a class="btn btn--primary" href="#research">Explore our research</a>
-      <a class="btn btn--ghost" href="#join">Join the lab</a>
+      <a class="btn btn--primary" href="#research">See what we do</a>
     </div>
   </div>
   <div class="hero-sim">
     <canvas id="spinwave" tabindex="0" role="img"
-      aria-label="Live simulation of spin waves. A gold microwave antenna drives a chain of precessing spins; the waves travel outward and fade with damping. Use the left and right arrow keys to move the antenna."></canvas>
+      aria-label="Interactive spin-wave toy. A chain of spins ripples as a gold antenna sends spin-wave pulses that bounce off the ends. Use the left and right arrow keys to move a magnet along the chain, and Enter to pluck it."></canvas>
   </div>
   <div class="wrap hero-caption">
-    <p>Live simulation: a microwave antenna (gold) launches spin waves along a magnetic waveguide, and damping makes them fade with distance. Move your pointer over the waves, tap, or use the arrow keys to move the antenna.</p>
-    <button class="sim-toggle" id="sim-toggle" type="button" aria-pressed="false">Pause animation</button>
+    <p id="sim-hint" data-touch="drag across the spins to pull on them, or tap to pluck them."><strong>Try it:</strong> <span>hover near the spins to pull on them, or click to pluck them.</span> The gold antenna sends out spin-wave pulses that bounce off the ends, like the echoes we measure in the lab.</p>
+    <button class="sim-toggle" id="sim-toggle" type="button" aria-pressed="false">Pause</button>
   </div>
 </section>
 
-<!-- ============ EVIDENCE ============ -->
-<section class="evidence" aria-label="Highlights">
+<!-- ============ WHAT'S NEW ============ -->
+<section class="latest" aria-labelledby="latest-title">
   <div class="wrap">
-    <ul>
-      <li><a href="https://doi.org/10.1103/PhysRevX.12.011060">
-        <p class="ev-source">Physical Review X</p>
-        <p class="ev-meta">2022, first and corresponding author</p>
-        <p class="ev-claim">Two distant magnets couple strongly through phonons, forming bright and dark collective states.</p>
+    <div class="latest-head">
+      <h2 id="latest-title">What's new</h2>
+      <a href="#news">All news</a>
+    </div>
+    <ul class="latest-grid">
+      <li class="latest-card"><a href="#news-kps2026">
+        <img width="720" height="540" src="images/thumbs/kps2026-team.jpg" alt="Kyongmo An with students in front of the 2026 KPS Fall Meeting banner in Jeju" loading="lazy">
+        <time datetime="2026-10">October 2026</time>
+        <h3>Two undergraduate teams at the KPS Fall Meeting</h3>
+        <p>Our students presented two projects in the undergraduate research competition in Jeju.</p>
       </a></li>
-      <li><a href="https://doi.org/10.1038/s41467-024-51483-7">
-        <p class="ev-source">Nature Communications</p>
-        <p class="ev-meta">2024, co-first author</p>
-        <p class="ev-claim">Nonlinear magnonic waveguides develop coherent modes, resolved at ultrahigh frequency resolution.</p>
+      <li class="latest-card"><a href="#news-kohno">
+        <img width="720" height="540" src="images/thumbs/ryuhei-kohno-visit-2026.jpg" alt="Ryuhei Kohno giving a thumbs-up in front of a blackboard covered in equations" loading="lazy">
+        <time datetime="2026-10">October 2026</time>
+        <h3>Ryuhei Kohno visits from Tohoku University</h3>
+        <p>A longtime collaborator from our SPINTEC days came to see the lab.</p>
       </a></li>
-      <li><a href="https://doi.org/10.1103/PhysRevLett.117.107202">
-        <p class="ev-source">Physical Review Letters</p>
-        <p class="ev-meta">2016, first author</p>
-        <p class="ev-claim">Light drives magnons and phonons out of local equilibrium in a magnetic insulator.</p>
-      </a></li>
-      <li><a href="#projects">
-        <p class="ev-source ev-source--plain">National funding to 2031</p>
-        <p class="ev-meta">Three programs since 2021</p>
-        <p class="ev-claim">Quantum transduction (Glocal R&amp;D), quantum sensing (ITRC) and a Sejong Science Fellowship.</p>
+      <li class="latest-card"><a href="#news-internship">
+        <img width="720" height="540" src="images/thumbs/kriss-visit-2026.jpg" alt="Students gathered around a researcher at a measurement setup at KRISS" loading="lazy">
+        <time datetime="2026-08">June to August 2026</time>
+        <h3>Our summer internship</h3>
+        <p>Three months of hands-on experiments, Friday seminars and a visit to KRISS.</p>
       </a></li>
     </ul>
   </div>
@@ -126,11 +126,11 @@
     <div class="research-intro">
       <div>
         <div class="section-head" style="margin-bottom:24px">
-          <h2 id="research-title">Research</h2>
+          <h2 id="research-title">What we do</h2>
         </div>
         <div class="prose">
           <p>Magnons, the quanta of spin waves, carry information at gigahertz frequencies without moving electric charge. Their frequency tunes with a magnetic field, and they couple strongly to lattice vibrations (phonons) and to microwave photons.</p>
-          <p>M² Lab works where these three meet. We use phonons to couple distant magnets, connect magnons to superconducting circuits to convert quantum information between platforms, and exploit nonlinear spin-wave dynamics for signal processing and neuromorphic computing.</p>
+          <p>Most of our work happens where these three meet. We use phonons to couple magnets that are far apart, connect magnons to superconducting circuits to pass quantum information between platforms, and use nonlinear spin waves for signal processing.</p>
         </div>
       </div>
       <figure class="figure">
@@ -145,7 +145,7 @@
           <video src="images/figures/shearwave-phonon.mp4" poster="images/figures/shearwave-phonon-poster.webp" muted loop playsinline preload="none" data-inview-play aria-hidden="true" title="Select to pause or play"></video>
         </div>
         <h3>Magnon–phonon coupling</h3>
-        <p>Magnons and phonons hybridize strongly in magnetic garnets. We use acoustic phonons to transfer angular momentum coherently between distant magnets and to engineer bright and dark collective states.</p>
+        <p>In magnetic garnets, magnons and sound waves (phonons) mix strongly. We use phonons to carry angular momentum coherently between magnets that are far apart, and to make two magnets behave as one coupled system with bright and dark states.</p>
         <ul class="cites">
           <li><a href="https://doi.org/10.1103/PhysRevX.12.011060"><span class="cite-j">Phys. Rev. X</span> 12, 011060 (2022)</a></li>
           <li><a href="https://doi.org/10.1103/PhysRevB.101.060407"><span class="cite-j">Phys. Rev. B</span> 101, 060407(R) (2020)</a></li>
@@ -157,7 +157,7 @@
           <img width="900" height="912" src="images/figures/bright-dark-states.webp" alt="Bloch sphere showing the bright state (|m1⟩ + |m2⟩)/√2 and dark state (|m1⟩ − |m2⟩)/√2 of two coupled magnets" loading="lazy">
         </div>
         <h3>Quantum magnonics</h3>
-        <p>Magnons couple to microwave photons and superconducting qubits, which makes them candidates for quantum transducers and sensors. Under our Open-Lab project we are building a cryogenic platform for magnon–superconductor quantum transduction, including the generation of squeezed magnon states.</p>
+        <p>Magnons also couple to microwave photons and superconducting qubits, which makes them good candidates for quantum transducers and sensors. In our Open-Lab project we are building a cryogenic setup where magnons meet superconducting circuits, including experiments on squeezed magnon states.</p>
         <ul class="cites">
           <li><a href="https://doi.org/10.1103/PhysRevX.12.011060"><span class="cite-j">Phys. Rev. X</span> 12, 011060 (2022)</a></li>
         </ul>
@@ -166,8 +166,8 @@
         <div class="theme-fig">
           <img width="1600" height="731" src="images/figures/nonlinear-waveguide.webp" alt="Schematic of a frequency-offset vector network analyzer measurement on a magnonic waveguide, with transmission spectra near 2.125 GHz" loading="lazy">
         </div>
-        <h3>Spin-wave signal processing and neuromorphic devices</h3>
-        <p>Spin waves carry information without charge currents, and their nonlinear interactions can perform logic and mimic neural functions. We study nonlinear magnonic waveguides at ultrahigh frequency resolution and design antennas that control spin-wave nonreciprocity.</p>
+        <h3>Spin-wave signal processing</h3>
+        <p>Spin waves carry signals without charge currents, and when they get strong they start to interact, which can be used for logic and brain-inspired computing. We look at these nonlinear effects with very fine frequency resolution and design antennas that send spin waves one way but not the other.</p>
         <ul class="cites">
           <li><a href="https://doi.org/10.1038/s41467-024-51483-7"><span class="cite-j">Nat. Commun.</span> 15, 7302 (2024)</a></li>
           <li><a href="https://doi.org/10.1007/s40042-026-01576-x"><span class="cite-j">J. Korean Phys. Soc.</span> 88, 1094 (2026)</a></li>
@@ -179,23 +179,11 @@
           <img width="227" height="200" src="images/figures/spin-caloritronics.webp" alt="Cartoon of a YIG/Pt bilayer heated from below, illustrating thermally driven spin currents" loading="lazy">
         </div>
         <h3>Spin caloritronics</h3>
-        <p>Heat travels through magnetic insulators as both magnons and phonons. We measure how the two fall out of equilibrium and how thermal magnons diffuse, as groundwork for energy-efficient spin devices.</p>
+        <p>Heat travels through magnetic insulators as both magnons and phonons. We measure how the two fall out of step and how hot magnons spread, as groundwork for energy-efficient spin devices.</p>
         <ul class="cites">
           <li><a href="https://doi.org/10.1103/PhysRevB.103.174432"><span class="cite-j">Phys. Rev. B</span> 103, 174432 (2021)</a></li>
           <li><a href="https://doi.org/10.1103/PhysRevLett.117.107202"><span class="cite-j">Phys. Rev. Lett.</span> 117, 107202 (2016)</a></li>
         </ul>
-      </li>
-      <li class="theme theme--wide">
-        <div class="theme-fig theme-fig--photo">
-          <img width="720" height="540" src="images/thumbs/fgt-sample-cpw.jpg" alt="A Fe3GaTe2 sample mounted at the centre of a coplanar-waveguide board with SMA connectors" loading="lazy">
-        </div>
-        <div>
-          <h3>Van der Waals magnets <span class="status">New direction</span></h3>
-          <p>Layered van der Waals ferromagnets such as Fe<sub>3</sub>GaTe<sub>2</sub> keep their magnetic order and perpendicular anisotropy above room temperature, which makes them attractive for compact spin devices. We measure their magnetization dynamics with out-of-plane ferromagnetic resonance and study how electric currents change their magnetic properties.</p>
-          <ul class="cites">
-            <li><a href="https://doi.org/10.1002/adma.202414917"><span class="cite-j">Adv. Mater.</span> 37, 2414917 (2025)</a></li>
-          </ul>
-        </div>
       </li>
     </ul>
   </div>
@@ -205,98 +193,45 @@
 <section class="section section--mist" id="projects" aria-labelledby="projects-title">
   <div class="wrap">
     <div class="section-head">
-      <h2 id="projects-title">Funded projects and roadmap</h2>
-      <p>Three national programs support the lab, with commitments running to 2031. The roadmap shows how the projects build on each other.</p>
+      <h2 id="projects-title">Projects</h2>
     </div>
-
-    <div class="tl" data-start="2021" data-end="2032">
-      <div class="tl-grid">
-        <div class="tl-spacer"></div>
-        <div class="tl-scale-wrap">
-          <span class="tl-now-label">Today</span>
-          <div class="tl-scale" aria-hidden="true"><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span><span>2026</span><span>2027</span><span>2028</span><span>2029</span><span>2030</span><span>2031</span></div>
-        </div>
-
-        <div class="tl-spacer"></div>
-        <div class="tl-phases" aria-hidden="true">
-          <span class="tl-phase" style="grid-column:5 / 7">Build</span>
-          <span class="tl-phase" style="grid-column:7 / 9">Couple</span>
-          <span class="tl-phase" style="grid-column:9 / 12">Sense and compute</span>
-        </div>
-
-        <div class="tl-label"><strong>Magnon–superconductor quantum transduction</strong><span>Glocal R&amp;D, Chungcheong Open-Lab, 2025–2028</span></div>
-        <div class="tl-track"><span class="tl-bar" style="grid-column:5 / 9" title="2025–2028"></span></div>
-
-        <div class="tl-label"><strong>Magnon-based quantum sensing</strong><span>ITRC program (IITP), 2024–2031</span></div>
-        <div class="tl-track"><span class="tl-bar" style="grid-column:4 / 12" title="2024–2031"></span></div>
-
-        <div class="tl-label"><strong>Sejong Science Fellowship</strong><span>NRF, 2021–2026</span></div>
-        <div class="tl-track"><span class="tl-bar" style="grid-column:1 / 7" title="2021–2026"></span></div>
-      </div>
-    </div>
-
-    <ul class="tl-desc">
-      <li>
+    <ul class="projects">
+      <li class="project">
         <h3>Magnon–superconductor quantum transduction</h3>
         <p class="meta">Glocal R&amp;D, 2025–2028</p>
-        <p>Builds a regional Open-Lab for cryogenic quantum transduction between superconducting qubits and magnonic systems, including squeezed magnon states.</p>
+        <p>Our main project. We are building an open lab in the Chungcheong region where magnons meet superconducting circuits, with the goal of passing quantum information between microwave platforms.</p>
       </li>
-      <li>
-        <h3>Magnon-based quantum sensing</h3>
-        <p class="meta">ITRC program at CBNU, 2024–2031</p>
-        <p>Develops magnon-based device platforms for next-generation quantum sensing within CBNU's Information Technology Research Center.</p>
-      </li>
-      <li>
+      <li class="project">
         <h3>Sejong Science Fellowship</h3>
         <p class="meta">2021–2026</p>
-        <p>Quantum-like magnon dynamics, spin–phonon interactions and low-dissipation information transport in engineered phononic structures.</p>
+        <p>Where this line of research started, at KRISS: quantum-like magnon dynamics and spin–phonon interactions in engineered phononic structures.</p>
       </li>
     </ul>
-
-    <h3 class="sub-head">Roadmap</h3>
-    <ol class="phase-list">
-      <li>
-        <h4>Build</h4>
-        <p class="meta">2025–2026</p>
-        <p>Microwave laboratory at CBNU with RF sources and analysers, lock-in detection and electromagnets; first spin-wave propagation experiments.</p>
-      </li>
-      <li>
-        <h4>Couple</h4>
-        <p class="meta">2027–2028</p>
-        <p>Cryogenic magnon–superconductor platform through the Open-Lab, squeezed magnon states and phonon-mediated coupling in planar devices.</p>
-      </li>
-      <li>
-        <h4>Sense and compute</h4>
-        <p class="meta">2029–2031</p>
-        <p>Magnon-based quantum sensors within the ITRC program and nonlinear spin-wave circuits for neuromorphic processing.</p>
-      </li>
-    </ol>
+    <p class="projects-note">We also take part in CBNU's ITRC program on magnon-based quantum sensing.</p>
   </div>
 </section>
 
-<!-- ============ FACILITIES ============ -->
-<section class="section" id="facilities" aria-labelledby="facilities-title">
+<!-- ============ LAB ============ -->
+<section class="section" id="lab" aria-labelledby="lab-title">
   <div class="wrap">
     <div class="section-head">
-      <h2 id="facilities-title">Facilities</h2>
-      <p>A microwave and magneto-optical laboratory, built from an empty room at CBNU since September 2025.</p>
+      <h2 id="lab-title">Inside the lab</h2>
+      <p>We built our microwave lab from an empty room, starting in September 2025. Here is what we can do so far.</p>
     </div>
     <div class="fac-grid">
       <figure class="fac-main figure">
         <button class="photo-btn" type="button" data-full="images/lab-summer-2026.jpg" data-caption="M² Lab, summer 2026: instrument racks, measurement stations and the optical table.">
           <img width="1600" height="1200" src="images/lab-summer-2026.jpg" alt="Wide view of M² Lab in summer 2026: instrument racks with RF sources, analyzers and lock-in amplifiers, measurement benches and workstations" loading="lazy">
         </button>
-        <figcaption>The lab in summer 2026, with experiments under way.</figcaption>
+        <figcaption>The lab in summer 2026.</figcaption>
       </figure>
       <dl class="caps">
-        <div><dt>Microwave spectroscopy</dt><dd>RF sources and analysers for in-plane and out-of-plane ferromagnetic resonance and spin-wave transmission.</dd></div>
-        <div><dt>Lock-in detection</dt><dd>Lock-in amplifiers for low-noise electrical detection of magnetization dynamics.</dd></div>
-        <div><dt>Magneto-optical Kerr effect</dt><dd>Laser-based MOKE setup on the optical table for optical detection of magnetization.</dd></div>
-        <div><dt>Magnetic fields</dt><dd>Electromagnets on bipolar power supplies, with an in-house Arduino-controlled rotation stage for angle-resolved measurements.</dd></div>
-        <div><dt>2D vector electromagnet <span class="status">In design</span></dt><dd>Four-pole in-plane vector magnet for rotating fields without moving the sample.</dd></div>
-        <div><dt>Spin-wave devices</dt><dd>Custom microwave antennas, including 1 mm and 0.5 mm designs, for propagating spin waves in the Damon–Eshbach geometry.</dd></div>
-        <div><dt>Simulation</dt><dd>Micromagnetic simulations and electromagnetic field calculations for antenna and device design.</dd></div>
-        <div><dt>Cryogenic platform <span class="status">Being built</span></dt><dd>Magnon–superconductor experiments through the Chungcheong Open-Lab project.</dd></div>
+        <div><dt>Microwave measurements</dt><dd>Ferromagnetic resonance and spin-wave transmission, with RF sources and spectrum analysers.</dd></div>
+        <div><dt>Lock-in detection</dt><dd>For picking out small signals from noise.</dd></div>
+        <div><dt>Magneto-optics</dt><dd>A laser-based magneto-optical Kerr effect (MOKE) setup on the optical table.</dd></div>
+        <div><dt>Magnetic fields</dt><dd>Electromagnets with a rotation stage we control with our own Arduino electronics.</dd></div>
+        <div><dt>Spin-wave antennas</dt><dd>Microwave antennas we design and make ourselves, including 1 mm and 0.5 mm versions.</dd></div>
+        <div><dt>Simulation</dt><dd>Micromagnetic simulations and field calculations for designing antennas and devices.</dd></div>
       </dl>
     </div>
 
@@ -321,12 +256,6 @@
         <figcaption><time datetime="2026-02">February 2026</time>Antenna for Damon–Eshbach spin-wave propagation.</figcaption>
       </figure></li>
       <li><figure>
-        <button class="photo-btn" type="button" data-full="images/fgt-sample-cpw.jpg" data-caption="April 2026: a Fe₃GaTe₂ sample mounted on a coplanar-waveguide board.">
-          <img width="720" height="540" src="images/thumbs/fgt-sample-cpw.jpg" alt="Sample mounted on a coplanar-waveguide board with four SMA connectors" loading="lazy">
-        </button>
-        <figcaption><time datetime="2026-04">April 2026</time>A Fe<sub>3</sub>GaTe<sub>2</sub> sample on a coplanar-waveguide board.</figcaption>
-      </figure></li>
-      <li><figure>
         <button class="photo-btn" type="button" data-full="images/moke-2026-05.jpg" data-caption="May 2026: building the magneto-optical Kerr effect (MOKE) setup on the optical table.">
           <img width="540" height="720" src="images/thumbs/moke-2026-05.jpg" alt="Laser and optics for a MOKE setup on an optical table" loading="lazy">
         </button>
@@ -339,16 +268,22 @@
         <figcaption><time datetime="2026-05">May 2026</time>In-house Arduino control of the rotation stage.</figcaption>
       </figure></li>
       <li><figure>
-        <button class="photo-btn" type="button" data-full="images/fgt-oop-fmr.jpg" data-caption="July 2026: out-of-plane ferromagnetic resonance measurement on Fe₃GaTe₂ between the electromagnet poles.">
-          <img width="540" height="720" src="images/thumbs/fgt-oop-fmr.jpg" alt="Sample holder with microwave cables between the pole pieces of an electromagnet" loading="lazy">
+        <button class="photo-btn" type="button" data-full="images/antenna-1mm-2026-05.jpg" data-caption="May 2026: a custom 1 mm antenna between the electromagnet pole pieces.">
+          <img width="540" height="720" src="images/thumbs/antenna-1mm-2026-05.jpg" alt="A small green circuit-board antenna held between two steel pole pieces" loading="lazy">
         </button>
-        <figcaption><time datetime="2026-07">July 2026</time>Out-of-plane FMR on Fe<sub>3</sub>GaTe<sub>2</sub>.</figcaption>
+        <figcaption><time datetime="2026-05">May 2026</time>A custom 1 mm antenna between the pole pieces.</figcaption>
+      </figure></li>
+      <li><figure>
+        <button class="photo-btn" type="button" data-full="images/s-antenna-2026-09.jpg" data-caption="September 2026: a sample on a custom antenna, ready for spin-wave measurements.">
+          <img width="540" height="720" src="images/thumbs/s-antenna-2026-09.jpg" alt="Sample holder with microwave cables between the pole pieces of an electromagnet" loading="lazy">
+        </button>
+        <figcaption><time datetime="2026-09">September 2026</time>A sample on a custom antenna, ready to measure.</figcaption>
       </figure></li>
       <li><figure>
         <button class="photo-btn" type="button" data-full="images/moke-2026-09.jpg" data-caption="September 2026: MOKE optics on the optical table.">
           <img width="540" height="720" src="images/thumbs/moke-2026-09.jpg" alt="Vertical optical column with lenses and a camera above a sample stage" loading="lazy">
         </button>
-        <figcaption><time datetime="2026-09">September 2026</time>MOKE optics in operation.</figcaption>
+        <figcaption><time datetime="2026-09">September 2026</time>MOKE optics up and running.</figcaption>
       </figure></li>
     </ol>
   </div>
@@ -359,10 +294,10 @@
   <div class="wrap">
     <div class="section-head">
       <h2 id="publications-title">Publications</h2>
-      <p><span data-count="published">30</span> peer-reviewed papers since 2011, <span data-count="led">10</span> of them led by Kyongmo An as first or corresponding author, in journals including Physical Review Letters, Physical Review X and Nature Communications.</p>
+      <p><span data-count="published">30</span> papers since 2011, from our group and from Kyongmo's earlier work at UT Austin, EPFL, SPINTEC and KRISS.</p>
     </div>
 
-    <h3 class="visually-hidden">Selected publications</h3>
+    <h3 class="favourites-title">A few favourites</h3>
     <ol class="pub-sel">
       <li>
         <p class="pub-src">Physical Review X<span class="vol">12, 011060 (2022)</span></p>
@@ -370,7 +305,6 @@
           <h4><a href="https://doi.org/10.1103/PhysRevX.12.011060">Bright and dark states of two distant macrospins strongly coupled by phonons</a></h4>
           <p class="authors"><b>K. An†</b>, R. Kohno, A. N. Litvinenko, R. L. Seeger, V. V. Naletov, L. Vila, G. de Loubens, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</p>
           <p class="why">Two distant magnets couple strongly through phonons, forming bright and dark collective states.</p>
-          <span class="note">First and corresponding author</span>
         </div>
       </li>
       <li>
@@ -379,7 +313,6 @@
           <h4><a href="https://doi.org/10.1038/s41467-024-51483-7">Emergent coherent modes in nonlinear magnonic waveguides detected at ultrahigh frequency resolution</a></h4>
           <p class="authors"><b>K. An</b>*, M. Xu*, A. Mucchietto, C. Kim, K.-W. Moon, C. Hwang, D. Grundler†</p>
           <p class="why">Nonlinear magnonic waveguides develop coherent modes, resolved at ultrahigh frequency resolution.</p>
-          <span class="note">Co-first author</span>
         </div>
       </li>
       <li>
@@ -388,7 +321,6 @@
           <h4><a href="https://doi.org/10.1103/PhysRevB.101.060407">Coherent long-range transfer of angular momentum between magnon Kittel modes by phonons</a></h4>
           <p class="authors"><b>K. An</b>, A. N. Litvinenko, R. Kohno, A. A. Fuad, V. V. Naletov, L. Vila, U. Ebels, G. de Loubens, H. Hurdequint, N. Beaulieu, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</p>
           <p class="why">Phonons carry angular momentum coherently between two magnets over long distances.</p>
-          <span class="note">First author</span> <span class="note">Cited 200+ times</span>
         </div>
       </li>
       <li>
@@ -397,7 +329,6 @@
           <h4><a href="https://doi.org/10.1103/PhysRevLett.117.107202">Magnons and phonons optically driven out of local equilibrium in a magnetic insulator</a></h4>
           <p class="authors"><b>K. An</b>, K. S. Olsson, A. Weathers, S. Sullivan, X. Chen, X. Li, L. G. Marshall, X. Ma, N. Klimovich, J. Zhou, L. Shi†, X. Li†</p>
           <p class="why">Light drives magnons and phonons out of local equilibrium in a magnetic insulator.</p>
-          <span class="note">First author</span>
         </div>
       </li>
       <li>
@@ -406,7 +337,6 @@
           <h4><a href="https://doi.org/10.1103/PhysRevApplied.20.014046">Optimizing the magnon-phonon cooperativity in planar geometries</a></h4>
           <p class="authors"><b>K. An</b>, C. Kim, K.-W. Moon, R. Kohno, G. Olivetti, G. de Loubens, N. Vukadinovic, J. B. Youssef, C. Hwang†, O. Klein†</p>
           <p class="why">How to maximize magnon–phonon cooperativity in planar device geometries.</p>
-          <span class="note">First author</span>
         </div>
       </li>
       <li>
@@ -415,7 +345,6 @@
           <h4><a href="https://doi.org/10.1103/PhysRevApplied.11.034065">Optimization of spin-wave propagation with enhanced group velocities by exchange-coupled ferrimagnet-ferromagnet bilayers</a></h4>
           <p class="authors"><b>K. An</b>†, V. S. Bhat, M. Mruczkiewicz, C. Dubs, D. Grundler</p>
           <p class="why">Exchange-coupled ferrimagnet–ferromagnet bilayers raise spin-wave group velocities.</p>
-          <span class="note">First and corresponding author</span>
         </div>
       </li>
     </ol>
@@ -426,7 +355,7 @@
         <span id="filter-label">Show</span>
         <span class="seg" role="group" aria-labelledby="filter-label">
           <button type="button" data-filter="all" aria-pressed="true">All papers</button>
-          <button type="button" data-filter="lead" aria-pressed="false">Led by K. An</button>
+          <button type="button" data-filter="lead" aria-pressed="false">First or corresponding author</button>
         </span>
         <span>† corresponding author, * equal contribution</span>
       </div>
@@ -666,7 +595,7 @@
         </ol>
       </section>
     </details>
-    <a class="scholar-link" href="https://scholar.google.com/citations?user=zsngCA4AAAAJ&amp;hl=en">Citations and metrics on Google Scholar</a>
+    <a class="scholar-link" href="https://scholar.google.com/citations?user=zsngCA4AAAAJ&amp;hl=en">Google Scholar profile</a>
   </div>
 </section>
 
@@ -681,8 +610,8 @@
       <img width="640" height="800" class="pi-photo" src="images/people/kyongmo-an.jpg" alt="Portrait of Kyongmo An" loading="lazy">
       <div>
         <h3>Kyongmo An<span lang="ko">안경모</span></h3>
-        <p class="role">Principal investigator. Assistant Professor, Department of Physics Education, Chungbuk National University</p>
-        <p class="bio">Kyongmo An founded M² Lab in March 2025. His work connects spin waves with sound and microwave photons: Brillouin light scattering of magnons and phonons during his Ph.D. at UT Austin, spin-wave devices as a Marie Skłodowska-Curie Fellow at EPFL, phonon-mediated coupling of magnets at SPINTEC in Grenoble, and hybrid magnonics as a Sejong Science Fellow at KRISS.</p>
+        <p class="role">Assistant Professor, Department of Physics Education, Chungbuk National University</p>
+        <p class="bio">Kyongmo started M² Lab in March 2025. Much of his research is about spin waves meeting sound and microwaves: Brillouin light scattering of magnons and phonons during his Ph.D. at UT Austin, spin-wave devices at EPFL, phonon-coupled magnets at SPINTEC in Grenoble, and hybrid magnonics at KRISS.</p>
         <p class="pi-links"><a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a><a href="https://scholar.google.com/citations?user=zsngCA4AAAAJ&amp;hl=en">Google Scholar</a></p>
         <ol class="career">
           <li><span class="when">2025–</span><span>Assistant Professor, Chungbuk National University</span></li>
@@ -715,7 +644,7 @@
         <a href="mailto:chanwoo204@gmail.com">chanwoo204@gmail.com</a>
       </li>
     </ul>
-    <p class="team-note">Each summer we also host undergraduate interns. The 2026 interns worked with us from June to August, and the team finished the program together at the KPS Fall Meeting in Jeju.</p>
+    <p class="team-note">Each summer we also host undergraduate interns. The 2026 interns worked with us from June to August and finished the program with the whole team at the KPS Fall Meeting in Jeju.</p>
   </div>
 </section>
 
@@ -726,27 +655,27 @@
       <h2 id="news-title">News</h2>
     </div>
     <ol class="news">
-      <li>
+      <li id="news-kps2026">
         <time datetime="2026-10-22">October 2026</time>
         <div>
-          <h3>Undergraduate research at the KPS Fall Meeting, Jeju</h3>
-          <p>Our summer interns presented their own project, diffraction from a macroscopic artificial crystal measured with microwave scattering, in the undergraduate physics research competition of the Korean Physical Society Fall Meeting. The whole lab travelled to Jeju to close the season together.</p>
+          <h3>Two undergraduate teams at the KPS Fall Meeting, Jeju</h3>
+          <p>Two teams of our undergraduates presented their projects in the undergraduate physics research competition at the Korean Physical Society Fall Meeting. One team showed how hitting a steel rod over and over shifts its magnetization toward the Earth's magnetic field, measured through the rod's stray field and with MOKE imaging. The other team built simple cubic, BCC and FCC crystals by moving steel balls on a 3D-printed lattice and measured their Bragg diffraction with microwaves and a portable network analyser.</p>
         </div>
-        <button class="photo-btn" type="button" data-full="images/kps2026-poster.jpg" data-caption="The interns' poster in the undergraduate physics research competition, KPS Fall Meeting 2026, Jeju.">
-          <img width="720" height="540" src="images/thumbs/kps2026-poster.jpg" alt="A student presents a poster next to a stacked lattice model at the KPS Fall Meeting" loading="lazy">
+        <button class="photo-btn" type="button" data-full="images/kps2026-team.jpg" data-caption="Our team at the 2026 KPS Fall Meeting, Jeju.">
+          <img width="720" height="540" src="images/thumbs/kps2026-team.jpg" alt="Kyongmo An with students in front of the 2026 KPS Fall Meeting banner in Jeju" loading="lazy">
         </button>
       </li>
-      <li>
+      <li id="news-kohno">
         <time datetime="2026-10-20">October 2026</time>
         <div>
           <h3>Ryuhei Kohno visits from Tohoku University</h3>
-          <p>Ryuhei Kohno, assistant professor at Tohoku University and co-author on seven of our papers, visited M² Lab.</p>
+          <p>Ryuhei Kohno, assistant professor at Tohoku University, came to see the lab. We have worked together since our SPINTEC days and share seven papers.</p>
         </div>
         <button class="photo-btn" type="button" data-full="images/ryuhei-kohno-visit-2026.jpg" data-caption="Ryuhei Kohno (Tohoku University) at M² Lab, October 2026.">
           <img width="720" height="540" src="images/thumbs/ryuhei-kohno-visit-2026.jpg" alt="Ryuhei Kohno giving a thumbs-up in front of a blackboard covered in equations" loading="lazy">
         </button>
       </li>
-      <li>
+      <li id="news-internship">
         <time datetime="2026-08">August 2026</time>
         <div>
           <h3>Summer internship wraps up</h3>
@@ -799,7 +728,7 @@
       <li>
         <time datetime="2026-01-26">January 2026</time>
         <div>
-          <h3>First paper led by M² Lab</h3>
+          <h3>Our first paper from M² Lab</h3>
           <p>Yunyoung Hwang, Taekyeoung An and Kyongmo An show how antenna-field design tunes spin-wave nonreciprocity, in the <a href="https://doi.org/10.1007/s40042-026-01576-x"><i>Journal of the Korean Physical Society</i></a>.</p>
         </div>
       </li>
@@ -842,10 +771,16 @@
         <p><time datetime="2026-10">October 2026</time>Jeju black-pork dinner with the whole team</p>
       </li>
       <li>
-        <button class="photo-btn" type="button" data-full="images/microwave-diffraction-setup-2026.jpg" data-caption="The interns' microwave diffraction setup on the optical table, September 2026.">
-          <img width="720" height="540" src="images/thumbs/microwave-diffraction-setup-2026.jpg" alt="Microwave horn antennas aimed at a stacked lattice model on an optical table" loading="lazy">
+        <button class="photo-btn" type="button" data-full="images/kps2026-poster.jpg" data-caption="The microwave diffraction poster in the undergraduate research competition, KPS Fall Meeting 2026, Jeju.">
+          <img width="720" height="540" src="images/thumbs/kps2026-poster.jpg" alt="A student presents a poster next to a stacked lattice model at the KPS Fall Meeting" loading="lazy">
         </button>
-        <p><time datetime="2026-09">September 2026</time>The interns' microwave diffraction setup</p>
+        <p><time datetime="2026-10">October 2026</time>At the microwave diffraction poster</p>
+      </li>
+      <li>
+        <button class="photo-btn" type="button" data-full="images/microwave-diffraction-setup-2026.jpg" data-caption="The microwave diffraction setup on the optical table, September 2026.">
+          <img width="720" height="540" src="images/thumbs/microwave-diffraction-setup-2026.jpg" alt="Microwave antennas aimed at a stacked lattice model on an optical table" loading="lazy">
+        </button>
+        <p><time datetime="2026-09">September 2026</time>The microwave diffraction setup</p>
       </li>
       <li>
         <button class="photo-btn" type="button" data-full="images/friday-seminar-2026.jpg" data-caption="Friday seminar: a student explains ferromagnetic resonance, June 2026.">
@@ -943,23 +878,13 @@
   </div>
 </section>
 
-<!-- ============ JOIN ============ -->
-<section class="section on-dark join" id="join" aria-labelledby="join-title">
-  <div class="wrap join-grid">
-    <div>
-      <h2 id="join-title">Join M² Lab</h2>
-      <p class="lede">We welcome students who are curious about spin waves, microwave measurements and hybrid quantum systems. Research experience is not required; curiosity and persistence are.</p>
-      <div class="hero-actions">
-        <a class="btn btn--primary" href="mailto:kman@cbnu.ac.kr?subject=Joining%20M%C2%B2%20Lab">Email Prof. An</a>
-      </div>
-      <p class="contact"><strong>Email</strong> <a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a><br>
-        <strong>Office</strong> E1-1-313, Department of Physics Education, Chungbuk National University, Cheongju, Republic of Korea</p>
-    </div>
-    <dl class="positions">
-      <div><dt>Graduate students (M.S. and Ph.D.)</dt><dd>Build microwave experiments, run simulations and design spin-wave devices.</dd></div>
-      <div><dt>Undergraduate interns</dt><dd>Summer and semester internships. First- and second-year students are welcome; our 2026 interns presented their own project at the KPS Fall Meeting.</dd></div>
-      <div><dt>Postdoctoral researchers</dt><dd>Get in touch to discuss openings and fellowship applications.</dd></div>
-    </dl>
+<!-- ============ CONTACT ============ -->
+<section class="section section--mist contact-section" id="contact" aria-labelledby="contact-title">
+  <div class="wrap">
+    <h2 id="contact-title">Say hello</h2>
+    <p class="contact-lede">If you're interested in what we do, you can reach me at <a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a>. Students are always welcome, and you don't need any research experience.</p>
+    <p class="contact-sign">Kyongmo An</p>
+    <p class="contact-meta">Office E1-1-313, Department of Physics Education, Chungbuk National University, Cheongju</p>
   </div>
 </section>
 
