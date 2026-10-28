@@ -242,6 +242,15 @@ ul, ol { padding: 0; }
 /* a phrase that opens a photo in the viewer */
 .photo-link { padding: 0; border: 0; background: none; font: inherit; color: var(--signal); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; cursor: zoom-in; }
 .photo-link:hover { color: var(--ink); }
+.vlab-teaser { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); margin-top: clamp(28px, 4vw, 44px); border-radius: var(--radius-lg); overflow: hidden; background: var(--cavity); color: var(--on-dark); }
+.vlab-teaser-img { display: block; min-height: 100%; background: var(--cavity-2); }
+.vlab-teaser-img img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 16 / 10; }
+.vlab-teaser-text { padding: clamp(24px, 3.5vw, 44px); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 14px; }
+.vlab-teaser-text h3 { color: #fff; font-size: clamp(1.35rem, 1.1rem + .9vw, 1.75rem); }
+.vlab-teaser-text h3::after { content: ""; display: block; width: 44px; height: 4px; margin-top: 12px; border-radius: 2px; background: var(--magnon); }
+.vlab-teaser-text p { color: var(--on-dark); line-height: 1.6; max-width: 32rem; }
+.vlab-teaser :focus-visible { outline-color: var(--magnon); }
+@media (max-width: 760px) { .vlab-teaser { grid-template-columns: 1fr; } }
 .history { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 32px); align-items: start; }
 .history .photo-btn { aspect-ratio: 4 / 3; background: var(--mist); }
 .buildout { list-style: none; margin-top: clamp(24px, 3vw, 32px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2.5vw, 32px); }

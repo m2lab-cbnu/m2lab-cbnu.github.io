@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Virtual lab | M² Lab, Chungbuk National University</title>
+<meta name="description" content="Walk around a 3D model of M² Lab and use its instruments: ferromagnetic resonance, spin-wave dispersion, a micromagnetic simulator that runs on your graphics card, and Brillouin light scattering.">
+<link rel="canonical" href="https://m2lab-cbnu.github.io/lab.html">
+<meta name="theme-color" content="#0E2A4D">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="M² Lab">
+<meta property="og:title" content="Virtual lab | M² Lab">
+<meta property="og:description" content="Walk around our lab in 3D and run its instruments in your browser: FMR, spin-wave dispersion, micromagnetics and BLS.">
+<meta property="og:url" content="https://m2lab-cbnu.github.io/lab.html">
+<meta property="og:image" content="https://m2lab-cbnu.github.io/images/og-vlab.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The virtual M² Lab: a 3D room with an optical table, an instrument rack and a stand TV">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="images/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="images/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/ibm-plex-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="modulepreload" href="assets/vlab/vendor/three.js">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/vlab/vlab.css">
+</head>
+<body class="vlab-page">
+<a class="skip" href="#vl-menu-btn">Skip to the list of instruments</a>
+<header class="site-header">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="index.html"><img src="images/logo-144.png" alt="" width="34" height="36">M² Lab</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 5h16M2 10h16M2 15h16" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>Menu
+    </button>
+    <ul id="nav-links" class="nav-links">
+      <li><a href="index.html#research">Research</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="index.html#lab">Lab</a></li>
+      <li><a href="lab.html" aria-current="page">Virtual lab</a></li>
+      <li><a href="index.html#publications">Publications</a></li>
+      <li><a href="index.html#people">People</a></li>
+      <li><a href="index.html#news">News</a></li>
+      <li><a href="index.html#teaching">Teaching</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="vlab" class="vlab-main">
+  <canvas id="vl-canvas" tabindex="0" aria-label="3D view of M² Lab. Drag to look around, use W A S D or the arrow keys to walk, and click an instrument to use it. The Instruments button lists every station."></canvas>
+  <p class="vl-loading">Setting up the lab…</p>
+  <div class="vl-labels"></div>
+  <div class="vl-top">
+    <div class="vl-title"><span class="dot" aria-hidden="true"></span>Virtual lab</div>
+    <span class="vl-spacer"></span>
+    <button id="vl-help" class="vl-chip" type="button" aria-label="How to move around">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7.6 7.6a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="10" cy="14.6" r="1.1" fill="currentColor"/></svg><span class="lbl">Help</span>
+    </button>
+    <button id="vl-menu-btn" class="vl-chip" type="button" aria-expanded="false" aria-controls="vl-menu">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="2.5" width="6" height="6" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="11.5" y="2.5" width="6" height="6" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="2.5" y="11.5" width="6" height="6" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="11.5" y="11.5" width="6" height="6" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.7"/></svg><span class="lbl">Instruments</span>
+    </button>
+  </div>
+  <div id="vl-menu" class="vl-menu" hidden><ul aria-label="Instruments"></ul></div>
+  <p class="vl-hint" aria-hidden="true"></p>
+  <div class="vl-fallback" hidden>
+    <div>
+      <h2>Your browser can’t draw the 3D room</h2>
+      <p>The room needs WebGL, which is switched off or not available here. You can still use every instrument:</p>
+    </div>
+  </div>
+  <div id="vl-intro" class="vl-intro" role="dialog" aria-modal="true" aria-labelledby="vl-intro-title">
+    <div class="vl-intro-card">
+      <h1 id="vl-intro-title">Welcome to the virtual M² Lab</h1>
+      <p>This is our lab rebuilt in 3D, and its instruments run real physics in your browser. Walk around, open a station, change the film or the field, and see what happens.</p>
+      <ul>
+        <li><span class="ic" aria-hidden="true">FMR</span><span><b>FMR setup</b>: resonance lines, field–frequency maps, damping and the angle dependence.</span></li>
+        <li><span class="ic" aria-hidden="true">k</span><span><b>Blackboard</b>: spin-wave dispersion, antennas and isofrequency curves.</span></li>
+        <li><span class="ic" aria-hidden="true">PC</span><span><b>Simulation PC</b>: a micromagnetic simulator that runs on your graphics card, in the spirit of mumax3.</span></li>
+        <li><span class="ic" aria-hidden="true">BLS</span><span><b>BLS setup</b>: Brillouin light scattering, from spectra and spatial maps to parametric pumping, magnon condensation and squeezing.</span></li>
+      </ul>
+      <div class="vl-intro-actions">
+        <button id="vl-enter" class="btn btn--primary" type="button">Enter the lab</button>
+        <button id="vl-tour" class="btn btn--outline" type="button">See the instruments</button>
+      </div>
+      <p class="vl-keys"><kbd>Drag</kbd> to look around, <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or the arrow keys to walk, click an instrument to use it, and <kbd>Esc</kbd> to step back. On a phone, tap the floor to walk. On a slow computer you can <a href="lab.html?flat">use the instruments without the 3D room</a>.</p>
+    </div>
+  </div>
+</main>
+<script src="assets/site.js" defer></script>
+<script type="module" src="assets/vlab/main.js"></script>
+</body>
+</html>
