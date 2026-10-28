@@ -330,9 +330,9 @@
       i = j + 1;
     }
     // field axis
-    ctx.strokeStyle = "rgba(169,188,211,0.5)"; ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgba(168,236,255,0.5)"; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(PAD_X, yb + 0.5); ctx.lineTo(W - PAD_X, yb + 0.5); ctx.stroke();
-    ctx.font = "500 11px " + FONT; ctx.fillStyle = "rgba(169,188,211,0.95)"; ctx.textBaseline = "alphabetic";
+    ctx.font = "500 11px " + FONT; ctx.fillStyle = "rgba(168,236,255,0.95)"; ctx.textBaseline = "alphabetic";
     for (var v = 0; v <= g.range + 0.1; v += 50) {
       var tx = fieldToX(v);
       ctx.beginPath(); ctx.moveTo(Math.round(tx) + 0.5, yb); ctx.lineTo(Math.round(tx) + 0.5, yb + 4); ctx.stroke();
@@ -363,23 +363,23 @@
     ctx.font = "600 12px " + FONT; ctx.textBaseline = "alphabetic"; ctx.textAlign = "center";
     var label = Math.round(g.field) + " mT", tw = ctx.measureText(label).width + 16;
     var lx = Math.min(W - tw - 4, Math.max(4, cx - tw / 2));
-    pill(lx, 25, tw, 19, "rgba(14,42,77,0.92)", "rgba(169,188,211,0.55)");
+    pill(lx, 25, tw, 19, "rgba(14,42,77,0.92)", "rgba(168,236,255,0.55)");
     ctx.fillStyle = "#fff"; ctx.fillText(label, lx + tw / 2, 39);
     // status line
     ctx.textAlign = "left";
     if (g.phase === "play") {
-      ctx.fillStyle = "rgba(232,241,250,0.96)";
-      ctx.fillText(g.sample.name + "  ·  " + g.f.toFixed(1) + " GHz", PAD_X, 16);
+      ctx.fillStyle = "rgba(255,255,255,0.96)";
+      ctx.fillText(g.sample.name + " at " + g.f.toFixed(1) + " GHz", PAD_X, 16);
     } else {
       ctx.fillStyle = "rgba(255,196,74,1)";
       ctx.fillText(g.sample.name + " resonates at " + Math.round(g.bRes) + " mT", PAD_X, 16);
     }
-    ctx.textAlign = "right"; ctx.fillStyle = "rgba(169,188,211,0.95)";
-    ctx.fillText(Math.min(g.idx + 1, SAMPLES.length) + " of " + SAMPLES.length + "  ·  " + fmtTime(g.time) +
-                 (g.best && W >= 480 ? "  ·  best " + fmtTime(g.best) : ""), W - PAD_X, 16);
+    ctx.textAlign = "right"; ctx.fillStyle = "rgba(168,236,255,0.95)";
+    ctx.fillText("Sample " + Math.min(g.idx + 1, SAMPLES.length) + " of " + SAMPLES.length + ",  " + fmtTime(g.time) +
+                 (g.best && W >= 480 ? "  (best " + fmtTime(g.best) + ")" : ""), W - PAD_X, 16);
     // until the first move, show where to sweep
     if (!g.started && H >= 200) {
-      ctx.textAlign = "center"; ctx.font = "500 13px " + FONT; ctx.fillStyle = "rgba(232,241,250,0.85)";
+      ctx.textAlign = "center"; ctx.font = "500 13px " + FONT; ctx.fillStyle = "rgba(255,255,255,0.85)";
       ctx.fillText(touchOnly ? "\u2190  drag sideways to sweep the field  \u2192" : "\u2190  move sideways to sweep the field  \u2192",
                    W / 2, SPEC_TOP + 8);
     }
@@ -497,7 +497,7 @@
       ctx.lineTo(tx - ux * head - uy * half, ty - uy * head + ux * half);
       ctx.lineTo(tx - ux * head + uy * half, ty - uy * head - ux * half);
       ctx.closePath(); ctx.fill();
-      ctx.fillStyle = "rgba(232,241,250,0.35)";
+      ctx.fillStyle = "rgba(255,255,255,0.35)";
       ctx.beginPath(); ctx.arc(bx, y0, 1.5, 0, 6.2832); ctx.fill();
     }
 
