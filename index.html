@@ -193,13 +193,13 @@
 </section>
 
 <!-- ============ PROJECTS ============ -->
-<section class="section section--mist" id="projects" aria-labelledby="projects-title">
+<section class="section on-dark projects-band" id="projects" aria-labelledby="projects-title">
   <div class="wrap">
     <div class="section-head">
       <h2 id="projects-title">Projects</h2>
     </div>
     <ul class="projects">
-      <li class="project">
+      <li class="project project--main">
         <h3>Magnon–superconductor quantum transduction</h3>
         <p class="meta">Glocal R&amp;D, 2025–2028</p>
         <p>Our main project. We are building an open lab in the Chungcheong region where magnons meet superconducting circuits, with the goal of passing quantum information between microwave platforms.</p>
@@ -631,7 +631,7 @@
     <div class="pi">
       <img width="640" height="800" class="pi-photo" src="images/people/kyongmo-an.jpg" alt="Portrait of Kyongmo An" loading="lazy">
       <div>
-        <h3>Kyongmo An<span lang="ko">안경모</span></h3>
+        <h3>Kyongmo An</h3>
         <p class="role">Assistant Professor, Department of Physics Education, Chungbuk National University</p>
         <p class="bio">Kyongmo started M² Lab in March 2025. Much of his research is about spin waves meeting sound and microwaves: Brillouin light scattering of magnons and phonons during his Ph.D. at UT Austin, spin-wave devices at EPFL, phonon-coupled magnets at SPINTEC in Grenoble, and hybrid magnonics at KRISS.</p>
         <p class="pi-links"><a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a><a href="https://scholar.google.com/citations?user=zsngCA4AAAAJ&amp;hl=en">Google Scholar</a></p>
@@ -655,7 +655,7 @@
         <p class="role">M.S. researcher</p>
         <p>Micromagnetic simulation</p>
         <p class="muted">B.S., Kangwon National University</p>
-        <a href="mailto:tk4214@naver.com">tk4214@naver.com</a>
+        <a href="mailto:tk4214@naver.com">tk4214@<wbr>naver.com</a>
       </li>
       <li class="member">
         <img width="480" height="600" class="member-photo" src="images/people/chanwoo-shin.jpg" alt="Portrait of Chanwoo Shin" loading="lazy">
@@ -663,10 +663,17 @@
         <p class="role">Undergraduate researcher</p>
         <p>Physics education and magnonics</p>
         <p class="muted">B.S. student, CBNU</p>
-        <a href="mailto:chanwoo204@gmail.com">chanwoo204@gmail.com</a>
+        <a href="mailto:chanwoo204@gmail.com">chanwoo204@<wbr>gmail.com</a>
+      </li>
+      <li class="member member--group">
+        <button class="photo-btn" type="button" data-full="images/kps2026-team.jpg" data-caption="The 2026 summer team at the KPS Fall Meeting, Jeju.">
+          <img width="1440" height="1080" class="member-photo" src="images/kps2026-team.jpg" srcset="images/thumbs/kps2026-team.jpg 720w, images/kps2026-team.jpg 1440w" sizes="(min-width: 1160px) 540px, (min-width: 900px) 48vw, 100vw" alt="Kyongmo An with the 2026 summer students in front of the KPS Fall Meeting banner in Jeju" loading="lazy">
+        </button>
+        <h4>Summer interns</h4>
+        <p class="role">Undergraduates, every summer</p>
+        <p>The 2026 group worked with us from June to August and presented two projects at the KPS Fall Meeting in Jeju.</p>
       </li>
     </ul>
-    <p class="team-note">Each summer we also host undergraduate interns. The 2026 interns worked with us from June to August and finished the program with the whole team at the KPS Fall Meeting in Jeju.</p>
   </div>
 </section>
 
@@ -851,34 +858,29 @@
       <p>Courses in the Department of Physics Education, where we train future physics teachers.</p>
     </div>
     <div class="teach-grid">
-      <dl class="semesters">
-        <div>
-          <dt>Spring 2026</dt>
-          <dd><ul>
-            <li>Electromagnetism and EM Education I</li>
-            <li>Mathematical Physics I</li>
-            <li>Thermal and Statistical Physics</li>
-            <li>Physics Experiment I</li>
-          </ul></dd>
-        </div>
-        <div>
-          <dt>Fall 2025</dt>
-          <dd><ul>
-            <li>Electromagnetism and EM Education II</li>
-            <li>Mathematical Physics II</li>
-            <li>Physics Experiment II</li>
-            <li>Solid State Physics Education</li>
-          </ul></dd>
-        </div>
-        <div>
-          <dt>Spring 2025</dt>
-          <dd><ul>
-            <li>Electromagnetism and EM Education I</li>
-            <li>Mathematical Physics I</li>
-            <li>Thermal and Statistical Physics</li>
-          </ul></dd>
-        </div>
-      </dl>
+      <div class="courses">
+        <table class="course-table">
+          <caption class="visually-hidden">Courses by semester. I and II are the first and second parts of a two-semester course.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Course</th>
+              <th scope="col">Spring<br>2025</th>
+              <th scope="col">Fall<br>2025</th>
+              <th scope="col">Spring<br>2026</th>
+              <th scope="col" class="is-now">Fall<br>2026</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Electromagnetism and EM Education</th><td>I</td><td>II</td><td>I</td><td class="is-now">II</td></tr>
+            <tr><th scope="row">Mathematical Physics</th><td>I</td><td>II</td><td>I</td><td class="is-now">II</td></tr>
+            <tr><th scope="row">Physics Experiment</th><td></td><td>II</td><td>I</td><td class="is-now">II</td></tr>
+            <tr><th scope="row">Thermal and Statistical Physics</th><td><span class="dot" aria-hidden="true"></span><span class="visually-hidden">taught</span></td><td></td><td><span class="dot" aria-hidden="true"></span><span class="visually-hidden">taught</span></td><td class="is-now"></td></tr>
+            <tr><th scope="row">Solid State Physics Education</th><td></td><td><span class="dot" aria-hidden="true"></span><span class="visually-hidden">taught</span></td><td></td><td class="is-now"><span class="dot" aria-hidden="true"></span><span class="visually-hidden">taught</span></td></tr>
+            <tr><th scope="row">Electromagnetism for non-majors <span class="new">New</span></th><td></td><td></td><td></td><td class="is-now"><span class="dot" aria-hidden="true"></span><span class="visually-hidden">taught</span></td></tr>
+          </tbody>
+        </table>
+        <p class="course-note">Highlighted: this semester.</p>
+      </div>
       <aside class="outreach" aria-labelledby="outreach-title">
         <h3 id="outreach-title">Interactive demos and physics notes</h3>
         <p>Tools and short notes we write for students and anyone curious about physics.</p>
@@ -894,12 +896,20 @@
 </section>
 
 <!-- ============ CONTACT ============ -->
-<section class="section section--mist contact-section" id="contact" aria-labelledby="contact-title">
-  <div class="wrap">
-    <h2 id="contact-title">Say hello</h2>
-    <p class="contact-lede">If you're interested in what we do, you can reach me at <a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a>. Students are always welcome, and you don't need any research experience.</p>
-    <p class="contact-sign">Kyongmo An</p>
-    <p class="contact-meta">Office E1-1-313, Department of Physics Education, Chungbuk National University, Cheongju</p>
+<section class="section on-dark contact-section" id="contact" aria-labelledby="contact-title">
+  <div class="wrap contact-grid">
+    <div>
+      <h2 id="contact-title">Say hello</h2>
+      <p class="contact-lede">If you're interested in what we do, you can reach me at <a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a>. Students are always welcome, and you don't need any research experience.</p>
+      <p class="contact-sign">Kyongmo An</p>
+      <p class="contact-meta">Office E1-1-313, Department of Physics Education, Chungbuk National University, Cheongju</p>
+    </div>
+    <figure class="contact-photo">
+      <button class="photo-btn" type="button" data-full="images/kps2026-jeju-group.jpg" data-caption="The lab together in Jeju during the KPS Fall Meeting, October 2026.">
+        <img width="1600" height="1200" src="images/kps2026-jeju-group.jpg" srcset="images/thumbs/kps2026-jeju-group.jpg 720w, images/kps2026-jeju-group.jpg 1600w" sizes="(min-width: 1160px) 480px, (min-width: 900px) 42vw, 100vw" alt="M² Lab members and interns pose at night under string lights and palm trees in Jeju" loading="lazy">
+      </button>
+      <figcaption>The lab together in Jeju, October 2026.</figcaption>
+    </figure>
   </div>
 </section>
 
