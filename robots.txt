@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://m2lab-cbnu.github.io/sitemap.xml

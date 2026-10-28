@@ -1,144 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>M² Lab | Useful Resources</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg:#121212; --panel:#1e1e1e; --text:#f1f1f1; --muted:#bbbbbb;
-      --muted2:#cccccc; --line:#222; --brand:#00e0ff; --brand2:#00bcd4;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
-    body { background:var(--bg); color:var(--text); line-height:1.6; }
-    header { background:var(--panel); position:relative; padding:30px 20px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,.6); }
-    .lab-title { font-size:28px; font-weight:600; color:var(--brand); letter-spacing:1.2px; }
-    .logo { position:absolute; top:15px; right:20px; height:100px; }
-    nav { background:var(--panel); display:flex; justify-content:center; flex-wrap:wrap; gap:20px; padding:15px; box-shadow:0 2px 10px rgba(0,0,0,.3); }
-    nav a { color:var(--muted); text-decoration:none; padding:8px 12px; font-size:16px; border-radius:8px; transition:.3s; }
-    nav a:hover { background:var(--brand); color:#121212; }
-    nav a[aria-current="page"] { background:var(--brand); color:#121212; }
-    main { max-width:1080px; margin:0 auto; padding:36px 20px; }
-    h1 { font-size:32px; color:var(--brand); margin-bottom:8px; }
-    .subtitle { color:var(--muted2); margin-bottom:20px; }
-
-    .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
-    @media (max-width:860px){
-      .grid{ grid-template-columns:1fr; }
-      .logo{ position:static; display:block; margin:10px auto 0; height:80px; }
-      .lab-title{ font-size:20px; }
-    }
-
-    .card { background:linear-gradient(145deg,#1d1d1d,#151515); border:1px solid var(--line);
-      border-radius:14px; padding:16px; box-shadow:0 10px 24px rgba(0,0,0,.25); }
-    .card h3 { font-size:18px; margin-bottom:6px; }
-    .card p { color:var(--muted2); font-size:14px; }
-    .actions { margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; }
-    .btn { display:inline-block; padding:10px 14px; border-radius:10px; border:1px solid var(--line);
-      background:var(--brand); color:#121212; text-decoration:none; font-size:14px; cursor:pointer; }
-    .btn.secondary { background:#1b1b1b; color:var(--muted2); }
-    .btn:hover { background:var(--brand2); }
-    .frame-wrap { margin-top:12px; border:1px solid var(--line); border-radius:12px; overflow:hidden; display:none; }
-    iframe { width:100%; height:600px; background:#0f0f0f; border:0; }
-
-    /* Gallery */
-    .thumbs { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px; }
-    .thumbs a { display:block; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:#0d0d0d; }
-    .thumbs img { width:100%; height:220px; object-fit:cover; display:block; transition:transform .25s ease; }
-    .thumbs a:hover img { transform:scale(1.02); }
-
-    footer { background:var(--panel); color:#888; text-align:center; padding:20px; font-size:14px; border-top:1px solid #333; margin-top:28px; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resources | M² Lab, Chungbuk National University</title>
+<meta name="description" content="Interactive physics demos, short physics notes and small tools from M² Lab (Microwave Magnonics Lab) at Chungbuk National University.">
+<link rel="canonical" href="https://m2lab-cbnu.github.io/resources.html">
+<meta name="theme-color" content="#0E2A4D">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="M² Lab">
+<meta property="og:title" content="Resources | M² Lab">
+<meta property="og:description" content="Interactive physics demos, short physics notes and small tools from M² Lab.">
+<meta property="og:url" content="https://m2lab-cbnu.github.io/resources.html">
+<meta property="og:image" content="https://m2lab-cbnu.github.io/images/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="images/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/ibm-plex-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
-  <header>
-    <div class="lab-title">M² Lab | Microwave Magnonics Lab</div>
-    <a href="index.html" aria-label="Return to home page">
-      <img src="logo.png" alt="M² Lab Logo" class="logo">
-    </a>
-  </header>
+<a class="skip" href="#main">Skip to content</a>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="research.html">Research</a>
-    <a href="people.html">People</a>
-    <a href="publications.html">Publications</a>
-    <a href="teaching.html">Teaching</a>
-    <a href="news.html">News</a>
-    <a href="resources.html" aria-current="page">Useful Resources</a>
-    <a href="contact.html">Contact</a>
+<header class="site-header">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="index.html"><img src="images/logo-144.png" alt="" width="34" height="36">M² Lab</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 5h16M2 10h16M2 15h16" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>Menu
+    </button>
+    <ul id="nav-links" class="nav-links">
+      <li><a href="index.html#research">Research</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="index.html#facilities">Facilities</a></li>
+      <li><a href="index.html#publications">Publications</a></li>
+      <li><a href="index.html#people">People</a></li>
+      <li><a href="index.html#news">News</a></li>
+      <li><a href="index.html#teaching">Teaching</a></li>
+      <li><a href="resources.html" aria-current="page">Resources</a></li>
+      <li><a class="nav-cta" href="index.html#join">Join us</a></li>
+    </ul>
   </nav>
+</header>
 
-  <main>
-    <h1>Useful Resources</h1>
-    <p class="subtitle">Lab demos, slides, templates, scripts, and more.</p>
+<main id="main">
+  <section class="page-hero" aria-labelledby="page-title">
+    <div class="wrap">
+      <h1 id="page-title">Resources</h1>
+      <p>Interactive demos, short physics notes and small tools from M² Lab, written for students and anyone curious about physics.</p>
+    </div>
+  </section>
 
-    <section class="grid">
-      <!-- NEW: Antenna field calc images -->
-      <article class="card" id="antenna-gallery">
-        <h3>Antenna Field Calculations — Gallery</h3>
-        <p>안테나 필드 계산 결과 이미지. (왼쪽) 수평성분 (오른쪽) 수직성분 </p>
-        <div class="thumbs">
-          <a href="Oscillating B field distribution.jpeg" target="_blank" rel="noopener">
-            <img src="Oscillating B field distribution.jpeg" alt="Antenna Field Calculation 1" loading="lazy">
-          </a>
-          <a href="Oscillating B field distribution2.jpg" target="_blank" rel="noopener">
-            <img src="Oscillating B field distribution2.jpg" alt="Antenna Field Calculation 2" loading="lazy">
-          </a>
-        </div>
-      </article>
+  <section class="section" aria-labelledby="demos-title">
+    <div class="wrap">
+      <div class="section-head"><h2 id="demos-title">Interactive demos</h2></div>
+      <ul class="res-list">
+        <li>
+          <div>
+            <h3>Magnetic field calculator</h3>
+            <p>Compute the B and H fields of a conductor with rectangular cross-section, using Biot–Savart multi-filament summation.</p>
+          </div>
+          <a class="btn btn--outline" href="sources/magnetic-field-rect.html" target="_blank" rel="noopener">Open calculator</a>
+        </li>
+        <li>
+          <div>
+            <h3>Sound-wave synthesizer</h3>
+            <p>Fourier and sine-wave synthesis with live audio playback, a phase-locked time-domain scope and a spectrum view.</p>
+          </div>
+          <a class="btn btn--outline" href="sources/sound-wave.html" target="_blank" rel="noopener">Open demo</a>
+        </li>
+        <li>
+          <div>
+            <h3>Coupled oscillators</h3>
+            <p>Normal modes and energy exchange in a system of coupled oscillators.</p>
+          </div>
+          <a class="btn btn--outline" href="sources/coupled_oscillator.html" target="_blank" rel="noopener">Open demo</a>
+        </li>
+      </ul>
+    </div>
+  </section>
 
-      <!-- NEW: Magnetic field calculator (rectangular conductor) -->
-      <article class="card" id="mf-rect">
-        <h3>Magnetic Field Calculator (Rectangular Conductor)</h3>
-        <p>너비·두께·길이가 주어진 직사각 단면 도체에 균일 전류가 흐를 때, 임의 지점에서의 <i>B</i>와 <i>H</i>를 계산합니다. (Biot–Savart, 다중 필라멘트 합산)</p>
-        <div class="actions">
-          <a class="btn" href="magnetic-field-rect.html" target="_blank" rel="noopener">Open in new tab</a>
-          <button class="btn secondary run-here" data-src="magnetic-field-rect.html" type="button">Run here</button>
-        </div>
-        <div class="frame-wrap">
-          <iframe title="Magnetic Field Calculator (Rectangular Conductor)"></iframe>
-        </div>
-      </article>
+  <section class="section section--mist" aria-labelledby="notes-title">
+    <div class="wrap">
+      <div class="section-head"><h2 id="notes-title">Physics notes</h2></div>
+      <ul class="res-list">
+        <li>
+          <div>
+            <h3>Microwaves and induction heating</h3>
+            <p>Same electromagnetism, different mechanisms: dielectric loss versus eddy currents, and why aluminium doesn't work on an induction cooktop.</p>
+          </div>
+          <a class="btn btn--outline" href="sources/induction-heating-en.html" target="_blank" rel="noopener">Read note</a>
+        </li>
+        <li>
+          <div>
+            <h3>How water becomes ice</h3>
+            <p>A kitchen-physics note on surface area, supercooling and the Mpemba effect: the strange hours between a cup of water and a cup of ice.</p>
+          </div>
+          <a class="btn btn--outline" href="sources/freezing-ice.html" target="_blank" rel="noopener">Read note</a>
+        </li>
+        <li>
+          <div>
+            <h3>NF BP4610 over USB (Windows 11)</h3>
+            <p>Instrumentation note on controlling the NF BP4610 bipolar power supply with the JEMIMA USB488 protocol: what worked and what didn't.</p>
+          </div>
+          <a class="btn btn--outline" href="sources/bp4610_usb488.html" target="_blank" rel="noopener">Read note</a>
+        </li>
+      </ul>
+    </div>
+  </section>
 
-      <!-- Existing: Sound Wave Demo -->
-      <article class="card" id="sound-wave">
-        <h3>Interactive Sound Wave Demo</h3>
-        <p>푸리에/사인파 합성, 파형 시각화, 오디오 재생 등을 테스트하는 데모입니다.</p>
-        <div class="actions">
-          <a class="btn" href="sound-wave.html" target="_blank" rel="noopener">Open in new tab</a>
-          <button class="btn secondary run-here" data-src="sound-wave.html" type="button">Run here</button>
-        </div>
-        <div class="frame-wrap">
-          <iframe title="Sound Wave Demo"></iframe>
-        </div>
-      </article>
-    </section>
-  </main>
+  <section class="section" aria-labelledby="utils-title">
+    <div class="wrap">
+      <div class="section-head"><h2 id="utils-title">Utilities</h2></div>
+      <ul class="res-list">
+        <li>
+          <div>
+            <h3>Folder File Recovery</h3>
+            <p>Accidentally deleted a file? This tool helps bring it back, a real lifesaver when one wrong click turns into a nightmare.</p>
+            <p class="meta">Windows executable (.exe), 10 MB</p>
+          </div>
+          <a class="btn btn--outline" href="sources/FolderFileRecovery.exe" download>Download for Windows</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
 
-  <footer>
-    © 2025 M² Lab | Chungbuk National University, Department of Physics Education
-  </footer>
+<footer class="site-footer on-dark">
+  <div class="wrap footer-row">
+    <p>© <span data-year>2026</span> M² Lab, Department of Physics Education, Chungbuk National University</p>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#join">Join us</a></li>
+      <li><a href="https://www.chungbuk.ac.kr">Chungbuk National University</a></li>
+    </ul>
+  </div>
+</footer>
 
-  <script>
-    // Generic "Run here" toggles for any card with .run-here button
-    document.querySelectorAll('.run-here').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const card = btn.closest('.card');
-        const wrap = card.querySelector('.frame-wrap');
-        const iframe = wrap.querySelector('iframe');
-        if (wrap.style.display !== 'block') {
-          iframe.src = btn.dataset.src || '';
-          wrap.style.display = 'block';
-          btn.textContent = 'Hide';
-        } else {
-          iframe.src = '';
-          wrap.style.display = 'none';
-          btn.textContent = 'Run here';
-        }
-      });
-    });
-  </script>
+<script src="assets/site.js" defer></script>
 </body>
 </html>

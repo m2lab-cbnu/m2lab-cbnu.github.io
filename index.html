@@ -1,802 +1,988 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>M² Lab — Microwave Magnonics Lab at CBNU</title>
-  <meta name="description" content="Microwave Magnonics Lab (M² Lab) at Chungbuk National University. Research in magnon-phonon coupling, quantum magnonics, spin-wave devices, and spin-caloritronics."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --bg: #0b0f14;
-      --surface: #131920;
-      --surface2: #1a2230;
-      --border: #222d3a;
-      --text: #e4e8ec;
-      --text-dim: #8a95a3;
-      --accent: #00d4ff;
-      --accent2: #0090b8;
-      --accent-glow: rgba(0,212,255,.12);
-      --warm: #ff6b35;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; line-height:1.7; -webkit-font-smoothing:antialiased; }
-
-    /* NAV */
-    nav { position:sticky; top:0; z-index:100; background:rgba(11,15,20,.85); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
-    .nav-inner { max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; }
-    .nav-brand { font-family:'DM Serif Display',serif; font-size:20px; color:var(--accent); text-decoration:none; letter-spacing:.5px; display:flex; align-items:center; gap:10px; }
-    .nav-logo { height:36px; width:auto; }
-    .nav-links { display:flex; gap:6px; flex-wrap:wrap; }
-    .nav-links a { color:var(--text-dim); text-decoration:none; font-size:13px; font-weight:500; padding:6px 12px; border-radius:6px; transition:.2s; }
-    .nav-links a:hover,.nav-links a.active { color:#fff; background:var(--surface2); }
-    .hamburger { display:none; background:none; border:none; color:var(--text); font-size:22px; cursor:pointer; }
-    @media(max-width:768px){
-      .hamburger{display:block;}
-      .nav-links{display:none;position:absolute;top:56px;left:0;right:0;background:var(--surface);flex-direction:column;padding:12px;border-bottom:1px solid var(--border);}
-      .nav-links.open{display:flex;}
-    }
-
-    /* HERO */
-    .hero { position:relative; padding:80px 24px 60px; text-align:center; overflow:hidden; }
-    .hero::before { content:''; position:absolute; top:-40%; left:50%; transform:translateX(-50%); width:800px; height:800px; background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 70%); pointer-events:none; }
-    .hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(36px,5vw,56px); color:#fff; margin-bottom:16px; position:relative; }
-    .hero h1 span { color:var(--accent); }
-    .hero .tagline { font-size:clamp(16px,2vw,20px); color:var(--text-dim); max-width:700px; margin:0 auto 28px; }
-    .hero-stats { display:flex; justify-content:center; gap:40px; flex-wrap:wrap; margin-top:32px; }
-    .hero-stats .stat { text-align:center; }
-    .hero-stats .stat-num { font-family:'DM Serif Display',serif; font-size:32px; color:var(--accent); }
-    .hero-stats .stat-label { font-size:12px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; }
-
-    /* SECTIONS */
-    section { max-width:1280px; margin:0 auto; padding:60px 24px; }
-    .section-label { font-size:11px; text-transform:uppercase; letter-spacing:2.5px; color:var(--accent); font-weight:700; margin-bottom:8px; }
-    .section-title { font-family:'DM Serif Display',serif; font-size:clamp(28px,3.5vw,40px); color:#fff; margin-bottom:24px; }
-    .divider { height:1px; background:var(--border); margin:0 auto; max-width:1280px; }
-
-    /* NEWS — newspaper style */
-    .news-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-    @media(max-width:700px){ .news-grid{grid-template-columns:1fr;} }
-    .news-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; transition:.25s; }
-    .news-card:hover { border-color:var(--accent); transform:translateY(-2px); }
-    .news-card.featured { grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:center; }
-    @media(max-width:700px){ .news-card.featured{grid-template-columns:1fr;} }
-    .news-card img { width:100%; border-radius:8px; object-fit:cover; }
-    .news-badge { display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; padding:3px 8px; border-radius:4px; background:var(--accent-glow); color:var(--accent); margin-bottom:8px; }
-    .news-badge.grant { background:rgba(255,107,53,.12); color:var(--warm); }
-    .news-date { font-size:12px; color:var(--text-dim); margin-bottom:6px; }
-    .news-card h3 { font-size:18px; color:#fff; margin-bottom:8px; line-height:1.4; }
-    .news-card p { font-size:14px; color:var(--text-dim); }
-
-    /* PHOTOS */
-    .photo-scroll { display:flex; gap:14px; overflow-x:auto; padding-bottom:12px; scroll-snap-type:x mandatory; }
-    .photo-scroll::-webkit-scrollbar { height:6px; }
-    .photo-scroll::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
-    .photo-card { flex:0 0 280px; scroll-snap-align:start; border-radius:12px; overflow:hidden; position:relative; border:1px solid var(--border); }
-    .photo-card img { width:100%; height:200px; object-fit:cover; display:block; }
-    .poster-card img { object-fit:contain; background:#fff; }
-    .photo-card .caption { padding:10px 12px; font-size:12px; color:var(--text-dim); background:var(--surface); }
-
-    /* RESEARCH */
-    .research-grid { display:flex; flex-direction:column; gap:28px; }
-    .research-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:32px; transition:.25s; display:grid; grid-template-columns:320px 1fr; gap:28px; align-items:start; }
-    .research-card:hover { border-color:var(--accent); }
-    @media(max-width:800px){ .research-card{grid-template-columns:1fr; } }
-    .research-card .num { font-family:'DM Serif Display',serif; font-size:36px; color:var(--accent); opacity:.4; margin-bottom:4px; }
-    .research-card h3 { font-size:19px; color:#fff; margin-bottom:10px; }
-    .research-card p { font-size:14px; color:var(--text-dim); line-height:1.7; }
-    .research-fig { width:100%; border-radius:8px; overflow:hidden; background:#f5f5f5; border:1px solid rgba(0,212,255,.1); display:flex; align-items:center; justify-content:center; padding:12px; aspect-ratio:4/3; }
-    .research-fig img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
-    .research-overview { display:flex; justify-content:center; margin-bottom:36px; }
-    .research-overview img { max-width:820px; width:100%; border-radius:12px; border:1px solid var(--border); box-shadow:0 0 20px rgba(0,212,255,.1); background:#f5f5f5; padding:10px; }
-    .research-card .pubs { margin-top:12px; }
-    .research-card .pubs a { display:block; font-size:12px; color:var(--accent); text-decoration:none; margin-bottom:4px; line-height:1.4; }
-    .research-card .pubs a:hover { text-decoration:underline; }
-
-    /* PROJECTS */
-    .project-list { display:flex; flex-direction:column; gap:16px; }
-    .project-item { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px 24px; }
-    .project-item h3 { font-size:16px; color:#fff; margin-bottom:4px; }
-    .project-item .period { font-size:12px; color:var(--accent); margin-bottom:8px; }
-    .project-item p { font-size:14px; color:var(--text-dim); }
-
-    /* PUBLICATIONS */
-    .pub-list { list-style:none; }
-    .pub-list li { padding:16px 0; border-bottom:1px solid var(--border); }
-    .pub-list li:last-child { border-bottom:none; }
-    .pub-list .pub-title { color:var(--accent); text-decoration:none; font-weight:600; font-size:15px; line-height:1.4; display:block; margin-bottom:4px; }
-    .pub-list .pub-title:hover { text-decoration:underline; }
-    .pub-list .pub-authors { font-size:13px; color:var(--text-dim); }
-    .pub-list .pub-authors b { color:#fff; }
-    .pub-list .pub-journal { font-size:13px; color:var(--text-dim); font-style:italic; margin-top:2px; }
-    .pub-more { display:inline-block; margin-top:16px; color:var(--accent); text-decoration:none; font-size:14px; font-weight:600; }
-
-    /* PEOPLE */
-    .people-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; }
-    .person-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; text-align:center; transition:.25s; }
-    .person-card:hover { border-color:var(--accent); transform:translateY(-2px); }
-    .person-card img { width:130px; height:170px; object-fit:cover; border-radius:10px; margin-bottom:14px; border:2px solid var(--border); }
-    .person-card h3 { font-size:17px; color:#fff; margin-bottom:4px; }
-    .person-role { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--accent); font-weight:700; margin-bottom:10px; }
-    .person-card .details { font-size:13px; color:var(--text-dim); text-align:left; }
-    .person-card .details h4 { font-size:12px; color:#fff; margin:10px 0 4px; border-left:2px solid var(--accent); padding-left:8px; }
-    .person-card .details li { list-style:none; margin-bottom:3px; line-height:1.4; }
-    .person-card .details .year { font-size:11px; color:#666; }
-    .person-card a { color:var(--accent); text-decoration:none; font-size:13px; }
-
-    /* TEACHING */
-    .teaching-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-    @media(max-width:600px){ .teaching-grid{grid-template-columns:1fr;} }
-    .teaching-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; }
-    .teaching-card h3 { font-size:16px; color:var(--accent); margin-bottom:12px; }
-    .teaching-card li { list-style:none; font-size:14px; color:var(--text-dim); padding:4px 0; }
-
-    /* CONTACT */
-    .contact-box { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:32px; max-width:600px; }
-    .contact-box p { font-size:15px; color:var(--text-dim); margin-bottom:10px; }
-    .contact-box a { color:var(--accent); }
-    .contact-box .recruit { margin-top:20px; padding-top:20px; border-top:1px solid var(--border); }
-    .contact-box .recruit h3 { font-size:17px; color:#fff; margin-bottom:8px; }
-
-    /* RESOURCES */
-    .resources-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-    @media(max-width:600px){ .resources-grid{grid-template-columns:1fr;} }
-    .resource-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; }
-    .resource-card h3 { font-size:15px; color:#fff; margin-bottom:6px; }
-    .resource-card p { font-size:13px; color:var(--text-dim); margin-bottom:10px; }
-    .resource-card a.btn { display:inline-block; padding:8px 14px; border-radius:8px; background:var(--accent-glow); color:var(--accent); text-decoration:none; font-size:13px; font-weight:600; border:1px solid rgba(0,212,255,.3); }
-    .resource-card a.btn:hover { background:var(--accent); color:var(--bg); }
-
-    /* Desktop: ensure comfortable wide layout */
-    @media(min-width:1024px){
-      .nav-inner { max-width:1400px; }
-      section { max-width:1400px; padding:70px 60px; }
-      .divider { max-width:1400px; }
-      .hero { padding:100px 60px 80px; }
-      .news-grid { grid-template-columns:1fr 1fr; gap:24px; }
-      .research-card { grid-template-columns:360px 1fr; gap:36px; padding:36px; }
-      .people-grid { grid-template-columns:repeat(3,1fr); gap:24px; }
-      .photo-card { flex:0 0 340px; }
-      .photo-card img { height:240px; }
-    }
-    @media(min-width:1600px){
-      .research-card { grid-template-columns:420px 1fr; }
-    }
-
-    /* FOOTER */
-    footer { border-top:1px solid var(--border); padding:28px 24px; text-align:center; font-size:13px; color:var(--text-dim); }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M² Lab | Microwave Magnonics Lab, Chungbuk National University</title>
+<meta name="description" content="M² Lab (Microwave Magnonics Lab) at Chungbuk National University couples spin waves to phonons, microwave photons and superconducting circuits for quantum transduction, quantum sensing and neuromorphic computing. Principal investigator: Kyongmo An.">
+<link rel="canonical" href="https://m2lab-cbnu.github.io/">
+<meta name="theme-color" content="#0E2A4D">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="M² Lab">
+<meta property="og:title" content="M² Lab | Microwave Magnonics Lab, Chungbuk National University">
+<meta property="og:description" content="Hybrid magnonics at microwave frequencies: spin waves coupled to phonons, microwave photons and superconducting circuits.">
+<meta property="og:url" content="https://m2lab-cbnu.github.io/">
+<meta property="og:image" content="https://m2lab-cbnu.github.io/images/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="M² Lab: a microwave antenna launching spin waves along a magnetic waveguide">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="images/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="images/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/ibm-plex-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "M² Lab (Microwave Magnonics Lab)",
+  "alternateName": "M2 Lab",
+  "url": "https://m2lab-cbnu.github.io/",
+  "logo": "https://m2lab-cbnu.github.io/images/logo-144.png",
+  "email": "kman@cbnu.ac.kr",
+  "description": "Research group studying hybrid magnonics at microwave frequencies: magnon–phonon coupling, quantum magnonics, spin-wave devices and spin caloritronics.",
+  "parentOrganization": { "@type": "CollegeOrUniversity", "name": "Chungbuk National University", "url": "https://www.chungbuk.ac.kr" },
+  "address": { "@type": "PostalAddress", "streetAddress": "E1-1-313, Department of Physics Education", "addressLocality": "Cheongju", "addressCountry": "KR" },
+  "member": {
+    "@type": "Person",
+    "name": "Kyongmo An",
+    "jobTitle": "Assistant Professor",
+    "email": "kman@cbnu.ac.kr",
+    "sameAs": ["https://scholar.google.com/citations?user=zsngCA4AAAAJ"]
+  }
+}
+</script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-inner">
-    <a href="#" class="nav-brand"><img src="images/logo.png" alt="M² Lab" class="nav-logo"/>M² Lab</a>
-    <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
-    <div class="nav-links">
-      <a href="#news">News</a>
-      <a href="#research">Research</a>
-      <a href="#publications">Publications</a>
-      <a href="#people">People</a>
-      <a href="#teaching">Teaching</a>
-      <a href="#resources">Resources</a>
-      <a href="#contact">Contact</a>
+<header class="site-header">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="#top"><img src="images/logo-144.png" alt="" width="34" height="36">M² Lab</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 5h16M2 10h16M2 15h16" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>Menu
+    </button>
+    <ul id="nav-links" class="nav-links">
+      <li><a href="#research">Research</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#facilities">Facilities</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#people">People</a></li>
+      <li><a href="#news">News</a></li>
+      <li><a href="#teaching">Teaching</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a class="nav-cta" href="#join">Join us</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="wrap hero-text">
+    <p class="hero-kicker">Microwave Magnonics Lab, Chungbuk National University</p>
+    <h1 id="hero-title">Hybrid magnonics at microwave frequencies</h1>
+    <p class="hero-lede">We couple spin waves (magnons) to phonons, microwave photons and superconducting circuits, and turn those couplings into devices for quantum transduction, quantum sensing and neuromorphic computing.</p>
+    <p class="hero-pi">Led by Kyongmo An, formerly a Marie Skłodowska-Curie Fellow at EPFL, a postdoctoral researcher at SPINTEC and a Sejong Science Fellow at KRISS.</p>
+    <div class="hero-actions">
+      <a class="btn btn--primary" href="#research">Explore our research</a>
+      <a class="btn btn--ghost" href="#join">Join the lab</a>
     </div>
   </div>
-</nav>
-
-<!-- HERO -->
-<div class="hero">
-  <img src="images/logo.png" alt="" style="height:80px;margin-bottom:16px;"/>
-  <h1><span>M²</span> Lab</h1>
-  <p class="tagline">Microwave Magnonics Lab at Chungbuk National University — advancing magnon-based platforms for quantum information, neuromorphic computing, and spin-wave signal processing.</p>
-  <img src="images/1d spin.gif" alt="Animation of magnons bridging quantum microwave systems" style="max-width:600px;width:90%;border-radius:14px;margin-top:8px;box-shadow:0 0 30px rgba(0,212,255,.15);"/>
-
-</div>
-
-<div class="divider"></div>
-
-<!-- NEWS -->
-<section id="news">
-  <div class="section-label">Latest</div>
-  <div class="section-title">News & Highlights</div>
-
-  <div class="news-grid">
-    <!-- Featured news with photo -->
-    <div class="news-card featured">
-      <div>
-        <img src="images/Lab_20260605.jpg" alt="M² Lab microwave measurement setup with RF instruments and electromagnet"/>
-      </div>
-      <div>
-        <span class="news-badge">Update</span>
-        <div class="news-date">June 5, 2026</div>
-        <h3>Lab Setup Complete — Experiments Underway</h3>
-        <p>Key microwave equipment and electromagnets have been installed. The lab is now equipped with RF source &amp; analyzer, lock-in measurement systems, electromagnet, sample stages, and an optical table area. Active measurements are in progress.</p>
-      </div>
-    </div>
-
-    <div class="news-card">
-      <span class="news-badge">Recruiting</span>
-      <div class="news-date">June 2026</div>
-      <h3>2026 Summer Internship Program Begins</h3>
-      <p>Our summer internship program kicks off this month, bringing students into hands-on research on microwave magnonics, spin-wave devices, and quantum interfaces.</p>
-    </div>
-
-    <div class="news-card">
-      <span class="news-badge grant">Grant</span>
-      <div class="news-date">September 2025</div>
-      <h3>New Project Awarded: Magnon-Superconductor Quantum Transduction</h3>
-      <p>Three-year funding (2025–2028) for "Magnon-Superconductor Quantum-Transduction Devices based on Chungcheong Open-Lab Foundation" has been awarded.</p>
-    </div>
-
-    <div class="news-card">
-      <span class="news-badge">Milestone</span>
-      <div class="news-date">March 2025</div>
-      <h3>M² Lab Launches at CBNU</h3>
-      <p>The Microwave Magnonics Lab officially begins operation in the Department of Physics Education at Chungbuk National University.</p>
-    </div>
+  <div class="hero-sim">
+    <canvas id="spinwave" tabindex="0" role="img"
+      aria-label="Live simulation of spin waves. A gold microwave antenna drives a chain of precessing spins; the waves travel outward and fade with damping. Use the left and right arrow keys to move the antenna."></canvas>
+  </div>
+  <div class="wrap hero-caption">
+    <p>Live simulation: a microwave antenna (gold) launches spin waves along a magnetic waveguide, and damping makes them fade with distance. Move your pointer over the waves, tap, or use the arrow keys to move the antenna.</p>
+    <button class="sim-toggle" id="sim-toggle" type="button" aria-pressed="false">Pause animation</button>
   </div>
 </section>
 
-<!-- CONFERENCE PHOTOS -->
-<section id="photos">
-  <div class="section-label">In Action</div>
-  <div class="section-title">Recent Activities</div>
-  <p style="font-size:14px;color:var(--text-dim);margin-bottom:18px;">Conference presentations, lab work, and collaborative visits.</p>
-  <div class="photo-scroll">
-    <!-- Replace these src paths with your actual conference/activity photos -->
-
-    <div class="photo-card">
-      <img src="images/Arduino_rotation_control.jpg" alt="Arduino-controlled rotation stage"/>
-      <div class="caption">In-house Arduino control of the rotation stage, 2026</div>
-    </div>
-
-    <div class="photo-card poster-card">
-      <img src="images/2026_summer_intern.png" alt="2026 Summer Internship program poster"/>
-      <div class="caption">2026 Summer Internship — program poster</div>
-    </div>
-
-    <div class="photo-card">
-      <img src="images/Crystal_Denver_photo.jpg" alt="Lab setup"/>
-      <div class="caption">Huge Crystal in Denver Museum of Nature and Science, Mar 2026</div>
-    </div>
-    
-    <div class="photo-card">
-      <img src="images/Taekyeoung_APS_poster.jpg" alt="Conference presentation"/>
-      <div class="caption">Taekyeoung's First APS presentation, 2026</div>
-    </div>
-
-    <div class="photo-card">
-      <img src="images/DE_antenna.jpg" alt="Lab work"/>
-      <div class="caption">New antenna for DE magnon propagation experiment, 2026</div>
-    </div>
-    
-    <div class="photo-card">
-      <img src="images/26Feb_lab.jpg" alt="Group dinner"/>
-      <div class="caption">Lab setup at CBNU, Feb 2026</div>
-    </div>
-    
-    <div class="photo-card">
-      <img src="images/lab_250918.jpg" alt="Lab setup"/>
-      <div class="caption">Lab setup at CBNU, Sep 2025</div>
-    </div>
-
-    <div class="photo-card">
-      <img src="images/Magnonics2025_photo.jpg" alt="Conference discussion"/>
-      <div class="caption">Magnonics 2025 boat excursion, 2025</div>
-    </div>
-    
-    <div class="photo-card">
-      <img src="images/20240626_172631.jpg" alt="Conference discussion"/>
-      <div class="caption">During SolSkymag conference, 2024</div>
-    </div>
-
-    <div class="photo-card">
-      <img src="images/APS2023_LiLab_photo.jpg" alt="Conference discussion"/>
-      <div class="caption">Li Lab Homecoming dinner, APS 2023</div>
-    </div>
-
-    <div class="photo-card">
-      <img src="images/Tmag_photo.jpg" alt="Conference discussion"/>
-      <div class="caption">TMAG conference, 2022</div>
-    </div>
-
-    <div class="photo-card">
-      <img src="images/SpinMechanics7_photo.jpg" alt="Conference discussion"/>
-      <div class="caption">Excursion to Rothenburg in Spin Mechanics 7, 2022</div>
-    </div>
-
+<!-- ============ EVIDENCE ============ -->
+<section class="evidence" aria-label="Highlights">
+  <div class="wrap">
+    <ul>
+      <li><a href="https://doi.org/10.1103/PhysRevX.12.011060">
+        <p class="ev-source">Physical Review X</p>
+        <p class="ev-meta">2022, first and corresponding author</p>
+        <p class="ev-claim">Two distant magnets couple strongly through phonons, forming bright and dark collective states.</p>
+      </a></li>
+      <li><a href="https://doi.org/10.1038/s41467-024-51483-7">
+        <p class="ev-source">Nature Communications</p>
+        <p class="ev-meta">2024, co-first author</p>
+        <p class="ev-claim">Nonlinear magnonic waveguides develop coherent modes, resolved at ultrahigh frequency resolution.</p>
+      </a></li>
+      <li><a href="https://doi.org/10.1103/PhysRevLett.117.107202">
+        <p class="ev-source">Physical Review Letters</p>
+        <p class="ev-meta">2016, first author</p>
+        <p class="ev-claim">Light drives magnons and phonons out of local equilibrium in a magnetic insulator.</p>
+      </a></li>
+      <li><a href="#projects">
+        <p class="ev-source ev-source--plain">National funding to 2031</p>
+        <p class="ev-meta">Three programs since 2021</p>
+        <p class="ev-claim">Quantum transduction (Glocal R&amp;D), quantum sensing (ITRC) and a Sejong Science Fellowship.</p>
+      </a></li>
+    </ul>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- RESEARCH -->
-<section id="research">
-  <div class="section-label">What We Do</div>
-  <div class="section-title">Research</div>
-  
-  <div class="research-overview">
-    <img src="images/circlediagram2.png" alt="Schematic linking magnons, phonons, and superconducting qubits in the GHz band"/>
-  </div>
-  
-  <p style="font-size:15px;color:var(--text-dim);margin-bottom:28px;max-width:800px;">We study how spin waves (magnons) interact with phonons, photons, and electric currents in the microwave regime, to build next-generation devices for quantum information, neuromorphic computing, and spin-based signal processing.</p>
-
-  <div class="research-grid">
-    <div class="research-card">
-      <div class="research-fig"><img src="images/shearwave_EVENPhonon.gif" alt="Shear wave phonon mode animation"/></div>
+<!-- ============ RESEARCH ============ -->
+<section class="section" id="research" aria-labelledby="research-title">
+  <div class="wrap">
+    <div class="research-intro">
       <div>
-        <div class="num">01</div>
-        <h3>Magnon–Phonon Coupling</h3>
-        <p>Coherent interaction between magnons and phonons in engineered platforms. Vibrational modes mediate long-range magnon coupling and energy transport.</p>
-        <div class="pubs">
-          <a href="https://doi.org/10.1103/PhysRevX.12.011060" target="_blank">Phys. Rev. X 12, 011060 (2022)</a>
-          <a href="https://doi.org/10.1103/PhysRevB.101.060407" target="_blank">Phys. Rev. B 101, 060407 (2020)</a>
-          <a href="https://doi.org/10.1103/PhysRevApplied.20.014046" target="_blank">Phys. Rev. Applied 20, 014046 (2023)</a>
+        <div class="section-head" style="margin-bottom:24px">
+          <h2 id="research-title">Research</h2>
+        </div>
+        <div class="prose">
+          <p>Magnons, the quanta of spin waves, carry information at gigahertz frequencies without moving electric charge. Their frequency tunes with a magnetic field, and they couple strongly to lattice vibrations (phonons) and to microwave photons.</p>
+          <p>M² Lab works where these three meet. We use phonons to couple distant magnets, connect magnons to superconducting circuits to convert quantum information between platforms, and exploit nonlinear spin-wave dynamics for signal processing and neuromorphic computing.</p>
         </div>
       </div>
+      <figure class="figure">
+        <img width="1400" height="1064" src="images/figures/magnon-phonon-photon.webp" alt="Diagram of three overlapping circles: magnons (tunable with magnetic field, strong coupling, no Joule heating), phonons (very long decay length, strong coupling) and microwave photons (superconducting qubits). Overlaps are labelled quantum magnonics, magneto-acoustics and quantum acoustics, with quantum memory, sensing and entanglement as applications.">
+        <figcaption>Magnons, phonons and microwave photons. Each overlap is a research direction: quantum magnonics, magneto-acoustics and quantum acoustics.</figcaption>
+      </figure>
     </div>
-    <div class="research-card">
-      <div class="research-fig"><img src="images/g348197.png" alt="Spin-wave logic and neuromorphic device schematic"/></div>
-      <div>
-        <div class="num">02</div>
-        <h3>Spin-Wave Logic &amp; Neuromorphic Devices</h3>
-        <p>Spin-wave devices that perform logic operations and emulate neural functions using nonlinear magnon interactions.</p>
-        <div class="pubs">
-          <a href="https://doi.org/10.1038/s41467-024-51483-7" target="_blank">Nat. Commun. 15, 7302 (2024)</a>
-          <a href="https://doi.org/10.1103/PhysRevApplied.11.034065" target="_blank">Phys. Rev. Applied 11, 034065 (2019)</a>
+
+    <ul class="themes">
+      <li class="theme">
+        <div class="theme-fig" role="img" aria-label="Animation of a shear-wave phonon mode in a magnetic disk">
+          <video src="images/figures/shearwave-phonon.mp4" poster="images/figures/shearwave-phonon-poster.webp" muted loop playsinline preload="none" data-inview-play aria-hidden="true" title="Select to pause or play"></video>
         </div>
-      </div>
-    </div>
-    <div class="research-card">
-      <div class="research-fig"><img src="images/blochsphere_v4.png" alt="Bloch sphere representation for quantum magnonics"/></div>
-      <div>
-        <div class="num">03</div>
-        <h3>Quantum Magnonics</h3>
-        <p>Hybrid quantum systems and information transfer at GHz frequencies, toward quantum communication and quantum sensing.</p>
-        <div class="pubs">
-          <a href="https://doi.org/10.1103/PhysRevX.12.011060" target="_blank">Phys. Rev. X 12, 011060 (2022)</a>
-        </div>
-      </div>
-    </div>
-    <div class="research-card">
-      <div class="research-fig"><img src="images/thermal.png" alt="Spin caloritronics thermal spin transport"/></div>
-      <div>
-        <div class="num">04</div>
-        <h3>Spin-Caloritronics</h3>
-        <p>Spin and heat interactions — thermally driven spin currents, nonlocal heat transfer via magnons and phonons, energy-efficient spin-based devices.</p>
-        <div class="pubs">
-          <a href="https://doi.org/10.1103/PhysRevB.103.174432" target="_blank">Phys. Rev. B 103, 174432 (2021)</a>
-          <a href="https://doi.org/10.1103/PhysRevLett.117.107202" target="_blank">Phys. Rev. Lett. 117, 107202 (2016)</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Ongoing projects -->
-  <h3 style="font-family:'DM Serif Display',serif;font-size:24px;color:#fff;margin:40px 0 16px;">Ongoing Projects</h3>
-  <div class="project-list">
-    <div class="project-item">
-      <h3>Glocal R&amp;D — Magnon-Superconductor Quantum Transduction</h3>
-      <div class="period">2025 – 2028</div>
-      <p>Building a regional Open-Lab infrastructure for cryogenic quantum transduction between superconducting qubits and magnonic systems, including magnon squeezed state generation.</p>
-    </div>
-    <div class="project-item">
-      <h3>ITRC Program — Magnon-Based Quantum Sensing</h3>
-      <div class="period">2024 – 2031</div>
-      <p>Part of the Information Technology Research Center program at CBNU, developing magnon-based device platforms for next-generation quantum sensing technologies.</p>
-    </div>
-    <div class="project-item">
-      <h3>Sejong Science Fellowship</h3>
-      <div class="period">2021 – 2026</div>
-      <p>Frontier research on quantum-like magnon dynamics, spin-phonon interactions, and low-dissipation information transport using engineered phononic structures.</p>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- PUBLICATIONS -->
-<section id="publications">
-  <div class="section-label">Output</div>
-  <div class="section-title">Publications</div>
-  <p style="font-size:13px;color:var(--text-dim);margin-bottom:8px;">†Corresponding Author &nbsp; *Equal Contributions</p>
-
-  <style>
-    .pub-year { font-family:'DM Serif Display',serif; font-size:22px; color:var(--accent); margin:28px 0 4px; padding-bottom:6px; border-bottom:1px solid var(--border); letter-spacing:.5px; }
-    .pub-list .pub-title.no-link { cursor:default; }
-    .pub-list .pub-title.no-link:hover { text-decoration:none; }
-  </style>
-
-  <div class="pub-year">2026</div>
-  <ul class="pub-list">
-    <li>
-      <span class="pub-title no-link">Time-gating of coherent spin-wave echoes from edge reflections in micro-patterned YIG</span>
-      <div class="pub-authors"><b>K. An</b>, M. Xu, C. Dubs, D. Grundler†</div>
-      <div class="pub-journal">Submitted (2026)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1002/adma.202511289" target="_blank">Chiral acoustic phonon and conservation of pseudoangular momentum in α-quartz</a>
-      <div class="pub-authors">C. Kim†, I.-K. Hwang, K.-W. Moon, <b>K. An</b>, K.-J. Lee, J.-H. Ko, B.-G. Park, K.-Y. Choi, C. Hwang†</div>
-      <div class="pub-journal">Adv. Mater. 38, e11289 (2026) </div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1007/s40042-026-01576-x" target="_blank">Optimizing spin-wave nonreciprocity via antenna-field design</a>
-      <div class="pub-authors">Y. Hwang, T. An, <b>K. An</b>†</div>
-      <div class="pub-journal">J. Korean Phys. Soc. 88, 1094 (2026)</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2025</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1021/acsnano.5c12003" target="_blank">Full spin–orbit torque switching of the magnetic cluster octupole in Mn₃Sn/W bilayer via interface engineering</a>
-      <div class="pub-authors">S. Lee*, E. Im*, S. Im*, C. Lee, H. Komiyama, Y. Shiota, T. Ono, <b>K. An</b>, K.-W. Kim, T.-H. T. Nguyen†, S. Kim†</div>
-      <div class="pub-journal">ACS Nano 19, 39747 (2025)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1016/j.cap.2025.10.015" target="_blank">Dynamic X-ray magnetic circular dichroism of yttrium iron garnet</a>
-      <div class="pub-authors">C. Kim, <b>K. An</b>, K.-W. Moon, Y. Kim, C. Hwang†</div>
-      <div class="pub-journal">Current Applied Physics (2025)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1002/adma.202414917" target="_blank">Giant modulation of magnetoresistance in a van der Waals magnet by in-plane current injection</a>
-      <div class="pub-authors">K. Kim*, H.-B. Ahn*, S. Lee, S. Jeong, D. Lee, S. Lee, S. Im, S. B. Kim, S. J. Kim, J. Park, N. J. Lee, H. C. Koo, <b>K. An</b>, K.-W. Moon, B. Kim, K. Kim, K.-J. Kim, C. Lee, K.-W. Kim†, S. K. Kim†, T.-E. Park†, S. Kim†</div>
-      <div class="pub-journal">Adv. Mater. 37, 2414917 (2025)</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2024</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1038/s41467-024-51483-7" target="_blank">Emergent coherent modes in nonlinear magnonic waveguides detected at ultrahigh frequency resolution</a>
-      <div class="pub-authors"><b>K. An</b>*, M. Xu*, A. Mucchietto, C. Kim, K.-W. Moon, C. Hwang, D. Grundler†</div>
-      <div class="pub-journal">Nature Communications 15, 7302 (2024)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1002/aelm.202400027" target="_blank">Programmable racetrack for magnetic domain wall motion via local tuning of exchange biased field</a>
-      <div class="pub-authors">H.-J. Kim*, K.-W. Moon*, S. Yoon, <b>K. An</b>, C. Kim, S. Yang, T.-S. Ju, J.-W. Son, J.-I. Hong†, C. Hwang†</div>
-      <div class="pub-journal">Adv. Electron. Mater. 10, 2400027 (2024)</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2023</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevApplied.20.014046" target="_blank">Optimizing the magnon-phonon cooperativity in planar geometries</a>
-      <div class="pub-authors"><b>K. An</b>, C. Kim, K.-W. Moon, R. Kohno, G. Olivetti, G. de Loubens, N. Vukadinovic, J. B. Youssef, C. Hwang†, O. Klein†</div>
-      <div class="pub-journal">Phys. Rev. Applied 20, 014046 (2023)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.108.144410" target="_blank">Nonlocal magnon transconductance in extended magnetic insulating films. I. Spin diode effect</a>
-      <div class="pub-authors">R. Kohno, <b>K. An</b>, E. Clot, V. V. Naletov, N. Thiery, L. Vila, R. Schlitz, N. Beaulieu, J. Ben Youssef, A. Anane, V. Cros, H. Merbouche, T. Hauet, V. E. Demidov, S. O. Demokritov, G. de Loubens, O. Klein†</div>
-      <div class="pub-journal">Phys. Rev. B 108, 144410 (2023)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.108.144411" target="_blank">Nonlocal magnon transconductance in extended magnetic insulating films. II. Two-fluid behavior</a>
-      <div class="pub-authors">R. Kohno, <b>K. An</b>, E. Clot, V. V. Naletov, N. Thiery, L. Vila, R. Schlitz, N. Beaulieu, J. Ben Youssef, A. Anane, V. Cros, H. Merbouche, T. Hauet, V. E. Demidov, S. O. Demokritov, G. de Loubens, O. Klein†</div>
-      <div class="pub-journal">Phys. Rev. B 108, 144411 (2023)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1063/5.0141994" target="_blank">Dynamics of weak magnetic coupling by x-ray ferromagnetic resonance</a>
-      <div class="pub-authors">C. Kim, W.-C. Choi, K.-W. Moon, H.-J. Kim, <b>K. An</b>, B.-G. Park, H.-Y. Kim, J.-I. Hong, J. Kim, Z. Q. Qiu, Y. Kim, C. Hwang†</div>
-      <div class="pub-journal">J. Appl. Phys. 133, 173906 (2023)</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2022</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevX.12.011060" target="_blank">Bright and dark states of two distant macrospins strongly coupled by phonons</a>
-      <div class="pub-authors"><b>K. An†</b>, R. Kohno, A. N. Litvinenko, R. L. Seeger, V. V. Naletov, L. Vila, G. de Loubens, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</div>
-      <div class="pub-journal">Phys. Rev. X 12, 011060 (2022)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1002/adfm.202112561" target="_blank">Field-free switching of magnetization by tilting the perpendicular magnetic anisotropy of Gd/Co multilayers</a>
-      <div class="pub-authors">H.-J. Kim, K.-W. Moon, B. X. Tran, S. Yoon, C. Kim, S. Yang, J.-H. Ha, <b>K. An</b>, T.-S. Ju, J.-I. Hong†, C. Hwang†</div>
-      <div class="pub-journal">Adv. Funct. Mater. 32, 2112561 (2022)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1021/acs.nanolett.2c02268" target="_blank">Magnetic field magnitudes needed for skyrmion generation in a general perpendicularly magnetized film</a>
-      <div class="pub-authors">S. Yang*, T.-S. Ju*, C. Kim, H.-J. Kim, <b>K. An</b>, K.-W. Moon†, S. Park†, C. Hwang†</div>
-      <div class="pub-journal">Nano Letters 22, 8430 (2022)</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2021</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.103.174432" target="_blank">Short-range thermal magnon diffusion in magnetic garnet</a>
-      <div class="pub-authors"><b>K. An</b>, R. Kohno, N. Thiery, D. Reitz, L. Vila, V. V. Naletov, N. Beaulieu, J. B. Youssef, G. de Loubens, Y. Tserkovnyak, O. Klein†</div>
-      <div class="pub-journal">Phys. Rev. B 103, 174432 (2021)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1063/5.0028664" target="_blank">Enhancement of YIG|Pt spin conductance by local Joule annealing</a>
-      <div class="pub-authors">R. Kohno, N. Thiery, <b>K. An</b>, P. Noël, L. Vila, V. V. Naletov, N. Beaulieu, J. B. Youssef, G. de Loubens, O. Klein†</div>
-      <div class="pub-journal">Appl. Phys. Lett. 118, 032404 (2021)</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2020</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.101.060407" target="_blank">Coherent long-range transfer of angular momentum between magnon Kittel modes by phonons</a>
-      <div class="pub-authors"><b>K. An</b>, A. N. Litvinenko, R. Kohno, A. A. Fuad, V. V. Naletov, L. Vila, U. Ebels, G. de Loubens, H. Hurdequint, N. Beaulieu, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</div>
-      <div class="pub-journal">Phys. Rev. B 101, 060407(R) (2020) — cited 200+ times</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevX.10.021029" target="_blank">Pure spin current and magnon chemical potential in a nonequilibrium magnetic insulator</a>
-      <div class="pub-authors">K. S. Olsson, <b>K. An</b>, G. A. Fiete, J. Zhou, L. Shi, X. Li†</div>
-      <div class="pub-journal">Phys. Rev. X 10, 021029 (2020)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.102.054422" target="_blank">Dimensional crossover in spin Hall oscillators</a>
-      <div class="pub-authors">A. Smith, K. Sobotkiewich, A. Khan, E. A. Montoya, L. Yang, Z. Duan, T. Schneider, K. Lenz, J. Lindner, <b>K. An</b>, X. Li, I. N. Krivorotov†</div>
-      <div class="pub-journal">Phys. Rev. B 102, 054422 (2020)</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2019</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevApplied.11.034065" target="_blank">Optimization of spin-wave propagation with enhanced group velocities by exchange-coupled ferrimagnet-ferromagnet bilayers</a>
-      <div class="pub-authors"><b>K. An</b>†, V. S. Bhat, M. Mruczkiewicz, C. Dubs, D. Grundler</div>
-      <div class="pub-journal">Phys. Rev. Applied 11, 034065 (2019)</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2018</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1088/1361-6463/aaadde" target="_blank">Magnon and phonon thermometry with inelastic light scattering</a>
-      <div class="pub-authors">K. S. Olsson, <b>K. An</b>, X. Li†</div>
-      <div class="pub-journal">J. Phys. D: Appl. Phys. 51, 133001 (2018) — Topical Review</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2017</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.96.024448" target="_blank">Temperature-dependent Brillouin light scattering spectra of magnons in yttrium iron garnet and permalloy</a>
-      <div class="pub-authors">K. S. Olsson, <b>K. An</b>, X. Ma, S. Sullivan, V. Venu, M. Tsoi, J. Zhou, L. Shi, X. Li†</div>
-      <div class="pub-journal">Phys. Rev. B 96, 024448 (2017)</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2016</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevLett.117.107202" target="_blank">Magnons and phonons optically driven out of local equilibrium in a magnetic insulator</a>
-      <div class="pub-authors"><b>K. An</b>, K. S. Olsson, A. Weathers, S. Sullivan, X. Chen, X. Li, L. G. Marshall, X. Ma, N. Klimovich, J. Zhou, L. Shi†, X. Li†</div>
-      <div class="pub-journal">Phys. Rev. Lett. 117, 107202 (2016)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.94.180408" target="_blank">Interfacial control of Dzyaloshinskii-Moriya interaction in heavy metal / ferromagnetic metal thin film heterostructures</a>
-      <div class="pub-authors">X. Ma, G. Yu, X. Li, T. Wang, D. Wu, K. S. Olsson, Z. Chu, <b>K. An</b>, J. Q. Xiao, K. L. Wang, X. Li†</div>
-      <div class="pub-journal">Phys. Rev. B 94, 180408(R) (2016)</div>
-    </li>
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.93.140404" target="_blank">Current control of magnetic anisotropy via stress in a ferromagnetic metal waveguide</a>
-      <div class="pub-authors"><b>K. An</b>, X. Ma, C.-F. Pai, J. Yang, K. S. Olsson, J. L. Erskine, A. H. MacDonald, D. C. Ralph, R. A. Buhrman, X. Li†</div>
-      <div class="pub-journal">Phys. Rev. B 93, 140404(R) (2016) — Editors' Suggestion</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2015</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1063/1.4907616" target="_blank">Temperature dependence of Brillouin light scattering spectra of acoustic phonons in silicon</a>
-      <div class="pub-authors">K. S. Olsson, N. Klimovich, <b>K. An</b>, S. Sullivan, A. Weathers, L. Shi, X. Li†</div>
-      <div class="pub-journal">Appl. Phys. Lett. 106, 051906 (2015)</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2014</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.89.140405" target="_blank">Control of propagating spin waves via spin transfer torque in a metallic bilayer waveguide</a>
-      <div class="pub-authors"><b>K. An</b>, D. R. Birt, C.-F. Pai, K. S. Olsson, D. C. Ralph, R. A. Buhrman, X. Li†</div>
-      <div class="pub-journal">Phys. Rev. B 89, 140405(R) (2014) — Editors' Suggestion</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2013</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1063/1.4793538" target="_blank">Brillouin light scattering spectra as local temperature sensors for thermal magnons and acoustic phonons</a>
-      <div class="pub-authors">D. R. Birt, <b>K. An</b>, A. Weathers, L. Shi, M. Tsoi, X. Li†</div>
-      <div class="pub-journal">Appl. Phys. Lett. 102, 082401 (2013)</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2012</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1063/1.4772798" target="_blank">Deviation from exponential decay for spin waves excited with a coplanar waveguide antenna</a>
-      <div class="pub-authors">D. R. Birt, <b>K. An</b>, M. Tsoi, S. Tamaru, D. Ricketts, K. L. Wong, P. Khalili Amiri, K. L. Wang, X. Li†</div>
-      <div class="pub-journal">Appl. Phys. Lett. 101, 252409 (2012)</div>
-    </li>
-  </ul>
-
-  <div class="pub-year">2011</div>
-  <ul class="pub-list">
-    <li>
-      <a class="pub-title" href="https://doi.org/10.1103/PhysRevB.84.174423" target="_blank">Spin state of MnO investigated by ⁵⁵Mn nuclear magnetic resonance</a>
-      <div class="pub-authors">E. Jo, <b>K. An</b>, J.-H. Shim, C. Kim, S. Lee†</div>
-      <div class="pub-journal">Phys. Rev. B 84, 174423 (2011)</div>
-    </li>
-  </ul>
-
-  <a class="pub-more" href="https://scholar.google.com/citations?user=zsngCA4AAAAJ&hl=en" target="_blank" style="margin-top:24px;">View full list on Google Scholar →</a>
-</section>
-
-<div class="divider"></div>
-
-<!-- PEOPLE -->
-<section id="people">
-  <div class="section-label">Team</div>
-  <div class="section-title">People</div>
-
-  <div class="people-grid">
-    <div class="person-card">
-      <img src="images/photo_3x4.jpeg" alt="Kyongmo An"/>
-      <h3>Kyongmo An</h3>
-      <div class="person-role">Principal Investigator</div>
-      <p style="font-size:13px;color:var(--text-dim);">Assistant Professor, Dept. of Physics Education, CBNU</p>
-      <a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a>
-      <div class="details">
-        <h4>Education</h4>
-        <ul>
-          <li><strong>Ph.D. Physics</strong>, UT Austin <span class="year">2010–2016</span></li>
-          <li><strong>M.S. Physics</strong>, KAIST <span class="year">2008–2010</span></li>
-          <li><strong>B.S. Physics</strong>, Yonsei University <span class="year">2002–2008</span></li>
+        <h3>Magnon–phonon coupling</h3>
+        <p>Magnons and phonons hybridize strongly in magnetic garnets. We use acoustic phonons to transfer angular momentum coherently between distant magnets and to engineer bright and dark collective states.</p>
+        <ul class="cites">
+          <li><a href="https://doi.org/10.1103/PhysRevX.12.011060"><span class="cite-j">Phys. Rev. X</span> 12, 011060 (2022)</a></li>
+          <li><a href="https://doi.org/10.1103/PhysRevB.101.060407"><span class="cite-j">Phys. Rev. B</span> 101, 060407(R) (2020)</a></li>
+          <li><a href="https://doi.org/10.1103/PhysRevApplied.20.014046"><span class="cite-j">Phys. Rev. Applied</span> 20, 014046 (2023)</a></li>
         </ul>
-        <h4>Previous Positions</h4>
-        <ul>
-          <li><strong>Sejong Science Fellow</strong>, KRISS <span class="year">2021–2024</span></li>
-          <li><strong>Postdoc</strong>, SPINTEC <span class="year">2019–2021</span></li>
-          <li><strong>Marie-Curie Fellow</strong>, EPFL <span class="year">2017–2019</span></li>
+      </li>
+      <li class="theme">
+        <div class="theme-fig">
+          <img width="900" height="912" src="images/figures/bright-dark-states.webp" alt="Bloch sphere showing the bright state (|m1⟩ + |m2⟩)/√2 and dark state (|m1⟩ − |m2⟩)/√2 of two coupled magnets" loading="lazy">
+        </div>
+        <h3>Quantum magnonics</h3>
+        <p>Magnons couple to microwave photons and superconducting qubits, which makes them candidates for quantum transducers and sensors. Under our Open-Lab project we are building a cryogenic platform for magnon–superconductor quantum transduction, including the generation of squeezed magnon states.</p>
+        <ul class="cites">
+          <li><a href="https://doi.org/10.1103/PhysRevX.12.011060"><span class="cite-j">Phys. Rev. X</span> 12, 011060 (2022)</a></li>
         </ul>
+      </li>
+      <li class="theme">
+        <div class="theme-fig">
+          <img width="1600" height="731" src="images/figures/nonlinear-waveguide.webp" alt="Schematic of a frequency-offset vector network analyzer measurement on a magnonic waveguide, with transmission spectra near 2.125 GHz" loading="lazy">
+        </div>
+        <h3>Spin-wave signal processing and neuromorphic devices</h3>
+        <p>Spin waves carry information without charge currents, and their nonlinear interactions can perform logic and mimic neural functions. We study nonlinear magnonic waveguides at ultrahigh frequency resolution and design antennas that control spin-wave nonreciprocity.</p>
+        <ul class="cites">
+          <li><a href="https://doi.org/10.1038/s41467-024-51483-7"><span class="cite-j">Nat. Commun.</span> 15, 7302 (2024)</a></li>
+          <li><a href="https://doi.org/10.1007/s40042-026-01576-x"><span class="cite-j">J. Korean Phys. Soc.</span> 88, 1094 (2026)</a></li>
+          <li><a href="https://doi.org/10.1103/PhysRevApplied.11.034065"><span class="cite-j">Phys. Rev. Applied</span> 11, 034065 (2019)</a></li>
+        </ul>
+      </li>
+      <li class="theme">
+        <div class="theme-fig">
+          <img width="227" height="200" src="images/figures/spin-caloritronics.webp" alt="Cartoon of a YIG/Pt bilayer heated from below, illustrating thermally driven spin currents" loading="lazy">
+        </div>
+        <h3>Spin caloritronics</h3>
+        <p>Heat travels through magnetic insulators as both magnons and phonons. We measure how the two fall out of equilibrium and how thermal magnons diffuse, as groundwork for energy-efficient spin devices.</p>
+        <ul class="cites">
+          <li><a href="https://doi.org/10.1103/PhysRevB.103.174432"><span class="cite-j">Phys. Rev. B</span> 103, 174432 (2021)</a></li>
+          <li><a href="https://doi.org/10.1103/PhysRevLett.117.107202"><span class="cite-j">Phys. Rev. Lett.</span> 117, 107202 (2016)</a></li>
+        </ul>
+      </li>
+      <li class="theme theme--wide">
+        <div class="theme-fig theme-fig--photo">
+          <img width="720" height="540" src="images/thumbs/fgt-sample-cpw.jpg" alt="A Fe3GaTe2 sample mounted at the centre of a coplanar-waveguide board with SMA connectors" loading="lazy">
+        </div>
+        <div>
+          <h3>Van der Waals magnets <span class="status">New direction</span></h3>
+          <p>Layered van der Waals ferromagnets such as Fe<sub>3</sub>GaTe<sub>2</sub> keep their magnetic order and perpendicular anisotropy above room temperature, which makes them attractive for compact spin devices. We measure their magnetization dynamics with out-of-plane ferromagnetic resonance and study how electric currents change their magnetic properties.</p>
+          <ul class="cites">
+            <li><a href="https://doi.org/10.1002/adma.202414917"><span class="cite-j">Adv. Mater.</span> 37, 2414917 (2025)</a></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section class="section section--mist" id="projects" aria-labelledby="projects-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="projects-title">Funded projects and roadmap</h2>
+      <p>Three national programs support the lab, with commitments running to 2031. The roadmap shows how the projects build on each other.</p>
+    </div>
+
+    <div class="tl" data-start="2021" data-end="2032">
+      <div class="tl-grid">
+        <div class="tl-spacer"></div>
+        <div class="tl-scale-wrap">
+          <span class="tl-now-label">Today</span>
+          <div class="tl-scale" aria-hidden="true"><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span><span>2026</span><span>2027</span><span>2028</span><span>2029</span><span>2030</span><span>2031</span></div>
+        </div>
+
+        <div class="tl-spacer"></div>
+        <div class="tl-phases" aria-hidden="true">
+          <span class="tl-phase" style="grid-column:5 / 7">Build</span>
+          <span class="tl-phase" style="grid-column:7 / 9">Couple</span>
+          <span class="tl-phase" style="grid-column:9 / 12">Sense and compute</span>
+        </div>
+
+        <div class="tl-label"><strong>Magnon–superconductor quantum transduction</strong><span>Glocal R&amp;D, Chungcheong Open-Lab, 2025–2028</span></div>
+        <div class="tl-track"><span class="tl-bar" style="grid-column:5 / 9" title="2025–2028"></span></div>
+
+        <div class="tl-label"><strong>Magnon-based quantum sensing</strong><span>ITRC program (IITP), 2024–2031</span></div>
+        <div class="tl-track"><span class="tl-bar" style="grid-column:4 / 12" title="2024–2031"></span></div>
+
+        <div class="tl-label"><strong>Sejong Science Fellowship</strong><span>NRF, 2021–2026</span></div>
+        <div class="tl-track"><span class="tl-bar" style="grid-column:1 / 7" title="2021–2026"></span></div>
       </div>
     </div>
 
-    <div class="person-card">
-      <img src="images/taekyeoung_photo.jpg" alt="Taekyeoung An"/>
-      <h3>Taekyeoung An</h3>
-      <div class="person-role">M.S. Researcher</div>
-      <p style="font-size:13px;color:var(--text-dim);">Research: Micromagnetic Simulation</p>
-      <a href="mailto:tk4214@naver.com">tk4214@naver.com</a>
-      <div class="details"><p style="margin-top:10px;">B.S. Kangwon National University</p></div>
+    <ul class="tl-desc">
+      <li>
+        <h3>Magnon–superconductor quantum transduction</h3>
+        <p class="meta">Glocal R&amp;D, 2025–2028</p>
+        <p>Builds a regional Open-Lab for cryogenic quantum transduction between superconducting qubits and magnonic systems, including squeezed magnon states.</p>
+      </li>
+      <li>
+        <h3>Magnon-based quantum sensing</h3>
+        <p class="meta">ITRC program at CBNU, 2024–2031</p>
+        <p>Develops magnon-based device platforms for next-generation quantum sensing within CBNU's Information Technology Research Center.</p>
+      </li>
+      <li>
+        <h3>Sejong Science Fellowship</h3>
+        <p class="meta">2021–2026</p>
+        <p>Quantum-like magnon dynamics, spin–phonon interactions and low-dissipation information transport in engineered phononic structures.</p>
+      </li>
+    </ul>
+
+    <h3 class="sub-head">Roadmap</h3>
+    <ol class="phase-list">
+      <li>
+        <h4>Build</h4>
+        <p class="meta">2025–2026</p>
+        <p>Microwave laboratory at CBNU with RF sources and analysers, lock-in detection and electromagnets; first spin-wave propagation experiments.</p>
+      </li>
+      <li>
+        <h4>Couple</h4>
+        <p class="meta">2027–2028</p>
+        <p>Cryogenic magnon–superconductor platform through the Open-Lab, squeezed magnon states and phonon-mediated coupling in planar devices.</p>
+      </li>
+      <li>
+        <h4>Sense and compute</h4>
+        <p class="meta">2029–2031</p>
+        <p>Magnon-based quantum sensors within the ITRC program and nonlinear spin-wave circuits for neuromorphic processing.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ FACILITIES ============ -->
+<section class="section" id="facilities" aria-labelledby="facilities-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="facilities-title">Facilities</h2>
+      <p>A microwave and magneto-optical laboratory, built from an empty room at CBNU since September 2025.</p>
+    </div>
+    <div class="fac-grid">
+      <figure class="fac-main figure">
+        <button class="photo-btn" type="button" data-full="images/lab-summer-2026.jpg" data-caption="M² Lab, summer 2026: instrument racks, measurement stations and the optical table.">
+          <img width="1600" height="1200" src="images/lab-summer-2026.jpg" alt="Wide view of M² Lab in summer 2026: instrument racks with RF sources, analyzers and lock-in amplifiers, measurement benches and workstations" loading="lazy">
+        </button>
+        <figcaption>The lab in summer 2026, with experiments under way.</figcaption>
+      </figure>
+      <dl class="caps">
+        <div><dt>Microwave spectroscopy</dt><dd>RF sources and analysers for in-plane and out-of-plane ferromagnetic resonance and spin-wave transmission.</dd></div>
+        <div><dt>Lock-in detection</dt><dd>Lock-in amplifiers for low-noise electrical detection of magnetization dynamics.</dd></div>
+        <div><dt>Magneto-optical Kerr effect</dt><dd>Laser-based MOKE setup on the optical table for optical detection of magnetization.</dd></div>
+        <div><dt>Magnetic fields</dt><dd>Electromagnets on bipolar power supplies, with an in-house Arduino-controlled rotation stage for angle-resolved measurements.</dd></div>
+        <div><dt>2D vector electromagnet <span class="status">In design</span></dt><dd>Four-pole in-plane vector magnet for rotating fields without moving the sample.</dd></div>
+        <div><dt>Spin-wave devices</dt><dd>Custom microwave antennas, including 1 mm and 0.5 mm designs, for propagating spin waves in the Damon–Eshbach geometry.</dd></div>
+        <div><dt>Simulation</dt><dd>Micromagnetic simulations and electromagnetic field calculations for antenna and device design.</dd></div>
+        <div><dt>Cryogenic platform <span class="status">Being built</span></dt><dd>Magnon–superconductor experiments through the Chungcheong Open-Lab project.</dd></div>
+      </dl>
     </div>
 
-    <div class="person-card">
-      <img src="images/chanwoo-photo.jpeg" alt="Chanwoo Shin"/>
-      <h3>Chanwoo Shin</h3>
-      <div class="person-role">Undergraduate Researcher</div>
-      <p style="font-size:13px;color:var(--text-dim);">Interest: Physics Education / Magnonics</p>
-      <a href="mailto:chanwoo204@gmail.com">chanwoo204@gmail.com</a>
-      <div class="details"><p style="margin-top:10px;">B.S. Student, CBNU</p></div>
+    <h3 class="sub-head">From an empty room to experiments</h3>
+    <ol class="buildout">
+      <li><figure>
+        <button class="photo-btn" type="button" data-full="images/lab_250918.jpg" data-caption="September 2025: the lab room at CBNU before the instruments arrived.">
+          <img width="720" height="540" src="images/thumbs/lab_250918.jpg" alt="The empty lab room at CBNU in September 2025" loading="lazy">
+        </button>
+        <figcaption><time datetime="2025-09">September 2025</time>The room before the instruments arrived.</figcaption>
+      </figure></li>
+      <li><figure>
+        <button class="photo-btn" type="button" data-full="images/26Feb_lab.jpg" data-caption="February 2026: instrument racks and measurement stations being assembled.">
+          <img width="720" height="540" src="images/thumbs/26Feb_lab.jpg" alt="Instrument racks and measurement stations in February 2026" loading="lazy">
+        </button>
+        <figcaption><time datetime="2026-02">February 2026</time>Instrument racks and measurement stations go in.</figcaption>
+      </figure></li>
+      <li><figure>
+        <button class="photo-btn" type="button" data-full="images/DE_antenna.jpg" data-caption="February 2026: new antenna for Damon–Eshbach spin-wave propagation experiments, mounted between the electromagnet poles.">
+          <img width="540" height="720" src="images/thumbs/DE_antenna.jpg" alt="Microwave antenna mounted between electromagnet pole pieces" loading="lazy">
+        </button>
+        <figcaption><time datetime="2026-02">February 2026</time>Antenna for Damon–Eshbach spin-wave propagation.</figcaption>
+      </figure></li>
+      <li><figure>
+        <button class="photo-btn" type="button" data-full="images/fgt-sample-cpw.jpg" data-caption="April 2026: a Fe₃GaTe₂ sample mounted on a coplanar-waveguide board.">
+          <img width="720" height="540" src="images/thumbs/fgt-sample-cpw.jpg" alt="Sample mounted on a coplanar-waveguide board with four SMA connectors" loading="lazy">
+        </button>
+        <figcaption><time datetime="2026-04">April 2026</time>A Fe<sub>3</sub>GaTe<sub>2</sub> sample on a coplanar-waveguide board.</figcaption>
+      </figure></li>
+      <li><figure>
+        <button class="photo-btn" type="button" data-full="images/moke-2026-05.jpg" data-caption="May 2026: building the magneto-optical Kerr effect (MOKE) setup on the optical table.">
+          <img width="540" height="720" src="images/thumbs/moke-2026-05.jpg" alt="Laser and optics for a MOKE setup on an optical table" loading="lazy">
+        </button>
+        <figcaption><time datetime="2026-05">May 2026</time>Building the MOKE setup on the optical table.</figcaption>
+      </figure></li>
+      <li><figure>
+        <button class="photo-btn" type="button" data-full="images/Arduino_rotation_control.jpg" data-caption="May 2026: in-house Arduino control of the rotation stage.">
+          <img width="540" height="720" src="images/thumbs/Arduino_rotation_control.jpg" alt="Arduino board and breadboard wired to control a rotation stage" loading="lazy">
+        </button>
+        <figcaption><time datetime="2026-05">May 2026</time>In-house Arduino control of the rotation stage.</figcaption>
+      </figure></li>
+      <li><figure>
+        <button class="photo-btn" type="button" data-full="images/fgt-oop-fmr.jpg" data-caption="July 2026: out-of-plane ferromagnetic resonance measurement on Fe₃GaTe₂ between the electromagnet poles.">
+          <img width="540" height="720" src="images/thumbs/fgt-oop-fmr.jpg" alt="Sample holder with microwave cables between the pole pieces of an electromagnet" loading="lazy">
+        </button>
+        <figcaption><time datetime="2026-07">July 2026</time>Out-of-plane FMR on Fe<sub>3</sub>GaTe<sub>2</sub>.</figcaption>
+      </figure></li>
+      <li><figure>
+        <button class="photo-btn" type="button" data-full="images/moke-2026-09.jpg" data-caption="September 2026: MOKE optics on the optical table.">
+          <img width="540" height="720" src="images/thumbs/moke-2026-09.jpg" alt="Vertical optical column with lenses and a camera above a sample stage" loading="lazy">
+        </button>
+        <figcaption><time datetime="2026-09">September 2026</time>MOKE optics in operation.</figcaption>
+      </figure></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ PUBLICATIONS ============ -->
+<section class="section section--mist" id="publications" aria-labelledby="publications-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="publications-title">Publications</h2>
+      <p><span data-count="published">30</span> peer-reviewed papers since 2011, <span data-count="led">10</span> of them led by Kyongmo An as first or corresponding author, in journals including Physical Review Letters, Physical Review X and Nature Communications.</p>
+    </div>
+
+    <h3 class="visually-hidden">Selected publications</h3>
+    <ol class="pub-sel">
+      <li>
+        <p class="pub-src">Physical Review X<span class="vol">12, 011060 (2022)</span></p>
+        <div class="pub-body">
+          <h4><a href="https://doi.org/10.1103/PhysRevX.12.011060">Bright and dark states of two distant macrospins strongly coupled by phonons</a></h4>
+          <p class="authors"><b>K. An†</b>, R. Kohno, A. N. Litvinenko, R. L. Seeger, V. V. Naletov, L. Vila, G. de Loubens, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</p>
+          <p class="why">Two distant magnets couple strongly through phonons, forming bright and dark collective states.</p>
+          <span class="note">First and corresponding author</span>
+        </div>
+      </li>
+      <li>
+        <p class="pub-src">Nature Communications<span class="vol">15, 7302 (2024)</span></p>
+        <div class="pub-body">
+          <h4><a href="https://doi.org/10.1038/s41467-024-51483-7">Emergent coherent modes in nonlinear magnonic waveguides detected at ultrahigh frequency resolution</a></h4>
+          <p class="authors"><b>K. An</b>*, M. Xu*, A. Mucchietto, C. Kim, K.-W. Moon, C. Hwang, D. Grundler†</p>
+          <p class="why">Nonlinear magnonic waveguides develop coherent modes, resolved at ultrahigh frequency resolution.</p>
+          <span class="note">Co-first author</span>
+        </div>
+      </li>
+      <li>
+        <p class="pub-src">Physical Review B<span class="vol">101, 060407(R) (2020)</span></p>
+        <div class="pub-body">
+          <h4><a href="https://doi.org/10.1103/PhysRevB.101.060407">Coherent long-range transfer of angular momentum between magnon Kittel modes by phonons</a></h4>
+          <p class="authors"><b>K. An</b>, A. N. Litvinenko, R. Kohno, A. A. Fuad, V. V. Naletov, L. Vila, U. Ebels, G. de Loubens, H. Hurdequint, N. Beaulieu, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</p>
+          <p class="why">Phonons carry angular momentum coherently between two magnets over long distances.</p>
+          <span class="note">First author</span> <span class="note">Cited 200+ times</span>
+        </div>
+      </li>
+      <li>
+        <p class="pub-src">Physical Review Letters<span class="vol">117, 107202 (2016)</span></p>
+        <div class="pub-body">
+          <h4><a href="https://doi.org/10.1103/PhysRevLett.117.107202">Magnons and phonons optically driven out of local equilibrium in a magnetic insulator</a></h4>
+          <p class="authors"><b>K. An</b>, K. S. Olsson, A. Weathers, S. Sullivan, X. Chen, X. Li, L. G. Marshall, X. Ma, N. Klimovich, J. Zhou, L. Shi†, X. Li†</p>
+          <p class="why">Light drives magnons and phonons out of local equilibrium in a magnetic insulator.</p>
+          <span class="note">First author</span>
+        </div>
+      </li>
+      <li>
+        <p class="pub-src">Physical Review Applied<span class="vol">20, 014046 (2023)</span></p>
+        <div class="pub-body">
+          <h4><a href="https://doi.org/10.1103/PhysRevApplied.20.014046">Optimizing the magnon-phonon cooperativity in planar geometries</a></h4>
+          <p class="authors"><b>K. An</b>, C. Kim, K.-W. Moon, R. Kohno, G. Olivetti, G. de Loubens, N. Vukadinovic, J. B. Youssef, C. Hwang†, O. Klein†</p>
+          <p class="why">How to maximize magnon–phonon cooperativity in planar device geometries.</p>
+          <span class="note">First author</span>
+        </div>
+      </li>
+      <li>
+        <p class="pub-src">Physical Review Applied<span class="vol">11, 034065 (2019)</span></p>
+        <div class="pub-body">
+          <h4><a href="https://doi.org/10.1103/PhysRevApplied.11.034065">Optimization of spin-wave propagation with enhanced group velocities by exchange-coupled ferrimagnet-ferromagnet bilayers</a></h4>
+          <p class="authors"><b>K. An</b>†, V. S. Bhat, M. Mruczkiewicz, C. Dubs, D. Grundler</p>
+          <p class="why">Exchange-coupled ferrimagnet–ferromagnet bilayers raise spin-wave group velocities.</p>
+          <span class="note">First and corresponding author</span>
+        </div>
+      </li>
+    </ol>
+
+    <details class="pub-all" id="all-publications" data-filter="all">
+      <summary><span>All publications (<span data-count="all">31</span>)</span></summary>
+      <div class="pub-tools">
+        <span id="filter-label">Show</span>
+        <span class="seg" role="group" aria-labelledby="filter-label">
+          <button type="button" data-filter="all" aria-pressed="true">All papers</button>
+          <button type="button" data-filter="lead" aria-pressed="false">Led by K. An</button>
+        </span>
+        <span>† corresponding author, * equal contribution</span>
+      </div>
+      <section class="pub-year" aria-labelledby="y-2026">
+        <h3 id="y-2026">2026</h3>
+        <ol class="pub-list">
+          <li data-lead data-status="submitted">
+            <p class="t">Time-gating of coherent spin-wave echoes from edge reflections in micro-patterned YIG</p>
+            <p class="j">Submitted (2026)</p>
+            <p class="authors"><b>K. An</b>, M. Xu, C. Dubs, D. Grundler†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1002/adma.202511289">Chiral acoustic phonon and conservation of pseudoangular momentum in α-quartz</a></p>
+            <p class="j"><i>Adv. Mater.</i> 38, e11289 (2026)</p>
+            <p class="authors">C. Kim†, I.-K. Hwang, K.-W. Moon, <b>K. An</b>, K.-J. Lee, J.-H. Ko, B.-G. Park, K.-Y. Choi, C. Hwang†</p>
+          </li>
+          <li data-lead>
+            <p class="t"><a href="https://doi.org/10.1007/s40042-026-01576-x">Optimizing spin-wave nonreciprocity via antenna-field design</a></p>
+            <p class="j"><i>J. Korean Phys. Soc.</i> 88, 1094 (2026)</p>
+            <p class="authors">Y. Hwang, T. An, <b>K. An</b>†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1016/j.cap.2025.10.015">Dynamic X-ray magnetic circular dichroism of yttrium iron garnet</a></p>
+            <p class="j"><i>Current Applied Physics</i> 81, 1 (2026)</p>
+            <p class="authors">C. Kim, <b>K. An</b>, K.-W. Moon, Y. Kim, C. Hwang†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2025">
+        <h3 id="y-2025">2025</h3>
+        <ol class="pub-list">
+          <li>
+            <p class="t"><a href="https://doi.org/10.1021/acsnano.5c12003">Full spin–orbit torque switching of the magnetic cluster octupole in Mn₃Sn/W bilayer via interface engineering</a></p>
+            <p class="j"><i>ACS Nano</i> 19, 39747 (2025)</p>
+            <p class="authors">S. Lee*, E. Im*, S. Im*, C. Lee, H. Komiyama, Y. Shiota, T. Ono, <b>K. An</b>, K.-W. Kim, T.-H. T. Nguyen†, S. Kim†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1002/adma.202414917">Giant modulation of magnetoresistance in a van der Waals magnet by in-plane current injection</a></p>
+            <p class="j"><i>Adv. Mater.</i> 37, 2414917 (2025)</p>
+            <p class="authors">K. Kim*, H.-B. Ahn*, S. Lee, S. Jeong, D. Lee, S. Lee, S. Im, S. B. Kim, S. J. Kim, J. Park, N. J. Lee, H. C. Koo, <b>K. An</b>, K.-W. Moon, B. Kim, K. Kim, K.-J. Kim, C. Lee, K.-W. Kim†, S. K. Kim†, T.-E. Park†, S. Kim†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2024">
+        <h3 id="y-2024">2024</h3>
+        <ol class="pub-list">
+          <li data-lead>
+            <p class="t"><a href="https://doi.org/10.1038/s41467-024-51483-7">Emergent coherent modes in nonlinear magnonic waveguides detected at ultrahigh frequency resolution</a></p>
+            <p class="j"><i>Nature Communications</i> 15, 7302 (2024)</p>
+            <p class="authors"><b>K. An</b>*, M. Xu*, A. Mucchietto, C. Kim, K.-W. Moon, C. Hwang, D. Grundler†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1002/aelm.202400027">Programmable racetrack for magnetic domain wall motion via local tuning of exchange biased field</a></p>
+            <p class="j"><i>Adv. Electron. Mater.</i> 10, 2400027 (2024)</p>
+            <p class="authors">H.-J. Kim*, K.-W. Moon*, S. Yoon, <b>K. An</b>, C. Kim, S. Yang, T.-S. Ju, J.-W. Son, J.-I. Hong†, C. Hwang†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2023">
+        <h3 id="y-2023">2023</h3>
+        <ol class="pub-list">
+          <li data-lead>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevApplied.20.014046">Optimizing the magnon-phonon cooperativity in planar geometries</a></p>
+            <p class="j"><i>Phys. Rev. Applied</i> 20, 014046 (2023)</p>
+            <p class="authors"><b>K. An</b>, C. Kim, K.-W. Moon, R. Kohno, G. Olivetti, G. de Loubens, N. Vukadinovic, J. B. Youssef, C. Hwang†, O. Klein†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevB.108.144410">Nonlocal magnon transconductance in extended magnetic insulating films. I. Spin diode effect</a></p>
+            <p class="j"><i>Phys. Rev. B</i> 108, 144410 (2023)</p>
+            <p class="authors">R. Kohno, <b>K. An</b>, E. Clot, V. V. Naletov, N. Thiery, L. Vila, R. Schlitz, N. Beaulieu, J. Ben Youssef, A. Anane, V. Cros, H. Merbouche, T. Hauet, V. E. Demidov, S. O. Demokritov, G. de Loubens, O. Klein†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevB.108.144411">Nonlocal magnon transconductance in extended magnetic insulating films. II. Two-fluid behavior</a></p>
+            <p class="j"><i>Phys. Rev. B</i> 108, 144411 (2023)</p>
+            <p class="authors">R. Kohno, <b>K. An</b>, E. Clot, V. V. Naletov, N. Thiery, L. Vila, R. Schlitz, N. Beaulieu, J. Ben Youssef, A. Anane, V. Cros, H. Merbouche, T. Hauet, V. E. Demidov, S. O. Demokritov, G. de Loubens, O. Klein†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1063/5.0141994">Dynamics of weak magnetic coupling by x-ray ferromagnetic resonance</a></p>
+            <p class="j"><i>J. Appl. Phys.</i> 133, 173906 (2023)</p>
+            <p class="authors">C. Kim, W.-C. Choi, K.-W. Moon, H.-J. Kim, <b>K. An</b>, B.-G. Park, H.-Y. Kim, J.-I. Hong, J. Kim, Z. Q. Qiu, Y. Kim, C. Hwang†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2022">
+        <h3 id="y-2022">2022</h3>
+        <ol class="pub-list">
+          <li data-lead>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevX.12.011060">Bright and dark states of two distant macrospins strongly coupled by phonons</a></p>
+            <p class="j"><i>Phys. Rev. X</i> 12, 011060 (2022)</p>
+            <p class="authors"><b>K. An†</b>, R. Kohno, A. N. Litvinenko, R. L. Seeger, V. V. Naletov, L. Vila, G. de Loubens, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1002/adfm.202112561">Field-free switching of magnetization by tilting the perpendicular magnetic anisotropy of Gd/Co multilayers</a></p>
+            <p class="j"><i>Adv. Funct. Mater.</i> 32, 2112561 (2022)</p>
+            <p class="authors">H.-J. Kim, K.-W. Moon, B. X. Tran, S. Yoon, C. Kim, S. Yang, J.-H. Ha, <b>K. An</b>, T.-S. Ju, J.-I. Hong†, C. Hwang†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1021/acs.nanolett.2c02268">Magnetic field magnitudes needed for skyrmion generation in a general perpendicularly magnetized film</a></p>
+            <p class="j"><i>Nano Letters</i> 22, 8430 (2022)</p>
+            <p class="authors">S. Yang*, T.-S. Ju*, C. Kim, H.-J. Kim, <b>K. An</b>, K.-W. Moon†, S. Park†, C. Hwang†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2021">
+        <h3 id="y-2021">2021</h3>
+        <ol class="pub-list">
+          <li data-lead>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevB.103.174432">Short-range thermal magnon diffusion in magnetic garnet</a></p>
+            <p class="j"><i>Phys. Rev. B</i> 103, 174432 (2021)</p>
+            <p class="authors"><b>K. An</b>, R. Kohno, N. Thiery, D. Reitz, L. Vila, V. V. Naletov, N. Beaulieu, J. B. Youssef, G. de Loubens, Y. Tserkovnyak, O. Klein†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1063/5.0028664">Enhancement of YIG|Pt spin conductance by local Joule annealing</a></p>
+            <p class="j"><i>Appl. Phys. Lett.</i> 118, 032404 (2021)</p>
+            <p class="authors">R. Kohno, N. Thiery, <b>K. An</b>, P. Noël, L. Vila, V. V. Naletov, N. Beaulieu, J. B. Youssef, G. de Loubens, O. Klein†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2020">
+        <h3 id="y-2020">2020</h3>
+        <ol class="pub-list">
+          <li data-lead>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevB.101.060407">Coherent long-range transfer of angular momentum between magnon Kittel modes by phonons</a></p>
+            <p class="j"><i>Phys. Rev. B</i> 101, 060407(R) (2020) <span class="note">cited 200+ times</span></p>
+            <p class="authors"><b>K. An</b>, A. N. Litvinenko, R. Kohno, A. A. Fuad, V. V. Naletov, L. Vila, U. Ebels, G. de Loubens, H. Hurdequint, N. Beaulieu, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevX.10.021029">Pure spin current and magnon chemical potential in a nonequilibrium magnetic insulator</a></p>
+            <p class="j"><i>Phys. Rev. X</i> 10, 021029 (2020)</p>
+            <p class="authors">K. S. Olsson, <b>K. An</b>, G. A. Fiete, J. Zhou, L. Shi, X. Li†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevB.102.054422">Dimensional crossover in spin Hall oscillators</a></p>
+            <p class="j"><i>Phys. Rev. B</i> 102, 054422 (2020)</p>
+            <p class="authors">A. Smith, K. Sobotkiewich, A. Khan, E. A. Montoya, L. Yang, Z. Duan, T. Schneider, K. Lenz, J. Lindner, <b>K. An</b>, X. Li, I. N. Krivorotov†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2019">
+        <h3 id="y-2019">2019</h3>
+        <ol class="pub-list">
+          <li data-lead>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevApplied.11.034065">Optimization of spin-wave propagation with enhanced group velocities by exchange-coupled ferrimagnet-ferromagnet bilayers</a></p>
+            <p class="j"><i>Phys. Rev. Applied</i> 11, 034065 (2019)</p>
+            <p class="authors"><b>K. An</b>†, V. S. Bhat, M. Mruczkiewicz, C. Dubs, D. Grundler</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2018">
+        <h3 id="y-2018">2018</h3>
+        <ol class="pub-list">
+          <li>
+            <p class="t"><a href="https://doi.org/10.1088/1361-6463/aaadde">Magnon and phonon thermometry with inelastic light scattering</a></p>
+            <p class="j"><i>J. Phys. D: Appl. Phys.</i> 51, 133001 (2018) <span class="note">Topical Review</span></p>
+            <p class="authors">K. S. Olsson, <b>K. An</b>, X. Li†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2017">
+        <h3 id="y-2017">2017</h3>
+        <ol class="pub-list">
+          <li>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevB.96.024448">Temperature-dependent Brillouin light scattering spectra of magnons in yttrium iron garnet and permalloy</a></p>
+            <p class="j"><i>Phys. Rev. B</i> 96, 024448 (2017)</p>
+            <p class="authors">K. S. Olsson, <b>K. An</b>, X. Ma, S. Sullivan, V. Venu, M. Tsoi, J. Zhou, L. Shi, X. Li†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2016">
+        <h3 id="y-2016">2016</h3>
+        <ol class="pub-list">
+          <li data-lead>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevLett.117.107202">Magnons and phonons optically driven out of local equilibrium in a magnetic insulator</a></p>
+            <p class="j"><i>Phys. Rev. Lett.</i> 117, 107202 (2016)</p>
+            <p class="authors"><b>K. An</b>, K. S. Olsson, A. Weathers, S. Sullivan, X. Chen, X. Li, L. G. Marshall, X. Ma, N. Klimovich, J. Zhou, L. Shi†, X. Li†</p>
+          </li>
+          <li>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevB.94.180408">Interfacial control of Dzyaloshinskii-Moriya interaction in heavy metal / ferromagnetic metal thin film heterostructures</a></p>
+            <p class="j"><i>Phys. Rev. B</i> 94, 180408(R) (2016)</p>
+            <p class="authors">X. Ma, G. Yu, X. Li, T. Wang, D. Wu, K. S. Olsson, Z. Chu, <b>K. An</b>, J. Q. Xiao, K. L. Wang, X. Li†</p>
+          </li>
+          <li data-lead>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevB.93.140404">Current control of magnetic anisotropy via stress in a ferromagnetic metal waveguide</a></p>
+            <p class="j"><i>Phys. Rev. B</i> 93, 140404(R) (2016) <span class="note">Editors' Suggestion</span></p>
+            <p class="authors"><b>K. An</b>, X. Ma, C.-F. Pai, J. Yang, K. S. Olsson, J. L. Erskine, A. H. MacDonald, D. C. Ralph, R. A. Buhrman, X. Li†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2015">
+        <h3 id="y-2015">2015</h3>
+        <ol class="pub-list">
+          <li>
+            <p class="t"><a href="https://doi.org/10.1063/1.4907616">Temperature dependence of Brillouin light scattering spectra of acoustic phonons in silicon</a></p>
+            <p class="j"><i>Appl. Phys. Lett.</i> 106, 051906 (2015)</p>
+            <p class="authors">K. S. Olsson, N. Klimovich, <b>K. An</b>, S. Sullivan, A. Weathers, L. Shi, X. Li†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2014">
+        <h3 id="y-2014">2014</h3>
+        <ol class="pub-list">
+          <li data-lead>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevB.89.140405">Control of propagating spin waves via spin transfer torque in a metallic bilayer waveguide</a></p>
+            <p class="j"><i>Phys. Rev. B</i> 89, 140405(R) (2014) <span class="note">Editors' Suggestion</span></p>
+            <p class="authors"><b>K. An</b>, D. R. Birt, C.-F. Pai, K. S. Olsson, D. C. Ralph, R. A. Buhrman, X. Li†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2013">
+        <h3 id="y-2013">2013</h3>
+        <ol class="pub-list">
+          <li>
+            <p class="t"><a href="https://doi.org/10.1063/1.4793538">Brillouin light scattering spectra as local temperature sensors for thermal magnons and acoustic phonons</a></p>
+            <p class="j"><i>Appl. Phys. Lett.</i> 102, 082401 (2013)</p>
+            <p class="authors">D. R. Birt, <b>K. An</b>, A. Weathers, L. Shi, M. Tsoi, X. Li†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2012">
+        <h3 id="y-2012">2012</h3>
+        <ol class="pub-list">
+          <li>
+            <p class="t"><a href="https://doi.org/10.1063/1.4772798">Deviation from exponential decay for spin waves excited with a coplanar waveguide antenna</a></p>
+            <p class="j"><i>Appl. Phys. Lett.</i> 101, 252409 (2012)</p>
+            <p class="authors">D. R. Birt, <b>K. An</b>, M. Tsoi, S. Tamaru, D. Ricketts, K. L. Wong, P. Khalili Amiri, K. L. Wang, X. Li†</p>
+          </li>
+        </ol>
+      </section>
+      <section class="pub-year" aria-labelledby="y-2011">
+        <h3 id="y-2011">2011</h3>
+        <ol class="pub-list">
+          <li>
+            <p class="t"><a href="https://doi.org/10.1103/PhysRevB.84.174423">Spin state of MnO investigated by ⁵⁵Mn nuclear magnetic resonance</a></p>
+            <p class="j"><i>Phys. Rev. B</i> 84, 174423 (2011)</p>
+            <p class="authors">E. Jo, <b>K. An</b>, J.-H. Shim, C. Kim, S. Lee†</p>
+          </li>
+        </ol>
+      </section>
+    </details>
+    <a class="scholar-link" href="https://scholar.google.com/citations?user=zsngCA4AAAAJ&amp;hl=en">Citations and metrics on Google Scholar</a>
+  </div>
+</section>
+
+<!-- ============ PEOPLE ============ -->
+<section class="section" id="people" aria-labelledby="people-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="people-title">People</h2>
+    </div>
+
+    <div class="pi">
+      <img width="640" height="800" class="pi-photo" src="images/people/kyongmo-an.jpg" alt="Portrait of Kyongmo An" loading="lazy">
+      <div>
+        <h3>Kyongmo An<span lang="ko">안경모</span></h3>
+        <p class="role">Principal investigator. Assistant Professor, Department of Physics Education, Chungbuk National University</p>
+        <p class="bio">Kyongmo An founded M² Lab in March 2025. His work connects spin waves with sound and microwave photons: Brillouin light scattering of magnons and phonons during his Ph.D. at UT Austin, spin-wave devices as a Marie Skłodowska-Curie Fellow at EPFL, phonon-mediated coupling of magnets at SPINTEC in Grenoble, and hybrid magnonics as a Sejong Science Fellow at KRISS.</p>
+        <p class="pi-links"><a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a><a href="https://scholar.google.com/citations?user=zsngCA4AAAAJ&amp;hl=en">Google Scholar</a></p>
+        <ol class="career">
+          <li><span class="when">2025–</span><span>Assistant Professor, Chungbuk National University</span></li>
+          <li><span class="when">2021–2024</span><span>Sejong Science Fellow, Korea Research Institute of Standards and Science (KRISS)</span></li>
+          <li><span class="when">2019–2021</span><span>Postdoctoral researcher, SPINTEC, Grenoble</span></li>
+          <li><span class="when">2017–2019</span><span>Marie Skłodowska-Curie Fellow, EPFL, Lausanne</span></li>
+          <li><span class="when">2016</span><span>Ph.D. in Physics, The University of Texas at Austin</span></li>
+          <li><span class="when">2010</span><span>M.S. in Physics, KAIST</span></li>
+          <li><span class="when">2008</span><span>B.S. in Physics, Yonsei University</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <h3 class="sub-head">Students and researchers</h3>
+    <ul class="team">
+      <li class="member">
+        <img width="480" height="600" class="member-photo" src="images/people/taekyeoung-an.jpg" alt="Portrait of Taekyeoung An" loading="lazy">
+        <h4>Taekyeoung An</h4>
+        <p class="role">M.S. researcher</p>
+        <p>Micromagnetic simulation</p>
+        <p class="muted">B.S., Kangwon National University</p>
+        <a href="mailto:tk4214@naver.com">tk4214@naver.com</a>
+      </li>
+      <li class="member">
+        <img width="480" height="600" class="member-photo" src="images/people/chanwoo-shin.jpg" alt="Portrait of Chanwoo Shin" loading="lazy">
+        <h4>Chanwoo Shin</h4>
+        <p class="role">Undergraduate researcher</p>
+        <p>Physics education and magnonics</p>
+        <p class="muted">B.S. student, CBNU</p>
+        <a href="mailto:chanwoo204@gmail.com">chanwoo204@gmail.com</a>
+      </li>
+    </ul>
+    <p class="team-note">Each summer we also host undergraduate interns. The 2026 interns worked with us from June to August, and the team finished the program together at the KPS Fall Meeting in Jeju.</p>
+  </div>
+</section>
+
+<!-- ============ NEWS ============ -->
+<section class="section section--mist" id="news" aria-labelledby="news-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="news-title">News</h2>
+    </div>
+    <ol class="news">
+      <li>
+        <time datetime="2026-10-22">October 2026</time>
+        <div>
+          <h3>Undergraduate research at the KPS Fall Meeting, Jeju</h3>
+          <p>Our summer interns presented their own project, diffraction from a macroscopic artificial crystal measured with microwave scattering, in the undergraduate physics research competition of the Korean Physical Society Fall Meeting. The whole lab travelled to Jeju to close the season together.</p>
+        </div>
+        <button class="photo-btn" type="button" data-full="images/kps2026-poster.jpg" data-caption="The interns' poster in the undergraduate physics research competition, KPS Fall Meeting 2026, Jeju.">
+          <img width="720" height="540" src="images/thumbs/kps2026-poster.jpg" alt="A student presents a poster next to a stacked lattice model at the KPS Fall Meeting" loading="lazy">
+        </button>
+      </li>
+      <li>
+        <time datetime="2026-10-20">October 2026</time>
+        <div>
+          <h3>Ryuhei Kohno visits from Tohoku University</h3>
+          <p>Ryuhei Kohno, assistant professor at Tohoku University and co-author on seven of our papers, visited M² Lab.</p>
+        </div>
+        <button class="photo-btn" type="button" data-full="images/ryuhei-kohno-visit-2026.jpg" data-caption="Ryuhei Kohno (Tohoku University) at M² Lab, October 2026.">
+          <img width="720" height="540" src="images/thumbs/ryuhei-kohno-visit-2026.jpg" alt="Ryuhei Kohno giving a thumbs-up in front of a blackboard covered in equations" loading="lazy">
+        </button>
+      </li>
+      <li>
+        <time datetime="2026-08">August 2026</time>
+        <div>
+          <h3>Summer internship wraps up</h3>
+          <p>Over three months, from June to August, our interns joined Friday seminars, built microwave experiments in the lab and visited the Korea Research Institute of Standards and Science (KRISS).</p>
+        </div>
+        <button class="photo-btn" type="button" data-full="images/kriss-visit-2026.jpg" data-caption="Interns watch a measurement demonstration during the visit to KRISS, August 2026.">
+          <img width="720" height="540" src="images/thumbs/kriss-visit-2026.jpg" alt="Students gather around a researcher at a measurement setup at KRISS" loading="lazy">
+        </button>
+      </li>
+      <li>
+        <time datetime="2026-07">July 2026</time>
+        <div>
+          <h3>Magnetism Summer School at CBNU</h3>
+          <p>Kyongmo An organized the 2026 Magnetism Summer School (<span lang="ko">자성학 여름학교</span>), held at Chungbuk National University.</p>
+        </div>
+        <button class="photo-btn" type="button" data-full="images/magnetism-summer-school-2026.jpg" data-caption="The 2026 Magnetism Summer School at Chungbuk National University, July 2026.">
+          <img width="720" height="540" src="images/thumbs/magnetism-summer-school-2026.jpg" alt="A full lecture hall of students at the Magnetism Summer School" loading="lazy">
+        </button>
+      </li>
+      <li>
+        <time datetime="2026-06-05">June 2026</time>
+        <div>
+          <h3>Lab setup complete, experiments under way</h3>
+          <p>Key microwave equipment and electromagnets are installed: RF sources and analysers, lock-in measurement systems, an electromagnet, sample stages and an optical table area. Measurements are in progress.</p>
+        </div>
+        <button class="photo-btn" type="button" data-full="images/Lab_20260605.jpg" data-caption="M² Lab, June 2026.">
+          <img width="720" height="540" src="images/thumbs/Lab_20260605.jpg" alt="M² Lab instrument racks in June 2026" loading="lazy">
+        </button>
+      </li>
+      <li>
+        <time datetime="2026-06">June 2026</time>
+        <div>
+          <h3>2026 summer internship program begins</h3>
+          <p>For three months, undergraduates join hands-on research on microwave magnonics, spin-wave devices and quantum interfaces.</p>
+        </div>
+        <button class="photo-btn" type="button" data-full="images/2026_summer_intern.jpg" data-caption="2026 summer internship program poster.">
+          <img width="509" height="720" src="images/thumbs/2026_summer_intern.jpg" alt="Poster for the 2026 M² Lab summer internship program" loading="lazy" style="object-fit:contain;background:#fff">
+        </button>
+      </li>
+      <li>
+        <time datetime="2026-03">March 2026</time>
+        <div>
+          <h3>First APS presentation for Taekyeoung An</h3>
+          <p>Taekyeoung presented his poster at the APS Global Physics Summit in Denver.</p>
+        </div>
+        <button class="photo-btn" type="button" data-full="images/Taekyeoung_APS_poster.jpg" data-caption="Taekyeoung An with his poster at the APS Global Physics Summit, Denver, March 2026.">
+          <img width="540" height="720" src="images/thumbs/Taekyeoung_APS_poster.jpg" alt="Taekyeoung An standing next to his conference poster" loading="lazy">
+        </button>
+      </li>
+      <li>
+        <time datetime="2026-01-26">January 2026</time>
+        <div>
+          <h3>First paper led by M² Lab</h3>
+          <p>Yunyoung Hwang, Taekyeoung An and Kyongmo An show how antenna-field design tunes spin-wave nonreciprocity, in the <a href="https://doi.org/10.1007/s40042-026-01576-x"><i>Journal of the Korean Physical Society</i></a>.</p>
+        </div>
+      </li>
+      <li>
+        <time datetime="2025-11-06">November 2025</time>
+        <div>
+          <h3>Chiral phonons in α-quartz</h3>
+          <p>With collaborators at KRISS, we report chiral acoustic phonons and conservation of pseudoangular momentum in <a href="https://doi.org/10.1002/adma.202511289"><i>Advanced Materials</i></a>.</p>
+        </div>
+      </li>
+      <li>
+        <time datetime="2025-09">September 2025</time>
+        <div>
+          <h3>New project: magnon–superconductor quantum transduction</h3>
+          <p>Three-year funding (2025–2028) awarded for "Magnon-Superconductor Quantum-Transduction Devices based on Chungcheong Open-Lab Foundation".</p>
+        </div>
+      </li>
+      <li>
+        <time datetime="2025-03">March 2025</time>
+        <div>
+          <h3>M² Lab opens at CBNU</h3>
+          <p>The Microwave Magnonics Lab begins operation in the Department of Physics Education at Chungbuk National University.</p>
+        </div>
+      </li>
+    </ol>
+
+    <h3 class="sub-head">Conferences and lab life</h3>
+    <p class="scroll-hint">Scroll sideways for more photos. Select a photo to enlarge it.</p>
+    <ul class="gallery">
+      <li>
+        <button class="photo-btn" type="button" data-full="images/kps2026-jeju-group.jpg" data-caption="The lab together in Jeju during the KPS Fall Meeting, October 2026.">
+          <img width="720" height="540" src="images/thumbs/kps2026-jeju-group.jpg" alt="M² Lab members and interns pose at night under string lights and palm trees in Jeju" loading="lazy">
+        </button>
+        <p><time datetime="2026-10">October 2026</time>The lab together in Jeju, KPS Fall Meeting</p>
+      </li>
+      <li>
+        <button class="photo-btn" type="button" data-full="images/kps2026-jeju-dinner.jpg" data-caption="Jeju black-pork dinner with the whole team, October 2026.">
+          <img width="720" height="540" src="images/thumbs/kps2026-jeju-dinner.jpg" alt="Selfie of the team around a barbecue table at dinner" loading="lazy">
+        </button>
+        <p><time datetime="2026-10">October 2026</time>Jeju black-pork dinner with the whole team</p>
+      </li>
+      <li>
+        <button class="photo-btn" type="button" data-full="images/microwave-diffraction-setup-2026.jpg" data-caption="The interns' microwave diffraction setup on the optical table, September 2026.">
+          <img width="720" height="540" src="images/thumbs/microwave-diffraction-setup-2026.jpg" alt="Microwave horn antennas aimed at a stacked lattice model on an optical table" loading="lazy">
+        </button>
+        <p><time datetime="2026-09">September 2026</time>The interns' microwave diffraction setup</p>
+      </li>
+      <li>
+        <button class="photo-btn" type="button" data-full="images/friday-seminar-2026.jpg" data-caption="Friday seminar: a student explains ferromagnetic resonance, June 2026.">
+          <img width="720" height="540" src="images/thumbs/friday-seminar-2026.jpg" alt="A student presents a slide on ferromagnetic resonance to the group in a seminar room" loading="lazy">
+        </button>
+        <p><time datetime="2026-06">June 2026</time>Friday seminar: a student explains ferromagnetic resonance</p>
+      </li>
+      <li>
+        <button class="photo-btn" type="button" data-full="images/Crystal_Denver_photo.jpg" data-caption="A very large crystal at the Denver Museum of Nature and Science, March 2026.">
+          <img width="540" height="720" src="images/thumbs/Crystal_Denver_photo.jpg" alt="Large betafite crystal on display in a museum case" loading="lazy">
+        </button>
+        <p><time datetime="2026-03">March 2026</time>A huge crystal at the Denver Museum of Nature and Science</p>
+      </li>
+      <li>
+        <button class="photo-btn" type="button" data-full="images/Magnonics2025_photo.jpg" data-caption="Boat excursion at the Magnonics 2025 conference.">
+          <img width="720" height="540" src="images/thumbs/Magnonics2025_photo.jpg" alt="Kyongmo An on a boat at sea during the Magnonics 2025 excursion" loading="lazy">
+        </button>
+        <p><time datetime="2025-07">July 2025</time>Magnonics 2025 boat excursion</p>
+      </li>
+      <li>
+        <button class="photo-btn" type="button" data-full="images/20240626_172631.jpg" data-caption="During the SolSkyMag conference, June 2024.">
+          <img width="720" height="540" src="images/thumbs/20240626_172631.jpg" alt="Kyongmo An at an aquarium during the SolSkyMag conference" loading="lazy">
+        </button>
+        <p><time datetime="2024-06">June 2024</time>SolSkyMag conference</p>
+      </li>
+      <li>
+        <button class="photo-btn" type="button" data-full="images/APS2023_LiLab_photo.jpg" data-caption="Li Lab homecoming dinner at the APS March Meeting, 2023.">
+          <img width="720" height="540" src="images/thumbs/APS2023_LiLab_photo.jpg" alt="Group dinner with members of the Li Lab" loading="lazy">
+        </button>
+        <p><time datetime="2023-03">March 2023</time>Li Lab homecoming dinner at APS</p>
+      </li>
+      <li>
+        <button class="photo-btn" type="button" data-full="images/Tmag_photo.jpg" data-caption="Trends in Magnetism (TMAG) 2022, Venice.">
+          <img width="540" height="720" src="images/thumbs/Tmag_photo.jpg" alt="Kyongmo An next to the Trends in Magnetism conference banner" loading="lazy">
+        </button>
+        <p><time datetime="2022-09">September 2022</time>Trends in Magnetism, Venice</p>
+      </li>
+      <li>
+        <button class="photo-btn" type="button" data-full="images/SpinMechanics7_photo.jpg" data-caption="Excursion to Rothenburg during Spin Mechanics 7, August 2022.">
+          <img width="720" height="540" src="images/thumbs/SpinMechanics7_photo.jpg" alt="Kyongmo An overlooking the town of Rothenburg" loading="lazy">
+        </button>
+        <p><time datetime="2022-08">August 2022</time>Spin Mechanics 7 excursion to Rothenburg</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ TEACHING ============ -->
+<section class="section" id="teaching" aria-labelledby="teaching-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="teaching-title">Teaching</h2>
+      <p>Courses in the Department of Physics Education, where we train future physics teachers.</p>
+    </div>
+    <div class="teach-grid">
+      <dl class="semesters">
+        <div>
+          <dt>Spring 2026</dt>
+          <dd><ul>
+            <li>Electromagnetism and EM Education I</li>
+            <li>Mathematical Physics I</li>
+            <li>Thermal and Statistical Physics</li>
+            <li>Physics Experiment I</li>
+          </ul></dd>
+        </div>
+        <div>
+          <dt>Fall 2025</dt>
+          <dd><ul>
+            <li>Electromagnetism and EM Education II</li>
+            <li>Mathematical Physics II</li>
+            <li>Physics Experiment II</li>
+            <li>Solid State Physics Education</li>
+          </ul></dd>
+        </div>
+        <div>
+          <dt>Spring 2025</dt>
+          <dd><ul>
+            <li>Electromagnetism and EM Education I</li>
+            <li>Mathematical Physics I</li>
+            <li>Thermal and Statistical Physics</li>
+          </ul></dd>
+        </div>
+      </dl>
+      <aside class="outreach" aria-labelledby="outreach-title">
+        <h3 id="outreach-title">Interactive demos and physics notes</h3>
+        <p>Tools and short notes we write for students and anyone curious about physics.</p>
+        <ul>
+          <li>Magnetic field calculator for rectangular conductors</li>
+          <li>Sound-wave synthesizer and coupled-oscillator demos</li>
+          <li>Notes on induction heating, freezing water and instrument control</li>
+        </ul>
+        <a class="btn btn--outline" href="resources.html">Open resources</a>
+      </aside>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- TEACHING -->
-<section id="teaching">
-  <div class="section-label">Courses</div>
-  <div class="section-title">Teaching</div>
-
-  <div class="teaching-grid">
-    <div class="teaching-card">
-      <h3>Spring 2026</h3>
-      <ul>
-        <li>Electromagnetism &amp; EM Education I</li>
-        <li>Mathematical Physics I</li>
-        <li>Thermal and Statistical Physics</li>
-        <li>Physics Experiment I</li>
-      </ul>
+<!-- ============ JOIN ============ -->
+<section class="section on-dark join" id="join" aria-labelledby="join-title">
+  <div class="wrap join-grid">
+    <div>
+      <h2 id="join-title">Join M² Lab</h2>
+      <p class="lede">We welcome students who are curious about spin waves, microwave measurements and hybrid quantum systems. Research experience is not required; curiosity and persistence are.</p>
+      <div class="hero-actions">
+        <a class="btn btn--primary" href="mailto:kman@cbnu.ac.kr?subject=Joining%20M%C2%B2%20Lab">Email Prof. An</a>
+      </div>
+      <p class="contact"><strong>Email</strong> <a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a><br>
+        <strong>Office</strong> E1-1-313, Department of Physics Education, Chungbuk National University, Cheongju, Republic of Korea</p>
     </div>
-    <div class="teaching-card">
-      <h3>Spring 2025</h3>
-      <ul>
-        <li>Electromagnetism &amp; EM Education I</li>
-        <li>Mathematical Physics I</li>
-        <li>Thermal and Statistical Physics</li>
-      </ul>
-    </div>
-    <div class="teaching-card">
-      <h3>Fall 2025</h3>
-      <ul>
-        <li>Electromagnetism &amp; EM Education II</li>
-        <li>Mathematical Physics II</li>
-        <li>Physics Experiment II</li>
-        <li>Solid State Physics Education</li>
-      </ul>
-    </div>
+    <dl class="positions">
+      <div><dt>Graduate students (M.S. and Ph.D.)</dt><dd>Build microwave experiments, run simulations and design spin-wave devices.</dd></div>
+      <div><dt>Undergraduate interns</dt><dd>Summer and semester internships. First- and second-year students are welcome; our 2026 interns presented their own project at the KPS Fall Meeting.</dd></div>
+      <div><dt>Postdoctoral researchers</dt><dd>Get in touch to discuss openings and fellowship applications.</dd></div>
+    </dl>
   </div>
 </section>
 
-<div class="divider"></div>
+</main>
 
-<!-- RESOURCES -->
-<section id="resources">
-  <div class="section-label">Tools</div>
-  <div class="section-title">Useful Resources</div>
-  <p style="font-size:14px;color:var(--text-dim);margin-bottom:18px;">Interactive demos and short physics notes from the lab.</p>
-
-  <h3 style="font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin:24px 0 14px;">Interactive Demos</h3>
-  <div class="resources-grid">
-    <div class="resource-card">
-      <h3>Magnetic Field Calculator</h3>
-      <p>Compute B and H fields for a rectangular-cross-section conductor using Biot–Savart multi-filament summation.</p>
-      <a class="btn" href="sources/magnetic-field-rect.html" target="_blank">Open Calculator</a>
-    </div>
-    <div class="resource-card">
-      <h3>Interactive Sound Wave Demo</h3>
-      <p>Fourier/sine-wave synthesis with live audio playback, phase-locked time-domain scope, and spectrum view.</p>
-      <a class="btn" href="sources/sound-wave.html" target="_blank">Open Demo</a>
-    </div>
-    <div class="resource-card">
-      <h3>Coupled Oscillator</h3>
-      <p>Visualization of normal modes and energy exchange in a coupled-oscillator system.</p>
-      <a class="btn" href="sources/coupled_oscillator.html" target="_blank">Open Demo</a>
-    </div>
+<footer class="site-footer on-dark">
+  <div class="wrap footer-row">
+    <p>© <span data-year>2026</span> M² Lab, Department of Physics Education, Chungbuk National University</p>
+    <ul>
+      <li><a href="https://scholar.google.com/citations?user=zsngCA4AAAAJ&amp;hl=en">Google Scholar</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="https://www.chungbuk.ac.kr">Chungbuk National University</a></li>
+    </ul>
   </div>
-
-  <h3 style="font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin:36px 0 14px;">Physics Notes</h3>
-  <div class="resources-grid">
-    <div class="resource-card">
-      <h3>Microwaves &amp; Induction Heating</h3>
-      <p>Same electromagnetism, different mechanisms — dielectric loss vs. eddy currents, and why aluminum doesn't work on an induction cooktop.</p>
-      <a class="btn" href="sources/induction-heating-en.html" target="_blank">Read Note</a>
-    </div>
-    <div class="resource-card">
-      <h3>How Water Becomes Ice</h3>
-      <p>A kitchen-physics note on surface area, supercooling, and the Mpemba effect — the strange hours between a cup of water and a cup of ice.</p>
-      <a class="btn" href="sources/freezing-ice.html" target="_blank">Read Note</a>
-    </div>
-    <div class="resource-card">
-      <h3>NF BP4610 over USB (Windows 11)</h3>
-      <p>Instrumentation note on controlling the NF BP4610 bipolar power supply using the JEMIMA USB488 protocol — what worked, what didn't.</p>
-      <a class="btn" href="sources/bp4610_usb488.html" target="_blank">Read Note</a>
-    </div>
-  </div>
-
-  <h3 style="font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin:36px 0 14px;">Utilities</h3>
-  <div class="resources-grid">
-    <div class="resource-card">
-      <h3>Folder File Recovery</h3>
-      <p>Accidentally deleted a file? This tool helps bring it back — a real lifesaver when one wrong click turns into a nightmare. Windows executable.</p>
-      <a class="btn" href="sources/FolderFileRecovery.exe" download>Download (.exe)</a>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="section-label">Get in Touch</div>
-  <div class="section-title">Contact</div>
-
-  <div class="contact-box">
-    <p><strong>Email:</strong> <a href="mailto:kman@cbnu.ac.kr">kman@cbnu.ac.kr</a></p>
-    <p><strong>Address:</strong> E1-1-313, Department of Physics Education, Chungbuk National University, Cheongju, Republic of Korea</p>
-
-    <div class="recruit">
-      <h3>Join Us</h3>
-      <p style="font-size:14px;color:var(--text-dim);">Undergraduates, graduate students, and postdocs curious about spintronics, magnonics, microwave measurements, or quantum interfaces are encouraged to reach out. Research experience is not required — you only need passion.</p>
-    </div>
-  </div>
-</section>
-
-<footer>
-  © 2026 M² Lab · Chungbuk National University, Department of Physics Education
 </footer>
 
+<dialog class="lightbox" id="lightbox" aria-labelledby="lb-title">
+  <h2 class="visually-hidden" id="lb-title">Photo viewer</h2>
+  <button class="lb-close" type="button">Close</button>
+  <figure><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt=""><figcaption></figcaption></figure>
+</dialog>
+
+<script src="assets/spinwave.js" defer></script>
+<script src="assets/site.js" defer></script>
 </body>
 </html>
