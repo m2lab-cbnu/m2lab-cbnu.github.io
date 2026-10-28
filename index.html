@@ -218,14 +218,98 @@
   <div class="wrap">
     <div class="section-head">
       <h2 id="lab-title">Our lab</h2>
-      <p>We moved into an empty room in 2025 and have been filling it with experiments ever since. Here is what we can do so far.</p>
+      <p>We moved into an empty room in 2025. This is the lab now, with the setups we have built so far.</p>
     </div>
-    <div class="fac-grid">
-      <figure class="fac-main figure">
+
+    <figure class="lab-lead figure">
+      <button class="photo-btn" type="button" data-full="images/lab-summer-2026.jpg" data-caption="M² Lab in July 2026: the instrument rack, the optical tables and the corner where we meet.">
+        <img width="1600" height="1200" src="images/lab-summer-2026.jpg" srcset="images/thumbs/lab-summer-2026.jpg 720w, images/lab-summer-2026.jpg 1600w" sizes="(min-width: 1160px) 1080px, 100vw" alt="Wide view of M² Lab in July 2026: an instrument rack on the left, the optical table with the electromagnet, a TV screen, an armchair, the door and a blackboard" loading="lazy">
+      </button>
+      <figcaption>The lab in July 2026.</figcaption>
+    </figure>
+
+    <h3 class="sub-head">Setups</h3>
+    <ul class="setups">
+      <li class="setup">
+        <button class="photo-btn" type="button" data-full="images/setup-fmr.jpg" data-caption="FMR setup, July 2026: the electromagnet on the optical table, with microwave cables running to the sample between its poles. The note says “measuring”.">
+          <img width="720" height="540" src="images/thumbs/setup-fmr.jpg" alt="Our electromagnet with copper coils on the optical table, with blue microwave cables running to the sample between the poles" loading="lazy">
+        </button>
+        <h4>FMR setup</h4>
+        <p>A magnetic film sits on <button class="photo-link" type="button" data-full="images/s-antenna-2026-09.jpg" data-caption="A sample on one of our antennas between the pole pieces, September 2026.">a microwave antenna</button> between the poles of our electromagnet. As we sweep the field, the film suddenly absorbs microwaves when its spins precess in step with them. That is ferromagnetic resonance, the same measurement as the game at the top of this page.</p>
+        <ul class="kit">
+          <li>Electromagnet with a bipolar power supply</li>
+          <li><button class="photo-link" type="button" data-full="images/antenna-1mm-2026-05.jpg" data-caption="One of our 1 mm antennas between the pole pieces, May 2026.">1 mm and 0.5 mm antennas</button> we make ourselves</li>
+          <li>Rotation stage run by <button class="photo-link" type="button" data-full="images/Arduino_rotation_control.jpg" data-caption="The Arduino board and stepper-motor driver that run our rotation stage, May 2026.">our own Arduino electronics</button></li>
+        </ul>
+      </li>
+      <li class="setup">
+        <button class="photo-btn" type="button" data-full="images/DE_antenna.jpg" data-caption="Spin-wave setup: an antenna for Damon–Eshbach spin waves between the electromagnet poles, February 2026.">
+          <img width="540" height="720" src="images/thumbs/DE_antenna.jpg" alt="An antenna for Damon–Eshbach spin waves mounted between the electromagnet pole pieces" loading="lazy">
+        </button>
+        <h4>Spin-wave setup</h4>
+        <p>Here antennas launch spin waves that run along the film. Spin waves of this kind (Damon–Eshbach waves) travel better in one direction than the other, and our first paper shows how the antenna design changes that.</p>
+        <ul class="kit">
+          <li>Antennas for Damon–Eshbach spin waves</li>
+          <li>Transmission spectra from the network analyser</li>
+        </ul>
+      </li>
+      <li class="setup">
+        <button class="photo-btn" type="button" data-full="images/setup-microwave.jpg" data-caption="The microwave rack during a measurement, June 2026. The note says “measuring”.">
+          <img width="720" height="540" src="images/thumbs/setup-microwave.jpg" alt="Instrument rack with a lock-in amplifier, a spectrum analyser showing a sharp peak, a network analyser and a signal generator, next to the electromagnet on the optical table" loading="lazy">
+        </button>
+        <h4>Microwave instruments</h4>
+        <p>One rack holds the electronics that the FMR and spin-wave setups share. The handwritten note on it says “measuring”, which is how we tell each other not to touch anything.</p>
+        <ul class="kit">
+          <li>Agilent four-port vector network analyser</li>
+          <li>Rohde &amp; Schwarz microwave signal generator</li>
+          <li>Agilent spectrum analyser</li>
+          <li>Stanford Research lock-in amplifiers, one of them for radio frequencies</li>
+        </ul>
+      </li>
+      <li class="setup">
+        <button class="photo-btn" type="button" data-full="images/moke-2026-05.jpg" data-caption="MOKE setup: the laser and optics on the optical table, May 2026.">
+          <img width="540" height="720" src="images/thumbs/moke-2026-05.jpg" alt="A Cobolt laser and optics for the MOKE setup on the optical table" loading="lazy">
+        </button>
+        <h4>MOKE setup</h4>
+        <p>Polarised laser light that reflects off a magnet comes back slightly rotated, and the rotation follows the magnetisation. With this magneto-optical Kerr effect (MOKE) we watch how a magnet switches as we sweep the field.</p>
+        <ul class="kit">
+          <li>Cobolt laser</li>
+          <li>Polarisers and Thorlabs optics</li>
+        </ul>
+      </li>
+      <li class="setup">
+        <button class="photo-btn" type="button" data-full="images/moke-2026-09.jpg" data-caption="Kerr microscope: the vertical optics with a 10× objective and a camera above the sample, September 2026.">
+          <img width="540" height="720" src="images/thumbs/moke-2026-09.jpg" alt="A vertical microscope column with a 10× objective and a camera above the sample stage" loading="lazy">
+        </button>
+        <h4>Kerr microscope</h4>
+        <p>The same effect seen through a microscope: polarised light, a 10× objective and a camera let us look at magnetic domains directly. Our undergraduates used it to see how hitting a steel rod changes its magnetisation.</p>
+        <ul class="kit">
+          <li>Mitutoyo 10× objective</li>
+          <li>Thorlabs cage optics with a polariser in a rotation mount</li>
+          <li>Camera on top of the column</li>
+        </ul>
+      </li>
+      <li class="setup">
+        <button class="photo-btn" type="button" data-full="images/microwave-diffraction-setup-2026.jpg" data-caption="Microwave diffraction setup: a lattice of steel balls between two antennas, September 2026.">
+          <img width="720" height="540" src="images/thumbs/microwave-diffraction-setup-2026.jpg" alt="Two antennas on black stands aimed at a stacked lattice of steel balls on 3D-printed layers" loading="lazy">
+        </button>
+        <h4>Microwave diffraction setup</h4>
+        <p>Crystals you can hold: steel balls on 3D-printed layers make simple cubic, BCC and FCC lattices, and microwaves play the part of X-rays. Our undergraduates measured Bragg diffraction with it for the KPS meeting.</p>
+        <ul class="kit">
+          <li>3D-printed lattices with steel balls</li>
+          <li>Two antennas on Thorlabs stands around a turntable</li>
+          <li>Portable network analyser</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 class="sub-head">Building the lab</h3>
+    <div class="history">
+      <figure class="figure">
         <div class="compare" style="--pos:50%">
-          <img width="1600" height="1200" src="images/lab-2025-later.jpg" srcset="images/thumbs/lab-2025-later.jpg 720w, images/lab-2025-later.jpg 1600w" sizes="(min-width: 1160px) 640px, (min-width: 900px) 56vw, 100vw" alt="The same corner a few months later: the optical table covered in electronics and cables, with instruments along the wall" loading="lazy" draggable="false">
+          <img width="1600" height="1200" src="images/lab-2025-later.jpg" srcset="images/thumbs/lab-2025-later.jpg 720w, images/lab-2025-later.jpg 1600w" sizes="(min-width: 1160px) 530px, (min-width: 760px) 48vw, 100vw" alt="The same corner a few months later: the optical table covered in electronics and cables, with instruments along the wall" loading="lazy" draggable="false">
           <div class="compare-before">
-            <img width="1600" height="1200" src="images/lab-2025-empty.jpg" srcset="images/thumbs/lab-2025-empty.jpg 720w, images/lab-2025-empty.jpg 1600w" sizes="(min-width: 1160px) 640px, (min-width: 900px) 56vw, 100vw" alt="The lab when we moved in: an empty floor, a yellow flammables cabinet, bare shelves and an old vacuum chamber" loading="lazy" draggable="false">
+            <img width="1600" height="1200" src="images/lab-2025-empty.jpg" srcset="images/thumbs/lab-2025-empty.jpg 720w, images/lab-2025-empty.jpg 1600w" sizes="(min-width: 1160px) 530px, (min-width: 760px) 48vw, 100vw" alt="The lab when we moved in: an empty floor, a yellow flammables cabinet, bare shelves and an old vacuum chamber" loading="lazy" draggable="false">
           </div>
           <span class="compare-tag compare-tag--before" aria-hidden="true">When we moved in</span>
           <span class="compare-tag compare-tag--after" aria-hidden="true">A few months later</span>
@@ -234,24 +318,14 @@
         </div>
         <figcaption>Drag the line: the same corner of the room when we moved in, and a few months later.</figcaption>
       </figure>
-      <dl class="caps">
-        <div><dt>Microwave measurements</dt><dd>Ferromagnetic resonance and spin-wave transmission, with RF sources and spectrum analysers.</dd></div>
-        <div><dt>Lock-in detection</dt><dd>For picking out small signals from noise.</dd></div>
-        <div><dt>Magneto-optics</dt><dd>A laser-based magneto-optical Kerr effect (MOKE) setup on the optical table.</dd></div>
-        <div><dt>Magnetic fields</dt><dd>Electromagnets with a rotation stage we control with our own Arduino electronics.</dd></div>
-        <div><dt>Spin-wave antennas</dt><dd>Microwave antennas we design and make ourselves, including 1 mm and 0.5 mm versions.</dd></div>
-        <div><dt>Simulation</dt><dd>Micromagnetic simulations and field calculations for designing antennas and devices.</dd></div>
-      </dl>
-    </div>
-
-    <h3 class="sub-head">Building the lab</h3>
-    <ol class="buildout">
-      <li class="buildout-wide"><figure>
+      <figure class="figure">
         <button class="photo-btn" type="button" data-full="images/lab-2025-crane.jpg" data-caption="Moving day, 2025: our optical table arrives by crane.">
-          <img width="1600" height="1200" src="images/lab-2025-crane.jpg" srcset="images/thumbs/lab-2025-crane.jpg 720w, images/lab-2025-crane.jpg 1600w" sizes="(min-width: 1160px) 540px, (min-width: 900px) 48vw, 100vw" alt="A crane lifts our blue-wrapped optical table up to the rooftop while students watch" loading="lazy">
+          <img width="1600" height="1200" src="images/lab-2025-crane.jpg" srcset="images/thumbs/lab-2025-crane.jpg 720w, images/lab-2025-crane.jpg 1600w" sizes="(min-width: 1160px) 530px, (min-width: 760px) 48vw, 100vw" alt="A crane lifts our blue-wrapped optical table up to the rooftop while students watch" loading="lazy">
         </button>
-        <figcaption><time datetime="2025">2025</time>Moving day: our optical table arrives by crane.</figcaption>
-      </figure></li>
+        <figcaption>Moving day, 2025: our optical table arrives by crane.</figcaption>
+      </figure>
+    </div>
+    <ol class="buildout">
       <li><figure>
         <button class="photo-btn" type="button" data-full="images/lab-2025-table.jpg" data-caption="2025: the optical table in place, waiting for its first experiment.">
           <img width="720" height="540" src="images/thumbs/lab-2025-table.jpg" alt="The new optical table with its overhead frame in the still mostly empty lab" loading="lazy">
@@ -269,42 +343,6 @@
           <img width="720" height="540" src="images/thumbs/26Feb_lab.jpg" alt="Instrument racks and measurement stations in February 2026" loading="lazy">
         </button>
         <figcaption><time datetime="2026-02">February 2026</time>Instrument racks and measurement stations go in.</figcaption>
-      </figure></li>
-      <li><figure>
-        <button class="photo-btn" type="button" data-full="images/DE_antenna.jpg" data-caption="February 2026: new antenna for Damon–Eshbach spin-wave propagation experiments, mounted between the electromagnet poles.">
-          <img width="540" height="720" src="images/thumbs/DE_antenna.jpg" alt="Microwave antenna mounted between electromagnet pole pieces" loading="lazy">
-        </button>
-        <figcaption><time datetime="2026-02">February 2026</time>Antenna for Damon–Eshbach spin-wave propagation.</figcaption>
-      </figure></li>
-      <li><figure>
-        <button class="photo-btn" type="button" data-full="images/moke-2026-05.jpg" data-caption="May 2026: building the magneto-optical Kerr effect (MOKE) setup on the optical table.">
-          <img width="540" height="720" src="images/thumbs/moke-2026-05.jpg" alt="Laser and optics for a MOKE setup on an optical table" loading="lazy">
-        </button>
-        <figcaption><time datetime="2026-05">May 2026</time>Building the MOKE setup on the optical table.</figcaption>
-      </figure></li>
-      <li><figure>
-        <button class="photo-btn" type="button" data-full="images/Arduino_rotation_control.jpg" data-caption="May 2026: in-house Arduino control of the rotation stage.">
-          <img width="540" height="720" src="images/thumbs/Arduino_rotation_control.jpg" alt="Arduino board and breadboard wired to control a rotation stage" loading="lazy">
-        </button>
-        <figcaption><time datetime="2026-05">May 2026</time>In-house Arduino control of the rotation stage.</figcaption>
-      </figure></li>
-      <li class="buildout-wide"><figure>
-        <button class="photo-btn" type="button" data-full="images/lab-summer-2026.jpg" data-caption="M² Lab, summer 2026: instrument racks, measurement stations and the optical table.">
-          <img width="1600" height="1200" src="images/lab-summer-2026.jpg" srcset="images/thumbs/lab-summer-2026.jpg 720w, images/lab-summer-2026.jpg 1600w" sizes="(min-width: 1160px) 540px, (min-width: 900px) 48vw, 100vw" alt="Wide view of M² Lab in summer 2026: instrument racks with RF sources, analyzers and lock-in amplifiers, measurement benches and workstations" loading="lazy">
-        </button>
-        <figcaption><time datetime="2026">Summer 2026</time>The lab this summer.</figcaption>
-      </figure></li>
-      <li><figure>
-        <button class="photo-btn" type="button" data-full="images/s-antenna-2026-09.jpg" data-caption="September 2026: a sample on a custom antenna, ready for spin-wave measurements.">
-          <img width="540" height="720" src="images/thumbs/s-antenna-2026-09.jpg" alt="Sample holder with microwave cables between the pole pieces of an electromagnet" loading="lazy">
-        </button>
-        <figcaption><time datetime="2026-09">September 2026</time>A sample on a custom antenna, ready to measure.</figcaption>
-      </figure></li>
-      <li><figure>
-        <button class="photo-btn" type="button" data-full="images/moke-2026-09.jpg" data-caption="September 2026: MOKE optics on the optical table.">
-          <img width="540" height="720" src="images/thumbs/moke-2026-09.jpg" alt="Vertical optical column with lenses and a camera above a sample stage" loading="lazy">
-        </button>
-        <figcaption><time datetime="2026-09">September 2026</time>MOKE optics up and running.</figcaption>
       </figure></li>
     </ol>
   </div>
@@ -859,7 +897,7 @@
     <div class="teach-grid">
       <div class="semesters">
         <div class="semester">
-          <h3>Fall 2026 <span>(this semester)</span></h3>
+          <h3>Fall 2026</h3>
           <ul>
             <li>Electromagnetism and EM Education II</li>
             <li>Mathematical Physics II</li>

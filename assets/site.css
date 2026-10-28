@@ -227,31 +227,36 @@ ul, ol { padding: 0; }
   .projects { grid-template-columns: 1fr; }
 }
 
-/* ---------- Facilities ---------- */
-.fac-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 4vw, 56px); align-items: start; }
+/* ---------- Lab ---------- */
 .photo-btn { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; text-align: left; color: inherit; border-radius: var(--radius); overflow: hidden; }
 .photo-btn img { width: 100%; height: 100%; object-fit: cover; }
-.fac-main .photo-btn { aspect-ratio: 4 / 3; }
-.caps { display: grid; gap: 0; }
-.caps > div { padding: 14px 0; border-top: 1px solid var(--rule); }
-.caps > div:last-child { border-bottom: 1px solid var(--rule); }
-.caps dt { font-weight: 600; }
-.caps dd { margin-top: 2px; color: var(--ink-2); font-size: 1rem; }
-.buildout { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 2vw, 24px); }
-.buildout .photo-btn { aspect-ratio: 4 / 3; overflow: hidden; background: var(--mist); }
+.lab-lead .photo-btn { aspect-ratio: 16 / 9; background: var(--mist); }
+.lab-lead img { object-position: 50% 58%; }
+.setups { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(32px, 4vw, 48px) clamp(20px, 3vw, 32px); }
+.setup .photo-btn { aspect-ratio: 4 / 3; background: var(--mist); }
+.setup h4 { margin-top: 16px; font-size: 1.25rem; }
+.setup > p { margin-top: 8px; font-size: 1rem; line-height: 1.6; }
+.kit { margin-top: 14px; padding: 12px 0 0 1.15em; border-top: 1px solid var(--rule); font-size: .9375rem; line-height: 1.45; }
+.kit li + li { margin-top: 4px; }
+.kit li::marker { color: var(--magnon-deep); }
+/* a phrase that opens a photo in the viewer */
+.photo-link { padding: 0; border: 0; background: none; font: inherit; color: var(--signal); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; cursor: zoom-in; }
+.photo-link:hover { color: var(--ink); }
+.history { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 32px); align-items: start; }
+.history .photo-btn { aspect-ratio: 4 / 3; background: var(--mist); }
+.buildout { list-style: none; margin-top: clamp(24px, 3vw, 32px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2.5vw, 32px); }
+.buildout .photo-btn { aspect-ratio: 4 / 3; background: var(--mist); }
 .buildout figcaption { margin-top: 10px; font-size: .9375rem; line-height: 1.45; }
-.buildout time { display: block; font-weight: 600; font-size: .875rem; color: var(--ink-2); }
-/* feature tiles: two columns by two rows, the photo fills whatever height the rows give it */
-.buildout-wide { grid-column: span 2; grid-row: span 2; }
-.buildout-wide figure { height: 100%; display: flex; flex-direction: column; }
-.buildout-wide .photo-btn { position: relative; flex: 1 1 auto; aspect-ratio: auto; min-height: 240px; }
-.buildout-wide .photo-btn img { position: absolute; inset: 0; }
-.buildout-wide figcaption { font-size: 1rem; }
+.buildout time { display: block; font-weight: 600; font-size: .875rem; }
 @media (max-width: 900px) {
-  .fac-grid { grid-template-columns: 1fr; }
-  .buildout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .buildout-wide { grid-row: auto; }
-  .buildout-wide .photo-btn { aspect-ratio: 4 / 3; min-height: 0; }
+  .setups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .history { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .setups, .buildout { grid-template-columns: 1fr; }
+  .lab-lead .photo-btn { aspect-ratio: 4 / 3; }
 }
 
 /* before/after photo comparison */
