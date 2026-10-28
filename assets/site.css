@@ -161,7 +161,7 @@ ul, ol { padding: 0; }
   .hero-actions { margin-top: 22px; }
   .hero-sim canvas { height: 180px; }
 }
-.hero-sim canvas:focus-visible { outline-offset: -4px; }
+.hero-sim canvas:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--magnon); }
 .hero-caption {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px;
   padding-block: 14px 26px; border-top: 1px solid var(--cavity-line);
@@ -174,6 +174,16 @@ ul, ol { padding: 0; }
   font: 500 .8125rem/1 var(--sans); padding: 8px 12px; border-radius: 4px; cursor: pointer;
 }
 .sim-toggle:hover { color: #fff; border-color: var(--on-dark-2); }
+.sim-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.sim-play {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 8px 15px 8px 13px;
+  background: rgba(0, 212, 255, .1); border: 1px solid rgba(0, 212, 255, .6); border-radius: 999px;
+  color: #fff; font: 600 .875rem/1 var(--sans); cursor: pointer; transition: background .15s, color .15s;
+}
+.sim-play svg { width: 11px; height: 11px; fill: var(--magnon); transition: fill .15s; }
+.sim-play:hover { background: var(--magnon); color: var(--cavity); }
+.sim-play:hover svg { fill: var(--cavity); }
+.hero-caption.is-playing #sim-hint { min-height: 3.2em; }
 
 /* ---------- What's new ---------- */
 .latest { padding-block: clamp(40px, 6vw, 64px); border-bottom: 1px solid var(--rule); }
@@ -242,10 +252,48 @@ ul, ol { padding: 0; }
 .buildout .photo-btn { aspect-ratio: 4 / 3; overflow: hidden; background: var(--mist); }
 .buildout figcaption { margin-top: 10px; font-size: .9375rem; line-height: 1.45; }
 .buildout time { display: block; font-weight: 600; font-size: .875rem; color: var(--ink-2); }
+/* feature tiles: two columns by two rows, the photo fills whatever height the rows give it */
+.buildout-wide { grid-column: span 2; grid-row: span 2; }
+.buildout-wide figure { height: 100%; display: flex; flex-direction: column; }
+.buildout-wide .photo-btn { position: relative; flex: 1 1 auto; aspect-ratio: auto; min-height: 240px; }
+.buildout-wide .photo-btn img { position: absolute; inset: 0; }
+.buildout-wide figcaption { font-size: 1rem; }
 @media (max-width: 900px) {
   .fac-grid { grid-template-columns: 1fr; }
   .buildout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .buildout-wide { grid-row: auto; }
+  .buildout-wide .photo-btn { aspect-ratio: 4 / 3; min-height: 0; }
 }
+
+/* before/after photo comparison */
+.compare {
+  --pos: 50%;
+  position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--mist);
+  cursor: ew-resize; touch-action: pan-y; user-select: none; -webkit-user-select: none;
+}
+.compare img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.compare-before { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.compare::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; transform: translateX(-1px);
+  background: #fff; box-shadow: 0 0 0 1px rgba(14, 42, 77, .18); pointer-events: none;
+}
+.compare-handle {
+  position: absolute; z-index: 1; top: 50%; left: var(--pos); width: 46px; height: 46px;
+  transform: translate(-50%, -50%); border-radius: 50%; background: #fff; color: var(--cavity);
+  display: grid; place-items: center; box-shadow: 0 2px 12px rgba(14, 42, 77, .35); pointer-events: none;
+  transition: transform .15s ease;
+}
+.compare.is-dragging .compare-handle { transform: translate(-50%, -50%) scale(1.1); }
+.compare:focus-within .compare-handle { outline: 2px solid var(--signal); outline-offset: 3px; }
+.compare-tag {
+  position: absolute; z-index: 1; top: 12px; padding: 5px 11px; border-radius: 999px;
+  background: rgba(14, 42, 77, .82); color: #fff; font-size: .8125rem; font-weight: 600; line-height: 1.25;
+  pointer-events: none; transition: opacity .2s ease;
+}
+.compare-tag--before { left: 12px; }
+.compare-tag--after { right: 12px; }
+.compare.hide-before .compare-tag--before, .compare.hide-after .compare-tag--after { opacity: 0; }
+.compare input[type=range] { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; pointer-events: none; }
 
 /* ---------- Publications ---------- */
 .favourites-title { font-size: 1.5rem; margin-bottom: 14px; }

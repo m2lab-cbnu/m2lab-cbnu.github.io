@@ -1,5 +1,5 @@
 /* M² Lab — small page behaviours: menu, section highlighting, publication filter,
-   photo viewer and the "today" marker on the project timeline. */
+   before/after photo comparison and the photo viewer. */
 (function () {
   "use strict";
 
@@ -38,15 +38,9 @@
     sections.forEach(function (s) { io.observe(s); });
   }
 
-  /* Publications: counts and "led by" filter */
+  /* Publications: "first or corresponding author" filter */
   var all = document.getElementById("all-publications");
   if (all) {
-    var items = all.querySelectorAll(".pub-list li");
-    var published = all.querySelectorAll(".pub-list li:not([data-status])").length;
-    var led = all.querySelectorAll(".pub-list li[data-lead]:not([data-status])").length;
-    document.querySelectorAll("[data-count='published']").forEach(function (el) { el.textContent = published; });
-    document.querySelectorAll("[data-count='all']").forEach(function (el) { el.textContent = items.length; });
-    document.querySelectorAll("[data-count='led']").forEach(function (el) { el.textContent = led; });
     var buttons = all.querySelectorAll(".seg button");
     buttons.forEach(function (b) {
       b.addEventListener("click", function () {
@@ -59,14 +53,58 @@
     window.addEventListener("hashchange", openIfTargeted);
   }
 
-  /* Timeline: place the gold "today" marker */
-  var tl = document.querySelector(".tl");
-  if (tl) {
-    var start = parseFloat(tl.getAttribute("data-start")), end = parseFloat(tl.getAttribute("data-end"));
-    var d = new Date(), y = d.getFullYear() + (d.getMonth() + d.getDate() / 31) / 12;
-    var pct = Math.max(0, Math.min(100, (y - start) / (end - start) * 100));
-    tl.style.setProperty("--now", pct.toFixed(2) + "%");
-  }
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Before/after photo comparison. Drag anywhere on the photo (mouse), swipe sideways (touch),
+     or use the arrow keys on the hidden range input, which also carries the value for screen readers. */
+  document.querySelectorAll(".compare").forEach(function (c) {
+    var range = c.querySelector("input[type=range]");
+    if (!range) return;
+    var dragging = false, moved = false, touched = false;
+    var set = function (v) {
+      v = Math.max(0, Math.min(100, v));
+      range.value = Math.round(v);
+      c.style.setProperty("--pos", v.toFixed(2) + "%");
+      c.classList.toggle("hide-before", v < 24);
+      c.classList.toggle("hide-after", v > 76);
+    };
+    var at = function (e) { var r = c.getBoundingClientRect(); return (e.clientX - r.left) / r.width * 100; };
+    range.addEventListener("input", function () { touched = true; set(+range.value); });
+    c.addEventListener("pointerdown", function (e) {
+      if (e.button) return;
+      touched = true; dragging = true; moved = false;
+      c.classList.add("is-dragging");
+      try { c.setPointerCapture(e.pointerId); } catch (err) {}
+      // a mouse jumps straight to the click; a finger waits to see whether it is swiping sideways or scrolling
+      if (e.pointerType !== "touch") set(at(e));
+    });
+    c.addEventListener("pointermove", function (e) { if (dragging) { moved = true; set(at(e)); } });
+    c.addEventListener("pointerup", function (e) {
+      if (dragging && !moved && e.pointerType === "touch") set(at(e));   // a tap moves the line there
+      dragging = false; c.classList.remove("is-dragging");
+    });
+    c.addEventListener("pointercancel", function () { dragging = false; c.classList.remove("is-dragging"); });
+    set(+range.value);
+
+    // a single gentle wiggle the first time the photo comes into view, so people see that it moves
+    if (!reduce && "IntersectionObserver" in window && window.requestAnimationFrame) {
+      var io = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) return;
+        io.disconnect();
+        var t0 = null;
+        var step = function (t) {
+          if (touched) return;
+          if (t0 === null) t0 = t;
+          var p = (t - t0) / 1800;
+          if (p >= 1) { set(50); return; }
+          set(50 + 16 * Math.sin(p * Math.PI * 2) * (1 - p));
+          requestAnimationFrame(step);
+        };
+        setTimeout(function () { requestAnimationFrame(step); }, 500);
+      }, { threshold: 0.6 });
+      io.observe(c);
+    }
+  });
 
   /* Photo viewer */
   var dlg = document.getElementById("lightbox");
@@ -94,7 +132,6 @@
   }
 
   /* Looping figure videos: play only while visible, never under reduced motion; click toggles */
-  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.querySelectorAll("video[data-inview-play]").forEach(function (v) {
     var userPaused = false;
     v.addEventListener("click", function () { userPaused = !v.paused; if (v.paused) v.play(); else v.pause(); });

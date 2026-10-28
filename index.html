@@ -82,11 +82,14 @@
   </div>
   <div class="hero-sim">
     <canvas id="spinwave" tabindex="0" role="img"
-      aria-label="Interactive spin-wave toy. A chain of spins ripples as a gold antenna sends spin-wave pulses that bounce off the ends. Use the left and right arrow keys to move a magnet along the chain, and Enter to pluck it."></canvas>
+      aria-label="Interactive chain of spins. Waves ripple along it and bounce off the ends. The left and right arrow keys move a small magnet along the chain and Enter plucks it. In the resonance game, the arrow keys sweep the magnetic field instead."></canvas>
   </div>
   <div class="wrap hero-caption">
-    <p id="sim-hint" data-touch="drag across the spins to pull on them, or tap to pluck them."><strong>Try it:</strong> <span>hover near the spins to pull on them, or click to pluck them.</span> The gold antenna sends out spin-wave pulses that bounce off the ends, like the echoes we measure in the lab.</p>
-    <button class="sim-toggle" id="sim-toggle" type="button" aria-pressed="false">Pause</button>
+    <p id="sim-hint" aria-live="polite" data-touch="drag across the spins to pull on them, or tap to pluck them and watch the waves bounce off the ends."><strong>Try it:</strong> <span>hover near the spins to pull on them, or click to pluck them and watch the waves bounce off the ends.</span></p>
+    <div class="sim-actions">
+      <button class="sim-play" id="sim-game" type="button"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z"/></svg><span>Play: find the resonance</span></button>
+      <button class="sim-toggle" id="sim-toggle" type="button" aria-pressed="false">Pause</button>
+    </div>
   </div>
 </section>
 
@@ -216,14 +219,21 @@
   <div class="wrap">
     <div class="section-head">
       <h2 id="lab-title">Inside the lab</h2>
-      <p>We built our microwave lab from an empty room, starting in September 2025. Here is what we can do so far.</p>
+      <p>We moved into an empty room in 2025 and have been filling it with experiments ever since. Here is what we can do so far.</p>
     </div>
     <div class="fac-grid">
       <figure class="fac-main figure">
-        <button class="photo-btn" type="button" data-full="images/lab-summer-2026.jpg" data-caption="M² Lab, summer 2026: instrument racks, measurement stations and the optical table.">
-          <img width="1600" height="1200" src="images/lab-summer-2026.jpg" alt="Wide view of M² Lab in summer 2026: instrument racks with RF sources, analyzers and lock-in amplifiers, measurement benches and workstations" loading="lazy">
-        </button>
-        <figcaption>The lab in summer 2026.</figcaption>
+        <div class="compare" style="--pos:50%">
+          <img width="1600" height="1200" src="images/lab-2025-later.jpg" srcset="images/thumbs/lab-2025-later.jpg 720w, images/lab-2025-later.jpg 1600w" sizes="(min-width: 1160px) 640px, (min-width: 900px) 56vw, 100vw" alt="The same corner a few months later: the optical table covered in electronics and cables, with instruments along the wall" loading="lazy" draggable="false">
+          <div class="compare-before">
+            <img width="1600" height="1200" src="images/lab-2025-empty.jpg" srcset="images/thumbs/lab-2025-empty.jpg 720w, images/lab-2025-empty.jpg 1600w" sizes="(min-width: 1160px) 640px, (min-width: 900px) 56vw, 100vw" alt="The lab when we moved in: an empty floor, a yellow flammables cabinet, bare shelves and an old vacuum chamber" loading="lazy" draggable="false">
+          </div>
+          <span class="compare-tag compare-tag--before" aria-hidden="true">When we moved in</span>
+          <span class="compare-tag compare-tag--after" aria-hidden="true">A few months later</span>
+          <span class="compare-handle" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <input type="range" min="0" max="100" value="50" step="1" aria-label="Compare the lab when we moved in with a few months later. Lower values show more of the later photo.">
+        </div>
+        <figcaption>Drag the line: the same corner of the room when we moved in, and a few months later.</figcaption>
       </figure>
       <dl class="caps">
         <div><dt>Microwave measurements</dt><dd>Ferromagnetic resonance and spin-wave transmission, with RF sources and spectrum analysers.</dd></div>
@@ -235,13 +245,25 @@
       </dl>
     </div>
 
-    <h3 class="sub-head">From an empty room to experiments</h3>
+    <h3 class="sub-head">How it came together</h3>
     <ol class="buildout">
-      <li><figure>
-        <button class="photo-btn" type="button" data-full="images/lab_250918.jpg" data-caption="September 2025: the lab room at CBNU before the instruments arrived.">
-          <img width="720" height="540" src="images/thumbs/lab_250918.jpg" alt="The empty lab room at CBNU in September 2025" loading="lazy">
+      <li class="buildout-wide"><figure>
+        <button class="photo-btn" type="button" data-full="images/lab-2025-crane.jpg" data-caption="Moving day, 2025: our optical table arrives by crane.">
+          <img width="1600" height="1200" src="images/lab-2025-crane.jpg" srcset="images/thumbs/lab-2025-crane.jpg 720w, images/lab-2025-crane.jpg 1600w" sizes="(min-width: 1160px) 540px, (min-width: 900px) 48vw, 100vw" alt="A crane lifts our blue-wrapped optical table up to the rooftop while students watch" loading="lazy">
         </button>
-        <figcaption><time datetime="2025-09">September 2025</time>The room before the instruments arrived.</figcaption>
+        <figcaption><time datetime="2025">2025</time>Moving day: our optical table arrives by crane.</figcaption>
+      </figure></li>
+      <li><figure>
+        <button class="photo-btn" type="button" data-full="images/lab-2025-table.jpg" data-caption="2025: the optical table in place, waiting for its first experiment.">
+          <img width="720" height="540" src="images/thumbs/lab-2025-table.jpg" alt="The new optical table with its overhead frame in the still mostly empty lab" loading="lazy">
+        </button>
+        <figcaption><time datetime="2025">2025</time>The optical table in place, waiting for its first experiment.</figcaption>
+      </figure></li>
+      <li><figure>
+        <button class="photo-btn" type="button" data-full="images/lab_250918.jpg" data-caption="September 2025: the first electronics on the optical table.">
+          <img width="720" height="540" src="images/thumbs/lab_250918.jpg" alt="The optical table with a monitor and the first electronics, next to a round meeting table" loading="lazy">
+        </button>
+        <figcaption><time datetime="2025-09">September 2025</time>The first electronics on the table.</figcaption>
       </figure></li>
       <li><figure>
         <button class="photo-btn" type="button" data-full="images/26Feb_lab.jpg" data-caption="February 2026: instrument racks and measurement stations being assembled.">
@@ -267,11 +289,11 @@
         </button>
         <figcaption><time datetime="2026-05">May 2026</time>In-house Arduino control of the rotation stage.</figcaption>
       </figure></li>
-      <li><figure>
-        <button class="photo-btn" type="button" data-full="images/antenna-1mm-2026-05.jpg" data-caption="May 2026: a custom 1 mm antenna between the electromagnet pole pieces.">
-          <img width="540" height="720" src="images/thumbs/antenna-1mm-2026-05.jpg" alt="A small green circuit-board antenna held between two steel pole pieces" loading="lazy">
+      <li class="buildout-wide"><figure>
+        <button class="photo-btn" type="button" data-full="images/lab-summer-2026.jpg" data-caption="M² Lab, summer 2026: instrument racks, measurement stations and the optical table.">
+          <img width="1600" height="1200" src="images/lab-summer-2026.jpg" srcset="images/thumbs/lab-summer-2026.jpg 720w, images/lab-summer-2026.jpg 1600w" sizes="(min-width: 1160px) 540px, (min-width: 900px) 48vw, 100vw" alt="Wide view of M² Lab in summer 2026: instrument racks with RF sources, analyzers and lock-in amplifiers, measurement benches and workstations" loading="lazy">
         </button>
-        <figcaption><time datetime="2026-05">May 2026</time>A custom 1 mm antenna between the pole pieces.</figcaption>
+        <figcaption><time datetime="2026">Summer 2026</time>Racks full, benches busy: the lab this summer.</figcaption>
       </figure></li>
       <li><figure>
         <button class="photo-btn" type="button" data-full="images/s-antenna-2026-09.jpg" data-caption="September 2026: a sample on a custom antenna, ready for spin-wave measurements.">
@@ -294,41 +316,17 @@
   <div class="wrap">
     <div class="section-head">
       <h2 id="publications-title">Publications</h2>
-      <p><span data-count="published">30</span> papers since 2011, from our group and from Kyongmo's earlier work at UT Austin, EPFL, SPINTEC and KRISS.</p>
+      <p>Work from our group, and from Kyongmo's earlier years at UT Austin, EPFL, SPINTEC and KRISS.</p>
     </div>
 
     <h3 class="favourites-title">A few favourites</h3>
     <ol class="pub-sel">
-      <li>
-        <p class="pub-src">Physical Review X<span class="vol">12, 011060 (2022)</span></p>
-        <div class="pub-body">
-          <h4><a href="https://doi.org/10.1103/PhysRevX.12.011060">Bright and dark states of two distant macrospins strongly coupled by phonons</a></h4>
-          <p class="authors"><b>K. An†</b>, R. Kohno, A. N. Litvinenko, R. L. Seeger, V. V. Naletov, L. Vila, G. de Loubens, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</p>
-          <p class="why">Two distant magnets couple strongly through phonons, forming bright and dark collective states.</p>
-        </div>
-      </li>
       <li>
         <p class="pub-src">Nature Communications<span class="vol">15, 7302 (2024)</span></p>
         <div class="pub-body">
           <h4><a href="https://doi.org/10.1038/s41467-024-51483-7">Emergent coherent modes in nonlinear magnonic waveguides detected at ultrahigh frequency resolution</a></h4>
           <p class="authors"><b>K. An</b>*, M. Xu*, A. Mucchietto, C. Kim, K.-W. Moon, C. Hwang, D. Grundler†</p>
           <p class="why">Nonlinear magnonic waveguides develop coherent modes, resolved at ultrahigh frequency resolution.</p>
-        </div>
-      </li>
-      <li>
-        <p class="pub-src">Physical Review B<span class="vol">101, 060407(R) (2020)</span></p>
-        <div class="pub-body">
-          <h4><a href="https://doi.org/10.1103/PhysRevB.101.060407">Coherent long-range transfer of angular momentum between magnon Kittel modes by phonons</a></h4>
-          <p class="authors"><b>K. An</b>, A. N. Litvinenko, R. Kohno, A. A. Fuad, V. V. Naletov, L. Vila, U. Ebels, G. de Loubens, H. Hurdequint, N. Beaulieu, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</p>
-          <p class="why">Phonons carry angular momentum coherently between two magnets over long distances.</p>
-        </div>
-      </li>
-      <li>
-        <p class="pub-src">Physical Review Letters<span class="vol">117, 107202 (2016)</span></p>
-        <div class="pub-body">
-          <h4><a href="https://doi.org/10.1103/PhysRevLett.117.107202">Magnons and phonons optically driven out of local equilibrium in a magnetic insulator</a></h4>
-          <p class="authors"><b>K. An</b>, K. S. Olsson, A. Weathers, S. Sullivan, X. Chen, X. Li, L. G. Marshall, X. Ma, N. Klimovich, J. Zhou, L. Shi†, X. Li†</p>
-          <p class="why">Light drives magnons and phonons out of local equilibrium in a magnetic insulator.</p>
         </div>
       </li>
       <li>
@@ -340,6 +338,22 @@
         </div>
       </li>
       <li>
+        <p class="pub-src">Physical Review X<span class="vol">12, 011060 (2022)</span></p>
+        <div class="pub-body">
+          <h4><a href="https://doi.org/10.1103/PhysRevX.12.011060">Bright and dark states of two distant macrospins strongly coupled by phonons</a></h4>
+          <p class="authors"><b>K. An†</b>, R. Kohno, A. N. Litvinenko, R. L. Seeger, V. V. Naletov, L. Vila, G. de Loubens, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</p>
+          <p class="why">Two distant magnets couple strongly through phonons, forming bright and dark collective states.</p>
+        </div>
+      </li>
+      <li>
+        <p class="pub-src">Physical Review B<span class="vol">101, 060407(R) (2020)</span></p>
+        <div class="pub-body">
+          <h4><a href="https://doi.org/10.1103/PhysRevB.101.060407">Coherent long-range transfer of angular momentum between magnon Kittel modes by phonons</a></h4>
+          <p class="authors"><b>K. An</b>, A. N. Litvinenko, R. Kohno, A. A. Fuad, V. V. Naletov, L. Vila, U. Ebels, G. de Loubens, H. Hurdequint, N. Beaulieu, J. B. Youssef, N. Vukadinovic, G. E. W. Bauer, A. N. Slavin, V. S. Tiberkevich, O. Klein†</p>
+          <p class="why">Phonons carry angular momentum coherently between two magnets over long distances.</p>
+        </div>
+      </li>
+      <li>
         <p class="pub-src">Physical Review Applied<span class="vol">11, 034065 (2019)</span></p>
         <div class="pub-body">
           <h4><a href="https://doi.org/10.1103/PhysRevApplied.11.034065">Optimization of spin-wave propagation with enhanced group velocities by exchange-coupled ferrimagnet-ferromagnet bilayers</a></h4>
@@ -347,10 +361,18 @@
           <p class="why">Exchange-coupled ferrimagnet–ferromagnet bilayers raise spin-wave group velocities.</p>
         </div>
       </li>
+      <li>
+        <p class="pub-src">Physical Review Letters<span class="vol">117, 107202 (2016)</span></p>
+        <div class="pub-body">
+          <h4><a href="https://doi.org/10.1103/PhysRevLett.117.107202">Magnons and phonons optically driven out of local equilibrium in a magnetic insulator</a></h4>
+          <p class="authors"><b>K. An</b>, K. S. Olsson, A. Weathers, S. Sullivan, X. Chen, X. Li, L. G. Marshall, X. Ma, N. Klimovich, J. Zhou, L. Shi†, X. Li†</p>
+          <p class="why">Light drives magnons and phonons out of local equilibrium in a magnetic insulator.</p>
+        </div>
+      </li>
     </ol>
 
     <details class="pub-all" id="all-publications" data-filter="all">
-      <summary><span>All publications (<span data-count="all">31</span>)</span></summary>
+      <summary><span>All publications</span></summary>
       <div class="pub-tools">
         <span id="filter-label">Show</span>
         <span class="seg" role="group" aria-labelledby="filter-label">
@@ -730,13 +752,6 @@
         <div>
           <h3>Our first paper from M² Lab</h3>
           <p>Yunyoung Hwang, Taekyeoung An and Kyongmo An show how antenna-field design tunes spin-wave nonreciprocity, in the <a href="https://doi.org/10.1007/s40042-026-01576-x"><i>Journal of the Korean Physical Society</i></a>.</p>
-        </div>
-      </li>
-      <li>
-        <time datetime="2025-11-06">November 2025</time>
-        <div>
-          <h3>Chiral phonons in α-quartz</h3>
-          <p>With collaborators at KRISS, we report chiral acoustic phonons and conservation of pseudoangular momentum in <a href="https://doi.org/10.1002/adma.202511289"><i>Advanced Materials</i></a>.</p>
         </div>
       </li>
       <li>
