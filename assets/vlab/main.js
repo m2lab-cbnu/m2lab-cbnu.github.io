@@ -8,6 +8,25 @@ import { Labels } from './world/labels.js';
 import { Panel } from './ui/panel.js';
 import { el } from './ui/widgets.js';
 import { STATIONS } from './stations/index.js';
+import { isKo, loadLang, install as installLang, setLang, tr } from './i18n.js';
+
+await loadLang();
+// the key help is one sentence around <kbd> keys, so it is translated whole
+{
+  const keys = document.querySelector('.vl-keys');
+  if (keys && isKo) { const k = keys.innerHTML.replace(/\s+/g, ' ').trim(), t = tr(k); if (t !== k) { keys.innerHTML = t; keys.dataset.tr = 'no'; } }
+}
+installLang();
+// English / 한국어, written in the language it switches to
+{
+  const b = document.getElementById('vl-lang');
+  if (b) {
+    b.querySelector('.lbl').textContent = isKo ? 'English' : '한국어';
+    b.setAttribute('lang', isKo ? 'en' : 'ko');
+    b.setAttribute('aria-label', isKo ? 'Switch to English' : '한국어로 보기');
+    b.addEventListener('click', () => setLang(isKo ? 'en' : 'ko'));
+  }
+}
 
 const main = document.getElementById('vlab');
 const canvas = document.getElementById('vl-canvas');
@@ -244,9 +263,11 @@ function setupMenu() {
 function setupIntro() {
   const intro = document.getElementById('vl-intro');
   const hint = document.querySelector('.vl-hint');
-  hint.innerHTML = isTouch
+  const hintHtml = isTouch
     ? '<b>Drag</b> to look around · <b>tap the floor</b> to walk · <b>tap an instrument</b> to use it'
     : '<b>Drag</b> to look around · <b>W A S D</b> or <b>arrow keys</b> to walk · <b>click an instrument</b> to use it';
+  hint.innerHTML = tr(hintHtml);   // translated whole, so the bold keys stay in a Korean sentence
+  if (hint.innerHTML !== hintHtml) hint.dataset.tr = 'no';
   let seen = false;
   try { seen = localStorage.getItem('m2lab-vlab-intro') === '1'; } catch (_) {}
   if (seen && !location.hash) intro.hidden = true;

@@ -10,6 +10,7 @@ import * as fmr from '../physics/fmr.js';
 import { MU0 } from '../physics/materials.js';
 import { lab } from '../state.js';
 import * as T from '../world/textures.js';
+import { trc, trf } from '../i18n.js';
 
 const S = { thetaH: 90, phiH: 0, f: 10e9, signal: 'abs', zoom: 'res' };
 const subs = new Set();
@@ -283,7 +284,7 @@ function tabMap(pane) {
   pane.append(
     el('p', { class: 'vp-intro', html: 'The full map of absorption against field and frequency. <b>Click the map</b> to set the microwave frequency for the other tabs. Below: the linewidth at each frequency and the straight-line fit we use to get the damping.' }),
     el('div', { class: 'vp-cols' },
-      el('div', { class: 'vp-side' }, sampleEditor(), group('Field direction', c.th, c.ph), group('Map', c.fq, track)),
+      el('div', { class: 'vp-side' }, sampleEditor(), group(trc('mag', 'Field direction'), c.th, c.ph), group(trc('mag', 'Map'), c.fq, track)),
       el('div', { class: 'vp-main' }, box, el('div', { class: 'ros' }, ro.cur, ro.fr), box2, el('div', { class: 'ros' }, ro.a, ro.b, ro.meff))));
   let cache = null;
   function compute() {
@@ -327,7 +328,7 @@ function tabMap(pane) {
     plot2.setSeries([{ x: cache.lf, y: cache.lw, points: true, r: 4, color: COLORS.signal, label: 'linewidth from the model' }, ...fit]).draw();
     const m = lab.sample;
     // in plane: FWHM = 2ΔB0 + (2α/γ) f  -> α = slope·γ/2 (slope in mT/GHz -> T/Hz)
-    ro.a.set(Number.isFinite(cache.a) ? `α ≈ ${fmtNum(cache.a * 1e-3 / 1e9 * m.gamma / 2, 3)}${m.hidden ? '' : ` (set: ${fmtNum(m.alpha, 3)})`}` : '–');
+    ro.a.set(Number.isFinite(cache.a) ? `α ≈ ${fmtNum(cache.a * 1e-3 / 1e9 * m.gamma / 2, 3)}${m.hidden ? '' : trf(' (set: {0})', fmtNum(m.alpha, 3))}` : '–');
     ro.b.set(Number.isFinite(cache.b) ? `${fmtNum(cache.b, 3)} mT` : '–');
     ro.meff.set(m.hidden ? 'hidden: measure it!' : `${fmtNum(mu0Meff(m) * 1e3, 4)} mT`);
   }
@@ -435,7 +436,7 @@ function tabPrecession(pane) {
     arrow(R.m, 'rgba(14,42,77,0.35)', 2, '');
     arrow(pt(phase), '#00A9D6', 3.5, 'm(t)');
     g.fillStyle = '#12243A'; g.font = '500 13px "Plex", sans-serif';
-    g.fillText(`slowed down ${fmtNum(R.f / speed, 2)} times`, 14, H - 14);
+    g.fillText(trf('slowed down {0} times', fmtNum(R.f / speed, 2)), 14, H - 14);
   }
   function loop(t) {
     cancelAnimationFrame(raf);

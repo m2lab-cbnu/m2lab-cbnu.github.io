@@ -193,3 +193,30 @@ export function tinyText(P, s, x, y, c) {
   return cx - x - 1;
 }
 export function tinyWidth(s) { return String(s).length * 4 - 1; }
+
+// Text in a Korean pixel font (Galmuri, SIL OFL): drawn at the font's own pixel size and snapped to
+// whole pixels, so Hangul signs sit in the pixel art. size 8 = Galmuri7, 12 = Galmuri 11.
+// The fonts must have loaded first (building.js waits for them); returns the width in pixels.
+const hgCache = new Map();
+function hangulMask(s, size) {
+  const key = size + '|' + s;
+  if (hgCache.has(key)) return hgCache.get(key);
+  const fam = size <= 8 ? '"Galmuri7"' : '"Galmuri"';
+  const w = Math.ceil(s.length * size * 1.1 + 4), h = Math.ceil(size * 1.4) + 2;
+  const cv = canvas(w, h), g = cv.getContext('2d');
+  g.font = `${size}px ${fam}, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif`;
+  g.textBaseline = 'alphabetic'; g.fillStyle = '#000';
+  const asc = Math.round(size * (size <= 8 ? 1 : 1));
+  g.fillText(s, 0, asc);
+  const tw = Math.ceil(g.measureText(s).width), d = g.getImageData(0, 0, w, h).data, pts = [];
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (d[(y * w + x) * 4 + 3] > 110) pts.push(x, y);
+  const m = { w: tw, h: size + 2, pts };
+  hgCache.set(key, m);
+  return m;
+}
+export function hangul(P, s, x, y, c, { size = 8 } = {}) {
+  const m = hangulMask(s, size);
+  for (let i = 0; i < m.pts.length; i += 2) P.px(x + m.pts[i], y + m.pts[i + 1], c);
+  return m.w;
+}
+export function hangulWidth(s, size = 8) { return hangulMask(s, size).w; }

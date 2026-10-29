@@ -6,6 +6,9 @@ import { el, button, group, readout, canvasBox, note, checkbox } from '../ui/wid
 import { contour } from '../ui/contour.js';
 import { rigStrip, current, onRig, loop, fitCanvas, fmtNum } from './common.js';
 import { rig } from '../rpg/state.js';
+import { Stage } from './stage.js';
+import * as KT from './kit.js';
+import { sound } from '../rpg/sound.js';
 
 const K = 8.988;          // k q for q = 1 nC, in V m
 const W = 40, H = 30;     // table size, cm
@@ -214,6 +217,215 @@ function tabTable(pane) {
   return { show() { dirty = true; anim.start(); }, hide() { anim.stop(); }, resize() { cache = null; dirty = true; } };
 }
 
-bench.tabs = [{ id: 'table', label: 'Table', build: tabTable }];
+// ---------------------------------------------------------------- the hands-on stage
+function tabPlay(pane) {
+  const st = new Stage(pane, {
+    bench, npc: 'hoo', label: 'A glass table seen from above with charged pucks. Drag the pucks; tap the glass to let a small test charge go.',
+    hello: 'Think of voltage as **height**: positive charges are hills, negative ones are valleys. **Tap the glass** to drop a small positive marble and watch it roll. Drag the pucks to reshape the land.',
+    aspect: 4 / 3, phoneAspect: 4 / 3.2,
+    onReset: () => { S.charges = PRESETS.dipole.map((c) => ({ ...c })); marbles.length = 0; dirty = true; },
+  });
+  st.tool('land', 'Hills and valleys', { icon: '#F29E4C', on: true, onChange: () => { dirty = true; } }).tool('lines', 'Field lines', { icon: KT.COL.string, on: true, onChange: () => { dirty = true; } })
+    .tool('equi', 'Equal-voltage lines', { icon: KT.COL.net, onChange: () => { dirty = true; } }).tool('arrows', 'Field arrows', { icon: KT.COL.vel }).tool('force', 'Push on the marble', { icon: KT.COL.gravity });
+  st.readout('v', 'Voltage where you point').readout('e', 'Field strength there').readout('n', 'Marbles rolling');
+  let dirty = true, lines = [], grid = null, img = null, hoverPt = null, sign = 1, first = true, pending = null;
+  const marbles = [];
+  let Lay = { w: 600, h: 450, x0: 10, y0: 10, s: 14 };
+
+  // ---------- controls
+  const add = (q) => { const b = el('button', { type: 'button', class: 'stg-chip', text: q > 0 ? `+${q}` : `−${-q}` }); b.addEventListener('click', () => { if (current(bench, 'layout') !== 'charges') rig.mount(bench.id, 'layout', 'charges'); S.charges.push({ x: 20 + (Math.random() - 0.5) * 8, y: 15 + (Math.random() - 0.5) * 8, q }); dirty = true; sound.play('pop'); }); return b; };
+  const preset = (name, L) => { const b = el('button', { type: 'button', class: 'stg-chip', text: name }); b.addEventListener('click', () => { if (current(bench, 'layout') !== 'charges') rig.mount(bench.id, 'layout', 'charges'); S.charges = L.map((c) => ({ ...c })); marbles.length = 0; dirty = true; sound.play('click'); }); return b; };
+  const signBtn = el('button', { type: 'button', class: 'stg-act ghost', text: 'Marbles: positive' });
+  signBtn.addEventListener('click', () => { sign = -sign; signBtn.textContent = sign > 0 ? 'Marbles: positive' : 'Marbles: negative'; sound.play('click'); });
+  const clr = el('button', { type: 'button', class: 'stg-act ghost', text: 'Clear marbles' });
+  clr.addEventListener('click', () => { marbles.length = 0; });
+  st.controls(el('p', { class: 'stg-small', text: 'Add a puck' }), el('div', { class: 'stg-row' }, add(1), add(2), add(-1), add(-2)),
+    el('p', { class: 'stg-small', text: 'Ready-made' }), el('div', { class: 'stg-row' }, preset('Dipole', PRESETS.dipole), preset('Two alike', PRESETS.alike), preset('+1 and +4', PRESETS.one4), preset('Four', PRESETS.quad)),
+    el('div', { class: 'stg-row' }, signBtn, clr));
+  onRig(bench, (m) => { if (m.slot === 'layout') { S.charges = current(bench, 'layout') === 'plates' ? plates() : PRESETS.dipole.map((c) => ({ ...c })); marbles.length = 0; } dirty = true; });
+
+  // ---------- the landscape of voltage
+  const VMAX = 260;
+  function rebuild() {
+    const nx = 120, ny = 90, data = new Float32Array(nx * ny);
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+      const f = fieldAt(i / (nx - 1) * W, j / (ny - 1) * H);
+      data[j * nx + i] = VMAX * Math.tanh(f.v / VMAX);
+    }
+    grid = { nx, ny, data };
+    // colour plus hill shading, at grid resolution; drawn smoothly scaled
+    const c = img || document.createElement('canvas'); c.width = nx; c.height = ny;
+    const g = c.getContext('2d'), id = g.createImageData(nx, ny);
+    const hi = [229, 83, 75], mid = [255, 246, 226], lo = [61, 127, 214];
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+      const v = data[j * nx + i] / VMAX;
+      const a = data[j * nx + Math.min(nx - 1, i + 1)] - data[j * nx + Math.max(0, i - 1)];
+      const b = data[Math.min(ny - 1, j + 1) * nx + i] - data[Math.max(0, j - 1) * nx + i];
+      // light from the top left: slopes facing it are brighter
+      const shade = Math.max(0.55, Math.min(1.25, 1 - (a + b) * 0.004));
+      const t = Math.abs(v), base = v > 0 ? hi : lo;
+      const k = (j * nx + i) * 4;
+      for (let ch = 0; ch < 3; ch++) id.data[k + ch] = Math.max(0, Math.min(255, (mid[ch] + (base[ch] - mid[ch]) * Math.pow(t, 0.8)) * shade));
+      id.data[k + 3] = 255;
+    }
+    g.putImageData(id, 0, 0);
+    img = c;
+    lines = st.on('lines') ? fieldLines() : [];
+    dirty = false;
+  }
+
+  // ---------- marbles (small test charges) roll with a little friction
+  function drop(x, y, q = sign) { marbles.push({ x, y, vx: 0, vy: 0, q, trail: [[x, y]], life: 0 }); if (marbles.length > 12) marbles.shift(); sound.play('pop'); }
+  st.onStep((dt) => {
+    if (dt <= 0) return;
+    for (const m of marbles) {
+      for (let k = 0; k < 6; k++) {
+        const h = dt / 6, f = fieldAt(m.x, m.y);
+        let ax = m.q * f.ex * 0.011, ay = m.q * f.ey * 0.011;
+        const a = Math.hypot(ax, ay); if (a > 700) { ax *= 700 / a; ay *= 700 / a; }
+        m.vx += (ax - 1.2 * m.vx) * h; m.vy += (ay - 1.2 * m.vy) * h;
+        m.x += m.vx * h; m.y += m.vy * h;
+      }
+      m.life += dt;
+      const last = m.trail[m.trail.length - 1];
+      if (Math.hypot(m.x - last[0], m.y - last[1]) > 0.25) { m.trail.push([m.x, m.y]); if (m.trail.length > 400) m.trail.shift(); }
+      if (S.charges.some((c) => Math.sign(c.q) === -m.q && (c.x - m.x) ** 2 + (c.y - m.y) ** 2 < 0.9)) { m.dead = true; sound.play('clink', { vol: 0.5 }); }
+      if (m.x < -1 || m.y < -1 || m.x > W + 1 || m.y > H + 1 || m.life > 40) m.dead = true;
+    }
+    for (let i = marbles.length - 1; i >= 0; i--) if (marbles[i].dead) marbles.splice(i, 1);
+    if (pending && pending.until()) { const f = pending.then; pending = null; f(); }
+  });
+
+  // ---------- drawing
+  st.onResize((w, h) => {
+    const s = Math.min((w - 20) / W, (h - 20) / H);
+    Lay = { w, h, s, x0: (w - W * s) / 2, y0: (h - H * s) / 2 };
+    dirty = true;
+  });
+  const X = (x) => Lay.x0 + x * Lay.s, Y = (y) => Lay.y0 + y * Lay.s;
+  const toCm = (px, py) => [(px - Lay.x0) / Lay.s, (py - Lay.y0) / Lay.s];
+
+  st.onDraw((g, w, h) => {
+    if (dirty || !grid) rebuild();
+    g.fillStyle = '#16264A'; g.fillRect(0, 0, w, h);
+    const tw = W * Lay.s, th = H * Lay.s;
+    // the glass table
+    KT.box(g, Lay.x0 - 8, Lay.y0 - 8, tw + 16, th + 16, KT.MAT.navy, { r: 12 });
+    g.save(); KT.rr(g, Lay.x0, Lay.y0, tw, th, 6); g.clip();
+    if (st.on('land')) { g.imageSmoothingEnabled = true; g.drawImage(img, Lay.x0, Lay.y0, tw, th); }
+    else { g.fillStyle = '#EAF6FC'; g.fillRect(Lay.x0, Lay.y0, tw, th); }
+    // a faint grid on the glass, 1 cm squares
+    g.strokeStyle = 'rgba(27,36,64,0.08)'; g.lineWidth = 1;
+    for (let x = 0; x <= W; x += 2) { g.beginPath(); g.moveTo(X(x), Lay.y0); g.lineTo(X(x), Lay.y0 + th); g.stroke(); }
+    for (let y = 0; y <= H; y += 2) { g.beginPath(); g.moveTo(Lay.x0, Y(y)); g.lineTo(Lay.x0 + tw, Y(y)); g.stroke(); }
+    if (st.on('equi') && grid) {
+      g.strokeStyle = 'rgba(75,51,176,0.7)'; g.lineWidth = 1.6; g.setLineDash([5, 4]);
+      for (const lv of [-200, -120, -60, -25, 25, 60, 120, 200]) {
+        const c = contour(grid.data, grid.nx, grid.ny, 0, W, 0, H, lv);
+        g.beginPath(); let pen = false;
+        for (let i = 0; i < c.x.length; i++) { if (Number.isNaN(c.x[i])) { pen = false; continue; } if (pen) g.lineTo(X(c.x[i]), Y(c.y[i])); else { g.moveTo(X(c.x[i]), Y(c.y[i])); pen = true; } }
+        g.stroke();
+      }
+      g.setLineDash([]);
+    }
+    if (st.on('lines')) {
+      g.strokeStyle = 'rgba(27,36,64,0.75)'; g.lineWidth = 1.6;
+      for (const L of lines) {
+        g.beginPath(); L.forEach(([x, y], i) => { if (i) g.lineTo(X(x), Y(y)); else g.moveTo(X(x), Y(y)); }); g.stroke();
+        const k = Math.floor(L.length / 2);
+        if (L.length > 6) { const [x1, y1] = L[k], [x2, y2] = L[k + 1]; const a = Math.atan2(y2 - y1, x2 - x1); g.save(); g.translate(X(x1), Y(y1)); g.rotate(a); g.beginPath(); g.moveTo(5, 0); g.lineTo(-3, -4); g.lineTo(-3, 4); g.closePath(); g.fillStyle = 'rgba(27,36,64,0.85)'; g.fill(); g.restore(); }
+      }
+    }
+    if (st.on('arrows')) {
+      for (let y = 1.5; y < H; y += 3) for (let x = 1.5; x < W; x += 3) {
+        const f = fieldAt(x, y); if (f.e < 1) continue;
+        const len = Math.min(2.4, 0.5 + Math.log10(f.e) * 0.45) * Lay.s * 0.6;
+        KT.arrow(g, X(x) - f.ex / f.e * len / 2, Y(y) - f.ey / f.e * len / 2, X(x) + f.ex / f.e * len / 2, Y(y) + f.ey / f.e * len / 2, KT.COL.vel, { lw: 2.2, head: 7, halo: false });
+      }
+    }
+    // marbles and their trails
+    for (const m of marbles) {
+      g.beginPath(); m.trail.forEach(([x, y], i) => { if (i) g.lineTo(X(x), Y(y)); else g.moveTo(X(x), Y(y)); }); g.lineTo(X(m.x), Y(m.y));
+      g.strokeStyle = m.q > 0 ? 'rgba(201,154,27,0.9)' : 'rgba(31,143,176,0.9)'; g.lineWidth = 2.5; g.stroke();
+      KT.shadow(g, X(m.x) + 3, Y(m.y) + 4, 8, 4, 0.35);
+      KT.ball(g, X(m.x), Y(m.y), 7, m.q > 0 ? 'yellow' : ['#5FD3F0', '#C9F4FF', '#1F8FB0'], { lw: 1.6 });
+      if (st.on('force')) { const f = fieldAt(m.x, m.y); const k = Math.min(70, 8 + Math.log10(1 + f.e) * 12); if (f.e > 1) KT.arrow(g, X(m.x), Y(m.y), X(m.x) + m.q * f.ex / f.e * k, Y(m.y) + m.q * f.ey / f.e * k, KT.COL.gravity, { lw: 3, head: 9 }); }
+    }
+    g.restore();
+    // pucks
+    for (const c of S.charges) {
+      const r = Math.max(10, Lay.s * (0.9 + 0.25 * Math.sqrt(Math.abs(c.q))));
+      KT.shadow(g, X(c.x) + 4, Y(c.y) + 5, r, r * 0.5, 0.35);
+      if (st.hovering('puck') && st._hov === c) KT.glow(g, X(c.x), Y(c.y), r * 2.4, '#FFFFFF', 0.5);
+      KT.ball(g, X(c.x), Y(c.y), r, c.q > 0 ? 'red' : 'blue', { lw: 2 });
+      KT.text(g, (c.q > 0 ? '+' : '−') + (Math.abs(c.q) !== 1 ? Math.abs(c.q) : ''), X(c.x), Y(c.y) + 5, { size: Math.min(16, r), weight: 700, align: 'center', color: '#FFFFFF' });
+    }
+    if (hoverPt) { const [x, y] = hoverPt; g.save(); g.strokeStyle = 'rgba(255,255,255,0.9)'; g.lineWidth = 2; g.beginPath(); g.arc(X(x), Y(y), 6, 0, Math.PI * 2); g.stroke(); g.restore(); }
+    if (first && marbles.length === 0) KT.tag(g, 'tap the glass to drop a marble', w / 2, Lay.y0 + 26, { size: 12.5, bg: '#FFF1B0' });
+  });
+  st.onOver(() => {
+    if (hoverPt) { const f = fieldAt(hoverPt[0], hoverPt[1]); st.set('v', `${f.v.toFixed(0)} V`); st.set('e', `${f.e < 1000 ? f.e.toFixed(0) : (f.e / 1000).toFixed(1) + ' k'} V/m`); }
+    st.set('n', String(marbles.length));
+  });
+
+  // ---------- hands: drag pucks, tap to drop marbles
+  st.handle({
+    id: 'puck', cursor: 'grab', enabled: () => current(bench, 'layout') === 'charges',
+    hit: (x, y) => { const [cx, cy] = toCm(x, y); let best = null, bd = 1.8; for (const c of S.charges) { const d = Math.hypot(c.x - cx, c.y - cy); if (d < bd) { bd = d; best = c; } } st._hov = best; return best ? bd : false; },
+    down: () => { st._drag = st._hov; first = false; },
+    move: (x, y) => { const [cx, cy] = toCm(x, y); const c = st._drag; if (!c) return; c.x = Math.max(1, Math.min(W - 1, cx)); c.y = Math.max(1, Math.min(H - 1, cy)); dirty = true; hoverPt = [c.x, c.y]; },
+    up: () => { const f = hoverPt ? fieldAt(hoverPt[0], hoverPt[1]) : null; void f; st._drag = null; },
+  });
+  st.handle({
+    id: 'glass', cursor: 'crosshair',
+    hit: (x, y) => { const [cx, cy] = toCm(x, y); return cx > 0 && cy > 0 && cx < W && cy < H ? 50 : false; },
+    click: (x, y) => { const [cx, cy] = toCm(x, y); first = false; drop(cx, cy); const f = fieldAt(cx, cy); if (S.charges.length >= 2 && f.e < 0.02 * f.mag) { rig.note({ bench: 'field', nullFound: true, x: cx, y: cy }); st.flash('A still spot!'); } },
+  });
+  st.cv.addEventListener('pointermove', (e) => { const r = st.cv.getBoundingClientRect(); const [cx, cy] = toCm(e.clientX - r.left, e.clientY - r.top); hoverPt = cx > 0 && cy > 0 && cx < W && cy < H ? [cx, cy] : null; });
+
+  // ---------- why
+  const layout = (L) => { if (current(bench, 'layout') !== 'charges') rig.mount(bench.id, 'layout', 'charges'); S.charges = L.map((c) => ({ ...c })); marbles.length = 0; dirty = true; };
+  st.tour({
+    title: 'What is a field?',
+    steps: [
+      { say: 'A positive charge pushes other positive charges away. The green arrows show which way a small **+ test charge** would be pushed at each spot: that is the **field**.', tools: { arrows: true, lines: false, land: false, equi: false }, enter: () => layout([{ x: 20, y: 15, q: 1 }]) },
+      { say: '**Field lines** follow the arrows. They start on + charges and end on − charges, and where they crowd together the push is strong.', tools: { arrows: false, lines: true }, enter: () => layout(PRESETS.dipole) },
+      { say: 'Now think of **voltage as height**: + charges are hills, − charges are valleys. A + marble simply **rolls downhill**. Watch.', tools: { land: true }, enter: () => { layout(PRESETS.dipole); drop(16, 9, 1); drop(14, 20, 1); drop(20, 4, 1); } },
+      { say: 'The dashed **equal-voltage lines** are like contour lines on a hiking map. The field always points straight downhill, across them at right angles.', tools: { equi: true }, enter: () => layout(PRESETS.dipole) },
+      { say: 'Two equal + hills: right between them the two pushes **cancel**. A marble placed there just sits on the saddle (until it is nudged).', tools: { equi: true, arrows: true }, enter: () => { layout(PRESETS.alike); drop(20.0, 15.0, 1); drop(20, 10, 1); } },
+    ],
+    onEnd: () => { layout(PRESETS.dipole); },
+  });
+
+  // ---------- challenges
+  st.setChallenges([
+    {
+      id: 'null', title: 'The still spot', card: 'field.null',
+      setup: () => layout(PRESETS.one4),
+      q: 'A +1 puck and a +4 puck. Somewhere on the line between them the field is zero. Where?', choices: ['Exactly in the middle', 'Closer to the +1', 'Closer to the +4'], answer: 1,
+      run: (s, finish) => { s.setTool('arrows', true); s.setTool('equi', true); const a = S.charges[0], b = S.charges[1]; const xn = a.x + (b.x - a.x) / 3; setTimeout(() => { drop(xn, 15, 1); hoverPt = [xn, 15]; finish(`It is at ${(xn - a.x).toFixed(1)} cm from the +1, a third of the way.`); }, 1500); },
+      explain: 'The push falls off as 1/distance². A charge four times bigger matches the small one from twice as far away, so the balance point is a third of the way from the +1.',
+    },
+    {
+      id: 'neg', title: 'A negative marble', card: 'field.negative',
+      setup: () => layout(PRESETS.dipole),
+      q: 'On this landscape, a positive marble rolls downhill. A negative marble…', choices: ['also rolls downhill', 'rolls uphill, towards the + hill', 'stays where it is'], answer: 1,
+      run: (s, finish) => { s.setTool('land', true); drop(20, 8, -1); drop(20, 22, -1); setTimeout(() => finish(), 3500); },
+      explain: 'A negative charge is pushed the opposite way to a positive one, so on the voltage landscape it climbs. That is why electrons in a wire flow from − to +.',
+    },
+    {
+      id: 'scale', title: 'Double every charge', card: 'field.scale',
+      setup: () => layout(PRESETS.dipole),
+      q: 'Double both charges of the dipole. The pattern of field lines…', choices: ['stays exactly the same shape', 'spreads out wider', 'gets squeezed together'], answer: 0,
+      run: (s, finish) => { s.setTool('lines', true); setTimeout(() => { S.charges.forEach((c) => { c.q *= 2; }); dirty = true; setTimeout(() => finish(), 1500); }, 1500); },
+      explain: 'Every push doubles, but in the same direction everywhere, so the lines follow the same paths. Only the strength (and how fast the marbles go) changes.',
+      after: () => layout(PRESETS.dipole),
+    },
+  ]);
+
+  return st.ctl;
+}
+
+bench.tabs = [{ id: 'play', label: 'Play', build: tabPlay }, { id: 'table', label: 'Measure', build: tabTable }];
 
 export default bench;

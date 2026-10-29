@@ -17,6 +17,14 @@ export const EXPERIMENTS = [
   { id: 'coupled', floor: 2, title: 'Coupled pendulums', blurb: 'Energy sloshing between two swings.', load: () => import('./coupled.js') },
   { id: 'gyro', floor: 2, title: 'Gyroscope', blurb: 'Precession and nutation.', load: () => import('./gyro.js') },
   { id: 'chladni', floor: 2, title: 'Chladni plate', blurb: 'Sand draws the shapes of vibration.', load: () => import('./chladni.js') },
+  // 3F · Magnonics Lab: the spin gallery and the project room
+  { id: 'precess', floor: 3, title: 'Spin precession', blurb: 'A single spin in a field, and microwaves that flip it.', load: () => import('./precess.js') },
+  { id: 'chain', floor: 3, title: 'Spin-wave machine', blurb: 'A row of spins: flick one end and a wave runs along.', load: () => import('./chain.js') },
+  { id: 'domains', floor: 3, title: 'Kerr microscope: domains', blurb: 'Watch magnetic domains grow, shrink and remember.', load: () => import('./domains.js') },
+  { id: 'logic', floor: 3, title: 'Spin-wave logic', blurb: 'Spin waves meet in a Y and compute.', load: () => import('./logic.js') },
+  { id: 'bragg', floor: 3, title: 'Microwave Bragg diffraction', blurb: 'Steel-ball crystals and microwaves: the angles where reflections add up.', load: () => import('./bragg.js') },
+  { id: 'rod', floor: 3, title: 'Hammer a steel rod', blurb: 'Hit a steel rod and Earth’s field turns it into a magnet.', load: () => import('./rod.js') },
+  { id: 'cavity', floor: 3, title: 'Magnons meet photons', blurb: 'Microwaves and magnons trade energy and refuse to cross.', load: () => import('./cavity.js') },
   // 3F · Magnonics Lab (the instruments of the 3D lab)
   { id: 'fmr', floor: 3, station: true, title: 'FMR setup', blurb: 'Ferromagnetic resonance of a thin film.', load: () => import('../stations/fmr.js') },
   { id: 'dispersion', floor: 3, station: true, title: 'Holo-board', blurb: 'Spin-wave dispersion and antennas.', load: () => import('../stations/dispersion.js') },

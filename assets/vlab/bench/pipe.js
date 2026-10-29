@@ -8,6 +8,10 @@ import { Plot, COLORS } from '../ui/plot.js';
 import { rigStrip, current, phys, onRig, loop, dataTable, fitCanvas, fmtNum } from './common.js';
 import { rig } from '../rpg/state.js';
 import { ITEMS } from '../rpg/items.js';
+import { Stage } from './stage.js';
+import * as K from './kit.js';
+import { sound } from '../rpg/sound.js';
+import { tr, trf } from '../i18n.js';
 
 const MU0 = 4e-7 * Math.PI, G = 9.81, LP = 1.0;   // pipe length, m
 
@@ -235,8 +239,239 @@ function tabGraph(pane) {
   return { show() { draw(); }, resize() { draw(); } };
 }
 
+// ---------------------------------------------------------------- the hands-on stage
+const PIPE_MAT = { 'pipe-cu': 'copper', 'pipe-slot': 'copper', 'pipe-thick': 'copper', 'pipe-al': 'alu', 'pipe-brass': 'brass', 'pipe-steel': 'steel', 'pipe-pvc': 'white' };
+const TABLES = new Map();
+function laneOf(magId, pipeId, cold, label = '') {
+  const mag = { id: magId, ...ITEMS[magId].phys }, pipe = { id: pipeId, ...ITEMS[pipeId].phys };
+  const key = `${magId}|${pipeId}|${cold}`;
+  if (!TABLES.has(key)) TABLES.set(key, brakeTable(mag, pipe, cold));
+  const T = TABLES.get(key);
+  let rm = 1e-12; for (const x of [0.002, 0.004, 0.006, 0.008, 0.01, 0.012]) rm = Math.max(rm, Math.sqrt(T.ring(x)));
+  return { mag, pipe, cold, T, ringMax: rm, z: -0.07, v: 0, t: 0, run: false, done: false, tTop: null, tBot: null, heat: new Float32Array(60), label, vt: T.bMid > 0 ? T.mass * G / T.bMid : Infinity };
+}
+function stepLane(L, dt, onExit) {
+  if (!L.run) return;
+  let left = dt;
+  while (left > 1e-12) {
+    const h = Math.min(0.0005, left); left -= h;
+    const b = L.T.b(L.z), k = b / L.T.mass, zPrev = L.z;
+    if (k * h > 1e-6) { const vt = G / k, e = Math.exp(-k * h); const vNew = vt + (L.v - vt) * e; L.z += vt * h + (L.v - vt) * (1 - e) / k; L.v = vNew; }
+    else { L.z += L.v * h + 0.5 * G * h * h; L.v += G * h; }
+    L.t += h;
+    // the power that goes into the pipe warms it where the magnet is
+    if (b > 0 && L.z > 0 && L.z < LP) { const i = Math.min(59, Math.floor(L.z / LP * 60)); L.heat[i] += b * L.v * L.v * h; }
+    if (zPrev < 0 && L.z >= 0) L.tTop = L.t;
+    if (zPrev < LP && L.z >= LP) { L.tBot = L.t; if (onExit) onExit(L); }
+    if (L.z > LP + 0.13) { L.run = false; L.done = true; L.z = LP + 0.13; L.v = 0; break; }
+  }
+}
+
+function tabPlay(pane) {
+  const st = new Stage(pane, {
+    bench, npc: 'pip', label: 'A tall metal pipe, cut open so you can see inside, with a magnet ready above it.',
+    hello: 'Grab the **magnet**, hold it over the pipe and **let go**. In metal it drifts down slowly, as if through honey. Turn on the race to drop one through plastic at the same time.',
+    aspect: 16 / 10, speeds: [[1, '1×', 'Real time'], [4, '4×', 'Four times faster'], [20, '20×', 'Twenty times faster'], [0.25, '¼×', 'Slow motion']],
+    onReset: () => { lanes = mkLanes(); },
+  });
+  st.tool('currents', 'Eddy currents', { icon: K.COL.mag, on: true }).tool('forces', 'Forces', { icon: K.COL.gravity }).tool('field', 'Magnet’s field', { icon: K.COL.string })
+    .tool('heat', 'Heat in the pipe', { icon: K.COL.heat }).tool('race', 'Race a plastic pipe', { icon: '#C3B4FF', onChange: () => { lanes = mkLanes(); } }).tool('graph', 'Graph', { icon: K.COL.pe });
+  st.readout('v', 'Speed now').readout('vt', 'Steady speed inside').readout('t', 'Time through the pipe').readout('free', 'Free fall would take');
+  const graph = st.liveGraph({ series: [{ id: 'v', label: 'speed (cm/s)', color: K.COL.vel }], window: 8, ylabel: 'cm/s' });
+  let held = false, heldY = 0, Lay = { w: 800, h: 500, top: 70, bot: 440, sc: 370 }, pending = null, demo = null, first = true;
+  const mkLanes = (cfg) => {
+    if (cfg) return cfg.map((c) => laneOf(c.mag, c.pipe, !!c.cold, c.label));
+    const L = [laneOf(current(bench, 'magnet'), current(bench, 'pipe'), current(bench, 'temp') === 'ln2', ITEMS[current(bench, 'pipe')].name)];
+    if (st.on('race') && current(bench, 'pipe') !== 'pipe-pvc') L.push(laneOf(current(bench, 'magnet'), 'pipe-pvc', false, 'Plastic pipe'));
+    return L;
+  };
+  let lanes = mkLanes();
+  onRig(bench, () => { if (!demo) lanes = mkLanes(); });
+  const dropBtn = el('button', { type: 'button', class: 'stg-act', text: 'Drop it' });
+  dropBtn.addEventListener('click', () => dropAll());
+  st.controls(el('div', { class: 'stg-row' }, dropBtn));
+  function dropAll() { lanes = demo ? mkLanes(demo) : mkLanes(); for (const L of lanes) { if (!L.T.fits) continue; L.run = true; } graph.clear(); first = false; st.hint(null); sound.play('swing'); }
+  function onExit(L) {
+    const tt = L.tBot - L.tTop;
+    if (!demo) rig.note({ bench: 'pipe', time: tt, mag: L.mag.id, pipe: L.pipe.id, cold: L.cold, auto: true });
+    if (tt > 5) st.flash(`${tt.toFixed(1)} s!`);
+  }
+
+  // ---------- physics
+  st.onStep((dt) => {
+    for (const L of lanes) {
+      const wasRun = L.run;
+      stepLane(L, dt, onExit);
+      if (wasRun && !L.run && L.done) sound.play('clink', { vol: Math.min(1, 0.3 + L.v) });
+    }
+    if (dt > 0 && lanes[0].run) graph.push(lanes[0].t, { v: lanes[0].v * 100 });
+    if (pending && pending.until()) { const f = pending.then; pending = null; f(); }
+  });
+
+  // ---------- drawing
+  st.onResize((w, h) => { Lay = { w, h, top: 76, bot: h - 64, sc: (h - 64 - 76) / LP }; });
+  const laneX = (i, n) => Lay.w * (n === 1 ? 0.5 : n === 2 ? [0.38, 0.66][i] : [0.26, 0.5, 0.74][i]);
+  const pw = () => Math.max(46, Math.min(74, Lay.w * 0.07));
+
+  function drawPipe(g, L, cx) {
+    const top = Lay.top, len = LP * Lay.sc, w = pw(), mat = K.MAT[PIPE_MAT[L.pipe.id]] || K.MAT.copper;
+    // back wall of the pipe (we see the inside through a window cut in the front)
+    g.save();
+    const gr = g.createLinearGradient(cx - w / 2, 0, cx + w / 2, 0);
+    gr.addColorStop(0, K.mixHex(mat[2], '#132447', 0.35)); gr.addColorStop(0.5, K.mixHex(mat[0], '#132447', 0.25)); gr.addColorStop(1, K.mixHex(mat[2], '#132447', 0.45));
+    g.fillStyle = gr; g.fillRect(cx - w / 2, top, w, len);
+    g.restore();
+    // heat glow
+    if (st.on('heat')) {
+      let mx = 1e-9; for (const q of L.heat) mx = Math.max(mx, q);
+      for (let i = 0; i < 60; i++) { const a = Math.min(0.75, L.heat[i] / mx * 0.75); if (a < 0.02) continue; g.fillStyle = `rgba(242,138,60,${a})`; g.fillRect(cx - w / 2 - 8, top + i / 60 * len, w + 16, len / 60 + 1); }
+    }
+    // the two cut edges of the front wall
+    K.box(g, cx - w / 2 - 9, top, 9, len, mat, { r: 2, vertical: true });
+    K.box(g, cx + w / 2, top, 9, len, mat, { r: 2, vertical: true });
+    if (L.pipe.slot) K.lineSeg(g, cx + w / 2 + 4, top, cx + w / 2 + 4, top + len, K.LINE, 2.5);
+    if (L.cold) { for (let i = 0; i < 20; i++) { const y = top + ((i * 53 + st.t * 40) % len); g.fillStyle = 'rgba(255,255,255,0.85)'; g.beginPath(); g.arc(cx + w / 2 + 14 + (i % 3) * 5, y, 2.2, 0, Math.PI * 2); g.fill(); } }
+    // mouth and foot
+    g.save(); g.beginPath(); g.ellipse(cx, top, w / 2 + 9, 7, 0, 0, Math.PI * 2); g.fillStyle = mat[1]; g.fill(); g.lineWidth = 2; g.strokeStyle = K.LINE; g.stroke();
+    g.beginPath(); g.ellipse(cx, top, w / 2, 4.5, 0, 0, Math.PI * 2); g.fillStyle = '#1B2440'; g.fill(); g.restore();
+    // a catch cup at the bottom
+    K.box(g, cx - w * 0.8, Lay.bot + 14, w * 1.6, 26, K.MAT.yellow, { r: 6 });
+    K.tag(g, L.label, cx, Lay.bot + 54, { size: 11.5, bg: '#FFFDF6' });
+  }
+
+  function drawCurrents(g, L, cx) {
+    if (!(L.T.sigma > 0) || !st.on('currents')) return;
+    const w = pw(), mz = Lay.top + L.z * Lay.sc;
+    // the rings sit within a couple of centimetres of the magnet: drawn spread out five times, so you can see them
+    for (let k = -7; k <= 7; k++) {
+      if (!k) continue;
+      const u = k * 0.003, z = L.z + u;
+      if (z < 0 || z > LP) continue;
+      const J = Math.sqrt(L.T.ring(u)) / L.ringMax * Math.min(1, Math.abs(L.v) / Math.max(0.02, Math.min(L.vt, 3)));
+      if (J < 0.06) continue;
+      const y = mz + u * Lay.sc * 5;
+      g.save(); g.lineWidth = 2.5 + 2 * J; g.strokeStyle = k < 0 ? `rgba(224,69,123,${Math.min(1, J)})` : `rgba(61,127,214,${Math.min(1, J)})`;
+      g.beginPath(); g.ellipse(cx, y, w / 2 + 4, 6, 0, 0, Math.PI * 2); g.stroke();
+      // which way the current goes round: a little arrowhead on the front
+      const dir = k < 0 ? 1 : -1;
+      g.fillStyle = g.strokeStyle; g.beginPath(); g.moveTo(cx + dir * 8, y + 6); g.lineTo(cx - dir * 4, y + 1); g.lineTo(cx - dir * 4, y + 11); g.closePath(); g.fill();
+      g.restore();
+    }
+    if (Math.abs(L.v) > 0.01 && L.z > 0.05 && L.z < LP - 0.05) {
+      K.tag(g, 'currents above: pull it back', cx + w / 2 + 24, mz - 26, { align: 'left', size: 11, bg: '#FFD0DC' });
+      K.tag(g, 'currents below: push it up', cx + w / 2 + 24, mz + 26, { align: 'left', size: 11, bg: '#BFE6FF' });
+    }
+  }
+
+  function drawMagnet(g, L, cx, y) {
+    const w = pw(), mw = w * (L.mag.R / L.pipe.a) * 0.92, mh = Math.max(24, L.mag.len * Lay.sc * 2.2);
+    if (st.on('field') && L.mag.Br > 0) {
+      g.save(); g.strokeStyle = 'rgba(61,111,182,0.55)'; g.lineWidth = 1.5;
+      for (const k of [1, 1.8, 2.8]) { g.beginPath(); g.ellipse(cx - mw * 0.7 * k, y, mw * 0.7 * k, mh * 0.9 * k, 0, -Math.PI / 2, Math.PI / 2, true); g.stroke(); g.beginPath(); g.ellipse(cx + mw * 0.7 * k, y, mw * 0.7 * k, mh * 0.9 * k, 0, Math.PI / 2, Math.PI * 1.5, true); g.stroke(); }
+      g.restore();
+    }
+    if (L.mag.id === 'slug-steel') K.box(g, cx - mw / 2, y - mh / 2, mw, mh, K.MAT.steel, { r: 3 });
+    else if (L.mag.id === 'magnet-ferrite') K.box(g, cx - mw / 2, y - mh / 2, mw, mh, K.MAT.ferrite, { r: 3 });
+    else {
+      K.box(g, cx - mw / 2, y - mh / 2, mw, mh / 2, K.MAT.magnetS, { r: 3 });
+      K.box(g, cx - mw / 2, y, mw, mh / 2, K.MAT.magnetN, { r: 3 });
+      K.text(g, 'S', cx, y - mh / 4 + 4, { size: 10, weight: 700, align: 'center', color: '#FFFFFF' });
+      K.text(g, 'N', cx, y + mh / 4 + 4, { size: 10, weight: 700, align: 'center', color: '#FFFFFF' });
+    }
+    return mh;
+  }
+
+  st.onDraw((g, w, h) => {
+    st.cache('bg', `${w}x${h}`, (gg, ww, hh) => {
+      K.room(gg, ww, hh, K.THEME[2], { floorH: 0.1 });
+      // a ruler up the side
+      K.rulerV(gg, 16, Lay.top, Lay.top + LP * Lay.sc, (v) => Lay.top + v / 100 * LP * Lay.sc, 0, 100, 5, { major: 2, fmt: (v) => String(v) });
+      K.text(gg, 'cm', 20, Lay.top - 14, { size: 11, weight: 600 });
+    });
+    lanes.forEach((L, i) => {
+      const cx = laneX(i, lanes.length);
+      drawPipe(g, L, cx);
+      const y = held && i === 0 ? heldY : Math.min(Lay.top + L.z * Lay.sc, Lay.bot + 18);
+      drawCurrents(g, L, cx);
+      // the magnet is drawn inside the pipe (between the back wall and the front edges)
+      const mh = drawMagnet(g, L, cx, y);
+      if (st.on('forces') && L.run && L.z > -0.02) {
+        const F = 46, b = L.T.b(L.z) * L.v / (L.T.mass * G);
+        K.arrow(g, cx - pw() - 30, y, cx - pw() - 30, y + F, K.COL.gravity, { label: 'weight', size: 11 });
+        if (b > 0.02) K.arrow(g, cx - pw() - 52, y, cx - pw() - 52, y - F * Math.min(2, b), K.COL.mag, { label: 'magnetic braking', size: 11 });
+      }
+      if (!L.T.fits) K.tag(g, 'too big for this pipe!', cx, Lay.top - 30, { size: 12, bg: '#FFD0DC' });
+      if (L.run || L.done) { const tt = (L.tBot ?? L.t) - (L.tTop ?? 0); K.tag(g, L.tTop === null ? 'falling…' : `${tt.toFixed(2)} s`, cx, Lay.top - 22 - (i % 2) * 0, { size: 12, bg: L.done ? '#E6FBF1' : '#FFF1B0' }); }
+      void mh;
+    });
+    if (first && !held) { const k = (Math.sin(st.t * 3) + 1) / 2; const cx = laneX(0, lanes.length); K.arrow(g, cx + 80, Lay.top - 60 - k * 6, cx + 26, Lay.top - 46, K.COL.normal, { lw: 3.5, head: 11 }); }
+  });
+  st.onOver(() => {
+    const L = lanes[0];
+    st.set('v', `${(Math.abs(L.v) * 100).toFixed(1)} cm/s`);
+    st.set('vt', Number.isFinite(L.vt) && L.vt < 4.4 ? `${(L.vt * 100).toFixed(1)} cm/s` : 'no braking');
+    st.set('t', L.tTop !== null ? `${((L.tBot ?? L.t) - L.tTop).toFixed(2)} s` : '–');
+    st.set('free', `${Math.sqrt(2 * LP / G).toFixed(2)} s`);
+    graph.draw();
+  });
+
+  // ---------- hands: lift the magnet and drop it in
+  st.handle({
+    id: 'magnet', cursor: 'grab',
+    hit: (x, y) => { const L = lanes[0], cx = laneX(0, lanes.length), my = Lay.top + L.z * Lay.sc; return !L.run && Math.abs(x - cx) < pw() && Math.abs(y - my) < 40 ? 0 : false; },
+    down: (x, y) => { held = true; heldY = y; first = false; st.hint(null); for (const L of lanes) { L.done = false; L.z = -0.07; } },
+    move: (x, y) => { heldY = Math.max(16, Math.min(Lay.top - 6, y)); },
+    up: () => { held = false; lanes = demo ? mkLanes(demo) : mkLanes(); for (const L of lanes) { L.z = Math.min(-0.01, (heldY - Lay.top) / Lay.sc); if (L.T.fits) L.run = true; } graph.clear(); sound.play('swing'); },
+  });
+  st.hint('Lift the magnet above the pipe and let it go', { sticky: true });
+
+  // ---------- why
+  const race = (cfg, speed = 1) => { demo = cfg; lanes = mkLanes(cfg); st.setSpeed(speed); dropAll(); };
+  st.tour({
+    title: 'Why does it fall so slowly?',
+    steps: [
+      { say: 'Two identical magnets, one in plastic and one in copper. Neither pipe is magnetic, and the magnet does not touch the walls. Yet…', tools: { currents: false, forces: false, field: false, heat: false }, enter: () => race([{ mag: 'magnet-n42', pipe: 'pipe-pvc', label: 'plastic' }, { mag: 'magnet-n42', pipe: 'pipe-cu', label: 'copper' }]) },
+      { say: 'As the magnet falls, the magnetic field through each ring of copper **keeps changing**: it grows in the rings ahead of the magnet and shrinks in the rings behind.', tools: { field: true }, enter: () => race([{ mag: 'magnet-n42', pipe: 'pipe-cu', label: 'copper' }], 1) },
+      { say: 'A changing magnetic field drives an electric current round each ring (that is how generators work). These swirls are **eddy currents**: pink above the magnet, blue below, going round opposite ways.', tools: { currents: true, field: false } },
+      { say: 'Each current ring is itself a little magnet. The one below **pushes** the falling magnet up, the one above **pulls** it back. Both brake it. The faster it falls, the stronger they get, until braking equals weight: a slow steady drift.', tools: { forces: true } },
+      { say: 'The energy goes into **warming the pipe** a tiny bit. Cold copper conducts much better, so in liquid nitrogen it falls even more slowly. Cut a slot along the pipe and the currents cannot go round: it falls fast.', tools: { forces: false, heat: true }, enter: () => race([{ mag: 'magnet-n42', pipe: 'pipe-cu', label: 'copper' }, { mag: 'magnet-n42', pipe: 'pipe-slot', label: 'slotted copper' }, { mag: 'magnet-n42', pipe: 'pipe-cu', cold: true, label: 'cold copper' }], 4) },
+    ],
+    onEnd: () => { demo = null; lanes = mkLanes(); st.setSpeed(1); },
+  });
+
+  // ---------- challenges
+  const until = (cond, then) => { pending = { until: cond, then }; };
+  const after = () => { pending = null; demo = null; lanes = mkLanes(); st.setSpeed(1); };
+  const allDone = () => lanes.every((L) => L.done || !L.T.fits);
+  const times = () => lanes.map((L) => trf('{0}: {1} s', tr(L.label), (L.tBot - L.tTop).toFixed(1))).join(', ') + '.';
+  const skip = () => { for (let i = 0; i < 4000 && !allDone(); i++) for (const L of lanes) stepLane(L, 0.05); };
+  st.setChallenges([
+    {
+      id: 'metals', title: 'Which metal brakes best?', card: 'pipe.metal', lock: true, after, skip,
+      q: 'Copper, aluminium and stainless steel pipes, none of them magnetic. In which does the magnet fall slowest?', choices: ['Copper', 'Aluminium', 'Stainless steel'], answer: 0,
+      run: (s, finish) => { race([{ mag: 'magnet-n42', pipe: 'pipe-cu', label: 'copper' }, { mag: 'magnet-n42', pipe: 'pipe-al', label: 'aluminium' }, { mag: 'magnet-n42', pipe: 'pipe-steel', label: 'stainless' }], 4); until(allDone, () => finish(times())); },
+      explain: 'The better the metal conducts, the bigger the eddy currents and the harder they brake. Copper conducts best of the three, stainless steel worst.',
+    },
+    {
+      id: 'slot', title: 'A slot in the pipe', card: 'pipe.slot', lock: true, after, skip,
+      q: 'Cut a thin slot all along a copper pipe. Now the magnet falls…', choices: ['even more slowly', 'about the same', 'much faster'], answer: 2,
+      run: (s, finish) => { race([{ mag: 'magnet-n42', pipe: 'pipe-cu', label: 'copper' }, { mag: 'magnet-n42', pipe: 'pipe-slot', label: 'slotted copper' }], 4); until(allDone, () => finish(times())); },
+      explain: 'Eddy currents need to flow all the way round the pipe. The slot breaks every ring, so only weak little loops are left and the braking nearly vanishes.',
+    },
+    {
+      id: 'cold', title: 'Cold copper', card: 'pipe.cold', lock: true, after, skip,
+      q: 'Cool the copper pipe in liquid nitrogen (−196 °C). The magnet falls…', choices: ['faster', 'the same', 'more slowly'], answer: 2,
+      run: (s, finish) => { race([{ mag: 'magnet-n42', pipe: 'pipe-cu', label: 'room temperature' }, { mag: 'magnet-n42', pipe: 'pipe-cu', cold: true, label: 'in liquid nitrogen' }], 20); until(allDone, () => finish(times())); },
+      explain: 'Cold copper conducts about eight times better, because its atoms jiggle less and get in the electrons’ way less. Eight times the currents, eight times slower.',
+    },
+  ]);
+
+  return st.ctl;
+}
+
 bench.tabs = [
-  { id: 'drop', label: 'Drop', build: tabDrop },
+  { id: 'play', label: 'Play', build: tabPlay },
+  { id: 'drop', label: 'Measure', build: tabDrop },
   { id: 'graph', label: 'Speed and braking', build: tabGraph },
 ];
 

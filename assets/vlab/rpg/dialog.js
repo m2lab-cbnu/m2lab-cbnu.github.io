@@ -2,6 +2,7 @@
 // and optional choices or a number to type in. Every call returns a promise.
 
 import { portrait } from './sprites.js';
+import { tr } from '../i18n.js';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const ADVANCE = new Set([' ', 'Enter', 'e', 'E', 'z', 'Z']);
@@ -22,8 +23,8 @@ export class Dialog {
         <div class="rpg-dlg-face"><canvas width="16" height="20" aria-hidden="true"></canvas></div>
         <div class="rpg-dlg-main">
           <p class="rpg-dlg-name" id="rpg-dlg-name"></p>
-          <p class="rpg-dlg-text" aria-live="polite"></p>
-          <div class="rpg-dlg-choices" role="group"></div>
+          <p class="rpg-dlg-text" aria-live="polite" data-tr="no"></p>
+          <div class="rpg-dlg-choices" role="group" data-tr="no"></div>
           <form class="rpg-dlg-input" hidden><label class="vh" for="rpg-dlg-num">Your answer</label><input id="rpg-dlg-num" type="text" inputmode="decimal" autocomplete="off"><span class="unit"></span><button type="submit">Tell</button><button type="button" class="later">Not yet</button></form>
         </div>
         <button class="rpg-dlg-next" type="button" aria-label="Next">▼</button>
@@ -67,6 +68,9 @@ export class Dialog {
     if (id) {
       const img = portrait(id, this.styleOf());
       this.face.width = img.width; this.face.height = img.height;
+      // whole-number scaling keeps the pixels square
+      const k = Math.max(2, Math.floor(Math.min(64 / img.width, 82 / img.height)));
+      this.face.style.width = img.width * k + 'px'; this.face.style.height = img.height * k + 'px';
       const g = this.face.getContext('2d'); g.clearRect(0, 0, img.width, img.height); g.drawImage(img, 0, 0);
     }
   }
@@ -105,7 +109,7 @@ export class Dialog {
     this.choicesEl.replaceChildren(); this.form.hidden = true;
     for (const line of lines) {
       this.nextBtn.hidden = true;
-      await this._type(fmt(line));
+      await this._type(fmt(tr(line)));
       this.nextBtn.hidden = false;
       this.nextBtn.focus({ preventScroll: true });
       await new Promise((r) => { this._next = r; this._escape = () => { this._advance(); }; });
@@ -118,12 +122,12 @@ export class Dialog {
     this._show(who);
     this.form.hidden = true; this.nextBtn.hidden = true;
     this.choicesEl.replaceChildren();
-    await this._type(fmt(line));
+    await this._type(fmt(tr(line)));
     return new Promise((resolve) => {
       const done = (i) => { this.choicesEl.replaceChildren(); this._escape = null; resolve(i); };
       choices.forEach((c, i) => {
         const b = document.createElement('button');
-        b.type = 'button'; b.innerHTML = fmt(c);
+        b.type = 'button'; b.innerHTML = fmt(tr(c));
         b.addEventListener('click', () => done(i));
         this.choicesEl.append(b);
       });
@@ -137,7 +141,7 @@ export class Dialog {
   async askNumber(who, line, { unit = '' } = {}) {
     this._show(who);
     this.choicesEl.replaceChildren(); this.nextBtn.hidden = true;
-    await this._type(fmt(line));
+    await this._type(fmt(tr(line)));
     this.form.hidden = false; this.unitEl.textContent = unit; this.input.value = '';
     this.input.focus({ preventScroll: true });
     return new Promise((resolve) => {

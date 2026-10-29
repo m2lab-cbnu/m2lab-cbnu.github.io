@@ -4,7 +4,7 @@
 .vpanel [hidden], .vl-menu [hidden], .vl-fallback [hidden] { display: none !important; }
 .vlab-page { height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; background: var(--cavity); }
 .vlab-page .site-header { position: relative; flex: none; }
-.vlab-main { position: relative; flex: 1; min-height: 0; overflow: hidden; background: #0B2140; }
+.vlab-main { position: relative; flex: 1; min-height: 0; overflow: hidden; overflow: clip; background: #0B2140; }   /* clip: nothing can scroll the lab sideways */
 #vl-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; outline: none; }
 #vl-canvas.is-dragging { cursor: grabbing; }
 #vl-canvas.is-pointing { cursor: pointer; }
@@ -124,7 +124,7 @@ kbd { display: inline-block; min-width: 1.6em; padding: 1px 6px; border-radius: 
 .vpanel-tabs button:hover { color: #fff; }
 .vpanel-tabs button[aria-selected="true"] { background: #fff; color: var(--ink); }
 .vpanel-tabs :focus-visible { outline: 2px solid var(--magnon); outline-offset: -3px; }
-.vpanel-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; container-type: inline-size; }
+.vpanel-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; container-type: inline-size; scrollbar-gutter: stable; }
 .vpanel-pane { padding: 18px 20px 28px; }
 .vpanel-pane[hidden] { display: none; }
 
@@ -234,3 +234,6 @@ kbd { display: inline-block; min-width: 1.6em; padding: 1px 6px; border-radius: 
 .vl-fallback a { color: var(--magnon); }
 .vl-fallback .vbtn { min-height: 44px; padding: 0 18px; font-size: .9375rem; }
 @media (max-width: 760px) { .vpanel-head button[aria-pressed] { display: none; } }
+
+/* Korean: break lines between words, not inside them */
+html:lang(ko) body { word-break: keep-all; overflow-wrap: break-word; }

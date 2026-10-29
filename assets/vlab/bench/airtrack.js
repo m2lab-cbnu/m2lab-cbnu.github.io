@@ -7,6 +7,10 @@ import { Plot, COLORS } from '../ui/plot.js';
 import { rigStrip, current, phys, onRig, loop, dataTable, fitCanvas, gauss } from './common.js';
 import { rig } from '../rpg/state.js';
 import { ITEMS } from '../rpg/items.js';
+import { Stage } from './stage.js';
+import * as K from './kit.js';
+import { sound } from '../rpg/sound.js';
+import { trf } from '../i18n.js';
 
 const TRACK = 2.0, HALF = 0.10, GATE1 = 0.62, GATE2 = 1.72;
 
@@ -187,8 +191,238 @@ function tabGraph(pane) {
   return { show() { draw(); }, resize() { draw(); } };
 }
 
+// ---------------------------------------------------------------- the hands-on stage
+function runWith({ bump, mA, mB, vA, vB, xA = 0.3, xB = 1.15, air = true }) {
+  const b = ITEMS[bump].phys;
+  return { bump, e: b.e, magnet: !!b.magnet, xA, xB, vA, vB, mA, mB, t: 0, stuck: false, contact: false, touched: false, after: null, before: { vA, vB }, trace: [], done: false, mu: air ? 0.0006 : 0.15 };
+}
+const GL = { A: ['#FFD54F', '#FFF1B0', '#C99A1B'], B: ['#5FD3F0', '#C9F4FF', '#1F8FB0'] };
+
+function tabPlay(pane) {
+  const st = new Stage(pane, {
+    bench, npc: 'hoo', label: 'Two gliders on an air track. Grab one, push it towards the other and let go.',
+    hello: 'Grab a glider, **push it** towards the other one and let go. Try different masses and bumpers, and watch the arrows: the total never changes.',
+    aspect: 16 / 8.2,
+    onReset: () => reset(),
+    keys: { arrow(dx) { r.vA = Math.max(-1.5, Math.min(1.5, r.vA + dx * 0.1)); }, action() { reset(); r.vA = 0.6; } },
+  });
+  st.tool('mom', 'Momentum', { icon: K.COL.vel, on: true }).tool('energy', 'Energy', { icon: K.COL.ke }).tool('cm', 'Centre of mass', { icon: K.COL.net })
+    .tool('snaps', 'Snapshots', { icon: '#F29E4C' }).tool('graph', 'Graph', { icon: K.COL.pe });
+  st.readout('pa', 'Momentum of A').readout('pb', 'Momentum of B').readout('pt', 'Total').readout('ke', 'Motion energy kept');
+  const graph = st.liveGraph({ series: [{ id: 'a', label: 'glider A (m)', color: '#C99A1B' }, { id: 'b', label: 'glider B (m)', color: '#1F8FB0' }], window: 6, ylabel: 'position (m)' });
+
+  const M = { A: 0.2, B: 0.2 };
+  let r = null, air = true, held = null, pending = null, ke0 = 0, keMin = 1, hitSound = false, snaps = [], snapT = 0, first = true;
+  let Lay = { w: 800, h: 400, x0: 40, s: 360, y: 260 };
+  const massBtns = (who) => el('div', { class: 'stg-row', role: 'group', 'aria-label': trf('Mass of glider {0}', who) }, ...[0.1, 0.2, 0.4].map((m) => {
+    const b = el('button', { type: 'button', class: 'stg-chip', 'aria-pressed': M[who] === m ? 'true' : 'false', text: `${m * 1000} g` });
+    b.addEventListener('click', () => { M[who] = m; b.parentNode.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b ? 'true' : 'false')); reset(); sound.play('clink'); });
+    return b;
+  }));
+  const goBtn = el('button', { type: 'button', class: 'stg-act', text: 'Push A at 0.6 m/s' });
+  goBtn.addEventListener('click', () => { reset(); r.vA = 0.6; r.before = { vA: 0.6, vB: 0 }; startE(); sound.play('swing'); });
+  const airBtn = el('button', { type: 'button', class: 'stg-act ghost', text: 'Blower off' });
+  airBtn.addEventListener('click', () => { air = !air; airBtn.textContent = air ? 'Blower off' : 'Blower on'; if (r) r.mu = air ? 0.0006 : 0.15; sound.play('click'); });
+  st.controls(el('p', { class: 'stg-small', text: 'Glider A' }), massBtns('A'), el('p', { class: 'stg-small', text: 'Glider B' }), massBtns('B'), el('div', { class: 'stg-row' }, goBtn, airBtn));
+
+  function reset(o = {}) {
+    r = runWith({ bump: o.bump || current(bench, 'bumper'), mA: o.mA ?? M.A, mB: o.mB ?? M.B, vA: o.vA ?? 0, vB: o.vB ?? 0, xA: o.xA ?? 0.3, xB: o.xB ?? 1.15, air });
+    ke0 = 0; keMin = 1; snaps = []; graph.clear();
+  }
+  function startE() { ke0 = 0.5 * r.mA * r.vA * r.vA + 0.5 * r.mB * r.vB * r.vB; keMin = 1; }
+  reset();
+  onRig(bench, () => { if (r && !r.touched) { const b = ITEMS[current(bench, 'bumper')].phys; r.bump = current(bench, 'bumper'); r.e = b.e; r.magnet = !!b.magnet; } });
+
+  // ---------- physics
+  st.onStep((dt) => {
+    if (!r) return;
+    let left = dt;
+    const wasContact = r.contact || r.stuck;
+    while (left > 1e-12) {
+      const h = Math.min(0.0005, left); left -= h;
+      if (held === 'A') { const keepV = r.vA; step(r, h); r.vA = keepV; r.xA = held_x; }
+      else if (held === 'B') { const keepV = r.vB; step(r, h); r.vB = keepV; r.xB = held_x; }
+      else step(r, h);
+    }
+    if (!wasContact && (r.contact || r.stuck) && !hitSound) {
+      hitSound = true;
+      const rel = Math.abs(r.vA - r.vB) + 0.1;
+      if (r.bump === 'bump-spring') sound.play('clack', { vol: rel }); else if (r.bump === 'bump-velcro') { sound.play('thud', { vol: rel }); sound.play('sand', { vol: 2 }); }
+      else if (r.bump === 'bump-clay') sound.play('thud', { vol: rel }); else sound.play('whoosh', { vol: 0.4 });
+    }
+    if (!(r.contact || r.stuck)) hitSound = false;
+    if (ke0 > 0) keMin = Math.min(keMin, ke() / ke0);
+    if (dt > 0) { graph.push(r.t, { a: r.xA, b: r.xB }); snapT += dt; if (snapT >= 0.1) { snapT = 0; snaps.push([r.xA, r.xB]); if (snaps.length > 12) snaps.shift(); } }
+    if (r.after && !r.noted) {
+      r.noted = true;
+      const p1 = r.mA * r.before.vA + r.mB * r.before.vB, p2 = r.mA * r.after.vA + r.mB * r.after.vB;
+      const k1 = 0.5 * r.mA * r.before.vA ** 2 + 0.5 * r.mB * r.before.vB ** 2, k2 = 0.5 * r.mA * r.after.vA ** 2 + 0.5 * r.mB * r.after.vB ** 2;
+      rig.note({ bench: 'airtrack', keLost: k1 > 0 ? 1 - k2 / k1 : 0, p1, p2, bump: r.bump });
+    }
+    if (pending && pending.until()) { const f = pending.then; pending = null; f(); }
+  });
+  let held_x = 0;
+  const ke = () => 0.5 * r.mA * r.vA * r.vA + 0.5 * r.mB * r.vB * r.vB;
+
+  // ---------- drawing
+  st.onResize((w, h, narrow) => {
+    const x0 = narrow ? 18 : 46, s = (w - 2 * x0) / TRACK;
+    Lay = { w, h, x0, s, y: Math.round(h * 0.62), narrow };
+  });
+  const X = (x) => Lay.x0 + x * Lay.s;
+  const gW = () => 2 * HALF * Lay.s;
+
+  function drawTrack(g, w, h) {
+    K.room(g, w, h, K.THEME[1], { floorH: 0.12 });
+    const y = Lay.y;
+    K.benchTop(g, 10, y + 44, w - 20, 16, 22, K.MAT.wood);
+    // legs and the blower
+    for (const x of [X(0.15), X(1.85)]) K.box(g, x - 6, y + 14, 12, 32, K.MAT.steel, { r: 2 });
+    K.box(g, X(0) - 36, y - 14, 28, 34, K.MAT.navy, { r: 5 });
+    K.text(g, 'air', X(0) - 22, y + 8, { size: 10, weight: 700, align: 'center', color: '#A8ECFF', font: K.PIXF });
+    // the rail: a long aluminium beam full of tiny holes
+    K.box(g, X(0) - 6, y - 4, TRACK * Lay.s + 12, 18, K.MAT.alu, { r: 3 });
+    g.fillStyle = 'rgba(46,74,125,0.55)';
+    for (let x = X(0.02); x < X(TRACK - 0.02); x += 9) { g.beginPath(); g.arc(x, y + 2, 1.2, 0, Math.PI * 2); g.fill(); }
+    // end stops
+    for (const x of [X(0) - 8, X(TRACK) + 2]) K.box(g, x, y - 22, 6, 22, K.MAT.rubber, { r: 2 });
+    // a metre stick along the front
+    K.rulerH(g, X(0), X(TRACK), y + 16, X, 0, TRACK, 0.1, { major: 5, fmt: (v) => v.toFixed(1) + ' m', h: 22 });
+  }
+
+  function drawGlider(g, x, m, cols, label, bumpLeft, bumpRight, hover) {
+    const y = Lay.y, w = gW(), x0 = X(x) - w / 2, top = y - 36;
+    if (air) for (let k = 0; k < 4; k++) { const ax = x0 + 8 + k * (w - 16) / 3, a = 0.3 + 0.3 * Math.sin(st.t * 30 + k * 2 + x * 10); g.fillStyle = `rgba(168,236,255,${a})`; g.fillRect(ax, y - 6, 2, 3); }
+    if (hover) K.glow(g, X(x), y - 18, w * 0.8, '#00D4FF', 0.35);
+    // body: an upside-down V that rides on the rail
+    K.box(g, x0, top, w, 30, cols, { r: 6 });
+    K.box(g, x0 + w / 2 - 3, top - 26, 6, 26, K.MAT.navy, { r: 2 });       // the flag for the photogates
+    // stacked weights show the mass
+    const n = Math.round(m / 0.1);
+    for (let i = 0; i < n - 1; i++) K.box(g, x0 + w * 0.2 + (i % 2) * w * 0.32, top - 10 - Math.floor(i / 2) * 9, w * 0.26, 9, K.MAT.brass, { r: 3, lw: 1.5 });
+    K.text(g, label, x0 + w / 2, top + 20, { size: 14, weight: 700, align: 'center', color: K.LINE, font: K.PIXF });
+    // bumpers
+    const bumper = (bx, dir, kind) => {
+      if (kind === 'bump-spring') { g.save(); g.strokeStyle = '#6886AC'; g.lineWidth = 2.5; g.beginPath(); g.ellipse(bx + dir * 7, top + 12, 8, 9, 0, 0, Math.PI * 2); g.stroke(); g.restore(); }
+      else if (kind === 'bump-velcro') K.box(g, dir > 0 ? bx : bx - 7, top + 3, 7, 18, ['#F29E4C', '#FFD1A1', '#B9651F'], { r: 2, lw: 1.5 });
+      else if (kind === 'bump-clay') { g.beginPath(); g.ellipse(bx + dir * 5, top + 13, 6, 8, 0, 0, Math.PI * 2); g.fillStyle = '#FF8FAB'; g.fill(); g.lineWidth = 1.5; g.strokeStyle = K.LINE; g.stroke(); }
+      else if (kind === 'bump-magnet') K.box(g, dir > 0 ? bx : bx - 9, top + 3, 9, 18, dir > 0 ? K.MAT.magnetN : K.MAT.magnetN, { r: 2, lw: 1.5 });
+    };
+    if (bumpRight) bumper(x0 + w, 1, bumpRight);
+    if (bumpLeft) bumper(x0, -1, bumpLeft);
+  }
+
+  st.onDraw((g, w, h) => {
+    st.cache('bg', `${w}x${h}`, drawTrack);
+    if (!r) return;
+    const bump = r.bump;
+    if (st.on('snaps')) snaps.forEach(([a, b], i) => { g.save(); g.globalAlpha = 0.1 + 0.25 * i / snaps.length; K.box(g, X(a) - gW() / 2, Lay.y - 30, gW(), 24, GL.A, { r: 5, lw: 1 }); K.box(g, X(b) - gW() / 2, Lay.y - 30, gW(), 24, GL.B, { r: 5, lw: 1 }); g.restore(); });
+    drawGlider(g, r.xA, r.mA, GL.A, 'A', null, bump, st.hovering('A'));
+    drawGlider(g, r.xB, r.mB, GL.B, 'B', bump, null, st.hovering('B'));
+    const pS = Lay.s * 1.4;                          // pixels per kg m/s
+    const cap = (v) => Math.max(-260, Math.min(260, v));
+    if (st.on('mom')) {
+      const pa = r.mA * r.vA, pb = r.mB * r.vB, yA = Lay.y - 92;
+      if (Math.abs(pa) > 0.003) K.arrow(g, X(r.xA), yA, X(r.xA) + cap(pa * pS), yA, '#C99A1B', { label: `A: ${pa.toFixed(3)}`, size: 11.5 });
+      if (Math.abs(pb) > 0.003) K.arrow(g, X(r.xB), yA - 28, X(r.xB) + cap(pb * pS), yA - 28, '#1F8FB0', { label: `B: ${pb.toFixed(3)}`, size: 11.5 });
+      // the total, drawn from a fixed spot so you can see it never changes
+      const pt = pa + pb, ty = 58, tx = Lay.w * 0.42;
+      K.text(g, 'total momentum', tx, ty - 18, { size: 12, weight: 600, align: 'center' });
+      g.save(); g.fillStyle = '#E6FBF1'; K.rr(g, tx - 150, ty - 10, 300, 22, 8); g.fill(); g.restore();
+      K.lineSeg(g, tx, ty - 12, tx, ty + 14, K.LINE, 1.5);
+      if (Math.abs(pt) > 0.003) K.arrow(g, tx, ty + 1, tx + Math.max(-140, Math.min(140, pt * pS)), ty + 1, K.COL.vel, { label: `${pt.toFixed(3)} kg m/s`, size: 11.5 });
+      // forces during contact: equal and opposite
+      if (r.contact && !r.stuck) {
+        K.arrow(g, X(r.xA) + gW() / 2, Lay.y - 50, X(r.xA) + gW() / 2 - 40, Lay.y - 50, K.COL.gravity, { label: 'push on A', size: 10.5 });
+        K.arrow(g, X(r.xB) - gW() / 2, Lay.y - 50, X(r.xB) - gW() / 2 + 40, Lay.y - 50, K.COL.gravity, { label: 'push on B', size: 10.5 });
+      }
+    }
+    if (st.on('cm')) {
+      const xc = (r.mA * r.xA + r.mB * r.xB) / (r.mA + r.mB);
+      const cx = X(xc), cy = Lay.y - 132;
+      g.save(); g.beginPath(); g.moveTo(cx, cy - 10); g.lineTo(cx + 9, cy); g.lineTo(cx, cy + 10); g.lineTo(cx - 9, cy); g.closePath(); g.fillStyle = K.COL.net; g.fill(); g.lineWidth = 2; g.strokeStyle = K.LINE; g.stroke(); g.restore();
+      K.lineSeg(g, cx, cy + 10, cx, Lay.y - 34, K.hexA(K.COL.net, 0.5), 1.5, [4, 4]);
+      K.tag(g, 'centre of mass', cx, cy - 22, { size: 11, bg: '#DCD3FF' });
+    }
+    if (st.on('energy')) {
+      const ka = 0.5 * r.mA * r.vA ** 2, kb = 0.5 * r.mB * r.vB ** 2, E = Math.max(ke0, ka + kb, 1e-9);
+      K.bars(g, w - 176, 18, 158, 150, [{ label: 'A', value: ka, color: '#E8C25A' }, { label: 'B', value: kb, color: '#3FC1D9' }, { label: 'lost', value: Math.max(0, ke0 - ka - kb), color: K.COL.heat }], E, { title: 'Motion energy' });
+    }
+    if (first && !held) { const k = (Math.sin(st.t * 3) + 1) / 2; K.arrow(g, X(r.xA) - 70 - k * 10, Lay.y - 70, X(r.xA) - gW() / 2 - 6, Lay.y - 26, K.COL.normal, { lw: 3.5, head: 11 }); }
+  });
+  st.onOver(() => {
+    if (!r) return;
+    const pa = r.mA * r.vA, pb = r.mB * r.vB;
+    st.set('pa', `${pa.toFixed(3)} kg m/s`); st.set('pb', `${pb.toFixed(3)} kg m/s`); st.set('pt', `${(pa + pb).toFixed(3)} kg m/s`);
+    st.set('ke', ke0 > 1e-6 ? `${Math.round(100 * ke() / ke0)}%` : '–');
+    graph.draw();
+  });
+
+  // ---------- hands: grab a glider and push it
+  const grab = (who) => ({
+    id: who, cursor: 'grab',
+    hit: (x, y) => { const gx = X(who === 'A' ? r.xA : r.xB); return Math.abs(x - gx) < gW() / 2 + 10 && y > Lay.y - 62 && y < Lay.y + 6 ? Math.abs(x - gx) : false; },
+    down: (x) => { held = who; held_x = who === 'A' ? r.xA : r.xB; first = false; st.hint(null); st._dx = x - X(held_x); if (who === 'A') r.vA = 0; else r.vB = 0; r.touched = false; r.after = null; r.noted = false; r.stuck = false; },
+    move: (x) => {
+      const nx = (x - st._dx - Lay.x0) / Lay.s;
+      if (who === 'A') { held_x = Math.max(HALF, Math.min(r.xB - 2 * HALF - 0.001, nx)); }
+      else { held_x = Math.max(r.xA + 2 * HALF + 0.001, Math.min(TRACK - HALF, nx)); }
+    },
+    up: (x, y, vx) => {
+      held = null;
+      const v = Math.max(-1.5, Math.min(1.5, vx / Lay.s));
+      if (who === 'A') r.vA = v; else r.vB = v;
+      r.before = { vA: r.vA, vB: r.vB }; startE();
+      if (Math.abs(v) > 0.05) sound.play('swing');
+    },
+  });
+  st.handle(grab('A')); st.handle(grab('B'));
+  st.hint('Grab glider A and push it towards B', { sticky: true });
+
+  // ---------- why
+  const go = (o) => { reset(o); r.before = { vA: r.vA, vB: r.vB }; startE(); };
+  st.tour({
+    title: 'What is kept in a crash?',
+    steps: [
+      { say: '**Momentum** is mass times velocity: how hard something would be to stop. Glider A has some (the arrow), B has none.', tools: { mom: true, energy: false, cm: false }, enter: (s) => { s.setSpeed(1); go({ bump: 'bump-spring', mA: 0.2, mB: 0.2, vA: 0.5 }); } },
+      { say: 'In the crash, A pushes B and **B pushes A back just as hard, for just as long**. So whatever momentum A loses, B gains.', enter: (s) => { s.setSpeed(1 / 16); go({ bump: 'bump-spring', mA: 0.2, mB: 0.2, vA: 0.5, xA: 0.82 }); } },
+      { say: 'So the **total stays the same** (the green arrow at the top). The **centre of mass** glides on at a steady speed, as if nothing happened.', tools: { cm: true }, enter: (s) => { s.setSpeed(0.5); go({ bump: 'bump-spring', mA: 0.4, mB: 0.1, vA: 0.5 }); } },
+      { say: 'Energy is another story. **Springy bumpers** give back almost all the motion energy. **Velcro** makes them stick: a lot of energy turns into heat and sound, yet the momentum is still all there.', tools: { cm: false, energy: true }, enter: (s) => { s.setSpeed(0.5); go({ bump: 'bump-velcro', mA: 0.2, mB: 0.2, vA: 0.6 }); } },
+    ],
+    onEnd: () => reset(),
+  });
+
+  // ---------- predict, watch, explain
+  const until = (cond, then) => { pending = { until: cond, then }; };
+  const after = () => { pending = null; reset(); };
+  const done = () => r.after && r.t > r.after.t + 0.4;
+  st.setChallenges([
+    {
+      id: 'swap', title: 'Equal gliders', card: 'airtrack.swap', lock: true, after,
+      q: 'Two 200 g gliders with springy bumpers. A hits B, which is standing still. Afterwards…', choices: ['A stops and B moves off', 'both move on at half speed', 'A bounces back'], answer: 0,
+      run: (s, finish) => { s.setSpeed(0.5); s.setTool('mom', true); go({ bump: 'bump-spring', mA: 0.2, mB: 0.2, vA: 0.5 }); until(done, () => finish(`A: ${r.after.vA.toFixed(2)} m/s, B: ${r.after.vB.toFixed(2)} m/s.`)); },
+      explain: 'With equal masses and a bouncy hit, the gliders simply swap speeds, like the balls of Newton’s cradle. Both momentum and energy are kept that way.',
+    },
+    {
+      id: 'half', title: 'Sticky crash', card: 'airtrack.half', lock: true, after,
+      q: 'Two equal gliders with velcro: they stick together. How much of the motion energy is left afterwards?', choices: ['All of it', 'Half', 'None'], answer: 1,
+      run: (s, finish) => { s.setSpeed(0.5); s.setTool('energy', true); go({ bump: 'bump-velcro', mA: 0.2, mB: 0.2, vA: 0.6 }); until(done, () => finish(`${Math.round(100 * ke() / ke0)}% is left.`)); },
+      explain: 'Momentum is kept, so the pair moves at half the speed. Motion energy goes with the speed squared: twice the mass at half the speed has half the energy. The other half became heat and sound.',
+    },
+    {
+      id: 'bounce', title: 'Light hits heavy', card: 'airtrack.bounce', lock: true, after,
+      q: 'A 100 g glider with springy bumpers hits a 400 g glider at rest. The light one…', choices: ['stops dead', 'keeps going forward, slower', 'bounces back'], answer: 2,
+      run: (s, finish) => { s.setSpeed(0.5); s.setTool('mom', true); go({ bump: 'bump-spring', mA: 0.1, mB: 0.4, vA: 0.6 }); until(done, () => finish(`A: ${r.after.vA.toFixed(2)} m/s (backwards), B: ${r.after.vB.toFixed(2)} m/s.`)); },
+      explain: 'The heavy glider takes more momentum than the light one had, so the light one has to go backwards to keep the total. Like a ping-pong ball bouncing off a bowling ball.',
+    },
+  ]);
+
+  return st.ctl;
+}
+
 bench.tabs = [
-  { id: 'track', label: 'Collide', build: tabTrack },
+  { id: 'play', label: 'Play', build: tabPlay },
+  { id: 'track', label: 'Measure', build: tabTrack },
   { id: 'graph', label: 'Film', build: tabGraph },
 ];
 

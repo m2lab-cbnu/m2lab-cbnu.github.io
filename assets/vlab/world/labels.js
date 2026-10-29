@@ -2,6 +2,7 @@
 // users can open every station without moving around the 3D room.
 
 import * as THREE from '../vendor/three.js';
+import { tr, trf } from '../i18n.js';
 
 export class Labels {
   constructor(container, camera, { occluders, onClick }) {
@@ -13,7 +14,7 @@ export class Labels {
   add(station, anchor) {
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'vl-label'; b.textContent = station.title;
-    b.setAttribute('aria-label', `Open ${station.title}`);
+    b.setAttribute('aria-label', trf('Open {0}', tr(station.title)));
     b.addEventListener('click', () => this.onClick(station));
     this.container.append(b);
     const item = { station, anchor: new THREE.Vector3(...anchor), el: b, occluded: false };

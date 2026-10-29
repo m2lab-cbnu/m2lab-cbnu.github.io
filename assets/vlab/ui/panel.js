@@ -2,6 +2,7 @@
 // time they are shown and kept, so settings survive closing and reopening the panel.
 
 import { el } from './widgets.js';
+import { trc } from '../i18n.js';
 
 const ICON_CLOSE = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 const ICON_WIDE = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 8V3h5M17 12v5h-5M3 3l5.5 5.5M17 17l-5.5-5.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -73,7 +74,7 @@ export class Panel {
     // tabs
     this.tabs.replaceChildren(...station.tabs.map((t) => el('button', {
       type: 'button', role: 'tab', id: `tab-${station.id}-${t.id}`, 'aria-controls': `pane-${station.id}-${t.id}`,
-      'aria-selected': 'false', tabindex: '-1', text: t.label, onclick: () => this.showTab(t.id),
+      'aria-selected': 'false', tabindex: '-1', text: trc('tab', t.label), onclick: () => this.showTab(t.id),
     })));
     this.tabs.hidden = station.tabs.length < 2;
     this.wideBtn.hidden = !!this.flat;

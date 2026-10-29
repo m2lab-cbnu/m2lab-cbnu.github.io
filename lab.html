@@ -28,7 +28,7 @@
 </head>
 <body class="vlab-page">
 <a class="skip" href="#rpg-guide">Skip to the list of experiments</a>
-<header class="site-header">
+<header class="site-header" data-tr="no">
   <nav class="nav" aria-label="Main">
     <a class="brand" href="index.html"><img src="images/logo-144.png" alt="" width="34" height="36">M² Lab</a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
@@ -56,12 +56,15 @@
     <div class="rpg-btns">
       <button id="rpg-guide" class="rpg-btn pixbox" type="button"><svg viewBox="0 0 9 9" aria-hidden="true"><path fill="currentColor" d="M0 1h3v1H0zM6 1h3v1H6zM0 2h1v6H0zM3 2h1v6H3zM5 2h1v6H5zM8 2h1v6H8zM1 7h2v1H1zM6 7h2v1H6zM4 1h1v1H4zM4 7h1v1H4z"/></svg><span class="lbl">Map</span></button>
       <button id="rpg-bag" class="rpg-btn pixbox" type="button"><svg viewBox="0 0 9 9" aria-hidden="true"><path fill="currentColor" d="M3 0h3v1H3zM2 1h1v2H2zM6 1h1v2H6zM1 3h7v1H1zM0 4h1v4H0zM8 4h1v4H8zM1 8h7v1H1zM4 5h1v1H4z"/></svg><span class="lbl">Bag</span></button>
-      <button id="rpg-pass" class="rpg-btn pixbox" type="button"><svg viewBox="0 0 9 9" aria-hidden="true"><path fill="currentColor" d="M3 0h3v1H3zM2 1h1v1H2zM6 1h1v1H6zM1 2h1v3H1zM7 2h1v3H7zM2 5h1v1H2zM6 5h1v1H6zM3 6h3v1H3zM2 7h5v2H2zM4 3h1v1H4z"/></svg><span class="lbl">Stamps</span><span class="count" hidden>0</span></button>
+      <button id="rpg-pass" class="rpg-btn pixbox" type="button"><svg viewBox="0 0 9 9" aria-hidden="true"><path fill="currentColor" d="M3 0h3v1H3zM2 1h1v1H2zM6 1h1v1H6zM1 2h1v3H1zM7 2h1v3H7zM2 5h1v1H2zM6 5h1v1H6zM3 6h3v1H3zM2 7h5v2H2zM4 3h1v1H4z"/></svg><span class="lbl">Passport</span><span class="count" hidden>0</span></button>
+      <button id="rpg-sound" class="rpg-btn pixbox" type="button" aria-pressed="true" aria-label="Sound"><svg class="on" viewBox="0 0 9 9" aria-hidden="true"><path fill="currentColor" d="M0 3h2v3H0zM2 2h1v5H2zM3 1h1v7H3zM5 3h1v3H5zM7 1h1v1H7zM8 2h1v5H8zM7 7h1v1H7z"/></svg><svg class="off" viewBox="0 0 9 9" aria-hidden="true"><path fill="currentColor" d="M0 3h2v3H0zM2 2h1v5H2zM3 1h1v7H3zM5 3h1v1H5zM8 3h1v1H8zM6 4h2v1H6zM5 5h1v1H5zM8 5h1v1H8z"/></svg><span class="lbl">Sound</span></button>
+      <button id="rpg-lang" class="rpg-btn pixbox" type="button" data-tr="no"><svg viewBox="0 0 9 9" aria-hidden="true"><path fill="currentColor" d="M0 1h4v1H0zM1 2h1v3H1zM3 2h1v1H3zM2 5h1v1H2zM0 6h1v1H0zM6 3h1v1H6zM5 4h1v1H5zM7 4h1v1H7zM5 5h3v1H5zM4 6h1v3H4zM8 6h1v3H8z"/></svg><span class="lbl">한국어</span></button>
       <button id="rpg-help" class="rpg-btn pixbox" type="button"><svg viewBox="0 0 9 9" aria-hidden="true"><path fill="currentColor" d="M3 0h3v1H3zM2 1h1v1H2zM6 1h1v3H6zM4 4h2v1H4zM4 5h1v1H4zM4 7h1v2H4z"/></svg><span class="lbl">Help</span></button>
     </div>
   </div>
   <div id="rpg-intro" class="rpg-intro" hidden>
     <div class="rpg-card pixbox" role="dialog" aria-modal="true" aria-labelledby="rpg-intro-title">
+      <button class="lang" type="button" lang="ko" data-tr="no">한국어로 보기</button>
       <h1 id="rpg-intro-title">Welcome to the M² Lab building</h1>
       <p class="lead">Three floors of experiments you can walk up to and use: textbook physics on 1F, the strange and wonderful on 2F, and our own magnonics instruments on 3F. Swap the samples, change the equipment, measure, and collect stamps from the people who work here.</p>
       <h3>Pick your scientist</h3>

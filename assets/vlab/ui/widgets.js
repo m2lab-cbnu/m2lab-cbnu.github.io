@@ -1,5 +1,7 @@
 // Form controls for station panels. Every control has a visible label and works with the keyboard.
 
+import { tr, trf } from '../i18n.js';
+
 let uid = 0;
 const id = (p) => `${p}-${++uid}`;
 
@@ -9,7 +11,7 @@ export function el(tag, attrs = {}, ...kids) {
     if (v === undefined || v === null || v === false) continue;
     if (k === 'class') e.className = v;
     else if (k === 'text') e.textContent = v;
-    else if (k === 'html') e.innerHTML = v;
+    else if (k === 'html') { const t = tr(v); e.innerHTML = t; if (t !== v) e.setAttribute('data-tr', 'no'); }   // rich text: translated whole
     else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
     else if (k === 'style' && typeof v === 'object') Object.assign(e.style, v);
     else e.setAttribute(k, v === true ? '' : v);
@@ -36,7 +38,7 @@ export function slider({ label, min, max, step, value, unit = '', log = false, d
   const toPos = (v) => log ? (Math.log10(v) - Math.log10(min)) / (Math.log10(max) - Math.log10(min)) * 1000 : v;
   const fromPos = (p) => log ? Math.pow(10, Math.log10(min) + p / 1000 * (Math.log10(max) - Math.log10(min))) : +p;
   const range = el('input', { type: 'range', id: sid, min: log ? 0 : min, max: log ? 1000 : max, step: log ? 1 : (step || 'any'), value: toPos(value) });
-  const num = el('input', { type: 'number', id: nid, class: 'num', step: 'any', value: fmtPlain(value, digits), 'aria-label': `${label}${unit ? ' in ' + unit : ''}` });
+  const num = el('input', { type: 'number', id: nid, class: 'num', step: 'any', value: fmtPlain(value, digits), 'aria-label': unit ? trf('{0} in {1}', tr(label), unit) : label });
   const wrap = el('div', { class: 'ctl ctl-slider' },
     el('div', { class: 'ctl-head' }, el('label', { for: sid, text: label }), el('span', { class: 'ctl-val' }, num, unit ? el('span', { class: 'unit', text: unit }) : null)),
     range, hint ? el('p', { class: 'ctl-hint', text: hint }) : null);

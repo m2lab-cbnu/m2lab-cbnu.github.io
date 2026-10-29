@@ -144,6 +144,108 @@
     }, { threshold: 0.25 }).observe(v);
   });
 
+  /* Projects: a quantum state leaves one qubit, becomes a magnon in the YIG sphere and arrives
+     at a second qubit. Geometry matches tx_svg.py. Plays once when the drawing comes into view
+     (never by itself under reduced motion); the button plays it again. */
+  (function () {
+    var fig = document.getElementById("tx");
+    if (!fig || !window.requestAnimationFrame || !document.querySelector) return;
+    var btn = document.getElementById("tx-play");
+    var steps = fig.querySelectorAll(".tx-step");
+    var Y = 170, NS = "http://www.w3.org/2000/svg";
+    var MEANDER = [[108, Y], [122, Y], [122, 130], [142, 130], [142, 210], [162, 210], [162, 130], [182, 130], [182, 210], [202, 210], [202, Y], [262, Y]];
+
+    function track(pts) {            // polyline with cumulative lengths
+      var L = [0];
+      for (var i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+      return { pts: pts, L: L, len: L[L.length - 1] };
+    }
+    function at(tr, s) {             // point at distance s along a track
+      s = Math.max(0, Math.min(tr.len, s));
+      for (var i = 1; i < tr.L.length; i++) if (tr.L[i] >= s) {
+        var f = (s - tr.L[i - 1]) / ((tr.L[i] - tr.L[i - 1]) || 1), p = tr.pts[i - 1], q = tr.pts[i];
+        return [p[0] + (q[0] - p[0]) * f, p[1] + (q[1] - p[1]) * f];
+      }
+      return tr.pts[tr.pts.length - 1];
+    }
+    var arts = Array.prototype.map.call(fig.querySelectorAll(".tx-svg"), function (svg) {
+      var a = +svg.getAttribute("data-a"), c = +svg.getAttribute("data-c"), b = +svg.getAttribute("data-b");
+      var inA = [[a + 68, Y]].concat(MEANDER.map(function (p) { return [a + p[0], p[1]]; }), [[a + 280, Y], [c - 64, Y], [c, Y]]);
+      var inB = [[c, Y], [c + 64, Y], [b, Y]].concat(MEANDER.slice().reverse().map(function (p) { return [b + 280 - p[0], p[1]]; }), [[b + 280 - 68, Y]]);
+      var q = svg.querySelectorAll(".tx-qglow"), pk = svg.querySelector(".tx-packet");
+      return {
+        c: c, A: track(inA), B: track(inB), qa: q[0], qb: q[1],
+        glow: svg.querySelector(".tx-mglow"), cone: svg.querySelector(".tx-cone"),
+        m: svg.querySelector(".tx-m"), head: svg.querySelector(".tx-mhead"),
+        pk: pk, dots: pk.querySelectorAll("circle")
+      };
+    });
+    if (!arts.length) return;
+
+    var ramp = function (t, t0, t1) { return Math.max(0, Math.min(1, (t - t0) / (t1 - t0))); };
+    var ease = function (x) { return x * x * (3 - 2 * x); };
+    var DUR = 6800, start = 0, raf = 0, played = false;
+
+    function draw(t, still) {
+      // still: reduced-motion version, the same three stages without movement
+      var qa = still ? (t < 1600 ? 1 : 0) : ease(ramp(t, 0, 600)) * (1 - ramp(t, 900, 1500));
+      var mag = still ? (t >= 1600 && t < 3400 ? 1 : 0) : ease(ramp(t, 2150, 2550)) * (1 - ease(ramp(t, 3750, 4350)));
+      var qb = still ? (t >= 3400 ? 1 : 0) : ease(ramp(t, 5350, 5900)) * (1 - 0.55 * ramp(t, 6200, DUR));
+      var sA = still ? -1 : (t - 750) / 1500, sB = still ? -1 : (t - 3850) / 1500;
+      var th = mag * 0.6, ph = still ? -0.6 : -t / 1000 * 2 * Math.PI * 1.3;
+      arts.forEach(function (r) {
+        r.qa.setAttribute("opacity", qa.toFixed(3));
+        r.qb.setAttribute("opacity", qb.toFixed(3));
+        r.glow.setAttribute("opacity", mag.toFixed(3));
+        // magnetisation: precesses about the field (up) with cone angle th, seen slightly from above
+        var bx = r.c, by = Y + 4, s = Math.sin(th), k = Math.cos(th);
+        var dx = s * Math.cos(ph), dy = -k + 0.35 * s * Math.sin(ph), n = Math.hypot(dx, dy) || 1;
+        var ux = dx / n, uy = dy / n;
+        r.m.setAttribute("x2", (bx + 34 * dx).toFixed(1)); r.m.setAttribute("y2", (by + 34 * dy).toFixed(1));
+        var tx = bx + 46 * dx, ty = by + 46 * dy, hx = bx + 33 * dx, hy = by + 33 * dy;
+        r.head.setAttribute("d", "M" + (hx - 7 * uy).toFixed(1) + "," + (hy + 7 * ux).toFixed(1) + " L" + tx.toFixed(1) + "," + ty.toFixed(1) + " L" + (hx + 7 * uy).toFixed(1) + "," + (hy - 7 * ux).toFixed(1) + " Z");
+        r.cone.setAttribute("cx", bx); r.cone.setAttribute("cy", (by - 40 * k).toFixed(1));
+        r.cone.setAttribute("rx", (40 * s).toFixed(1)); r.cone.setAttribute("ry", (14 * s).toFixed(1));
+        r.cone.setAttribute("opacity", (0.8 * mag).toFixed(3));
+        // the travelling quantum, with a short trail
+        var tr = sA >= 0 && sA <= 1 ? r.A : sB >= 0 && sB <= 1 ? r.B : null;
+        if (!tr) { r.pk.setAttribute("opacity", "0"); return; }
+        var f = tr === r.A ? sA : sB, d = ease(f) * tr.len;
+        r.pk.setAttribute("opacity", Math.min(1, f * 12, (1 - f) * 12).toFixed(3));
+        [0, 30, 20, 10, 0].forEach(function (back, i) {   // glow, trail (far to near), core
+          var p = at(tr, d - back), el = r.dots[i];
+          if (el) { el.setAttribute("cx", p[0].toFixed(1)); el.setAttribute("cy", p[1].toFixed(1)); }
+        });
+      });
+      var on = still ? (t < 1600 ? 0 : t < 3400 ? 1 : 2) : (t < 2200 ? 0 : t < 4300 ? 1 : 2);
+      for (var i = 0; i < steps.length; i++) steps[i].classList.toggle("is-on", i === on);
+    }
+
+    function play() {
+      played = true;
+      if (btn) btn.lastChild.textContent = "Send it again";
+      cancelAnimationFrame(raf);
+      start = 0;
+      var frame = function (now) {
+        if (!start) start = now;
+        var t = now - start;
+        draw(Math.min(t, DUR), reduce);
+        if (t < DUR) raf = requestAnimationFrame(frame);
+      };
+      raf = requestAnimationFrame(frame);
+    }
+
+    if (btn) { btn.hidden = false; btn.addEventListener("click", play); }
+    if (!reduce && "IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting && !played) { io.disconnect(); setTimeout(play, 350); }
+        });
+      }, { threshold: 0.6 });
+      io.observe(fig.querySelector(".tx-art"));
+    }
+  })();
+
   /* Footer year */
   document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 })();

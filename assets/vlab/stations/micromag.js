@@ -12,6 +12,7 @@ import { fft, nextPow2 } from '../physics/fft.js';
 import * as disp from '../physics/dispersion.js';
 import * as T from '../world/textures.js';
 import { lab } from '../state.js';
+import { tr, trf } from '../i18n.js';
 
 const VIEWS = [
   { value: 0, label: 'Direction (mumax colours)' }, { value: 1, label: 'm_x' }, { value: 2, label: 'm_y' }, { value: 3, label: 'm_z' },
@@ -117,7 +118,7 @@ function paintMain() {
 // ------------------------------------------------------------------------------------- simulate tab
 function tabSimulate(pane) {
   if (!engine.available()) {
-    pane.append(el('p', { class: 'note', html: `The simulator needs WebGL 2 with floating-point render targets, which this browser does not offer (${engine.error ? engine.error.message : ''}). The other instruments still work.` }));
+    pane.append(el('p', { class: 'note', html: trf('The simulator needs WebGL 2 with floating-point render targets, which this browser does not offer ({0}). The other instruments still work.', engine.error ? engine.error.message : '') }));
     return {};
   }
   const presetSel = select({ label: 'Simulation', options: PRESETS.map((p) => ({ value: p.id, label: p.name })), value: st.preset, onChange: (v) => { st.preset = v; buildOptions(); load(); } });
@@ -168,10 +169,13 @@ function tabSimulate(pane) {
   }
   function legend() {
     const mode = engine.view.mode;
-    lg.innerHTML = mode === 0 ? '<span class="wheel" aria-hidden="true"></span><span>Colour shows the in-plane direction, as in mumax3: red along +x, green +y, cyan −x, purple −y; white points up (+z), black down.</span>'
+    const html = mode === 0 ? '<span class="wheel" aria-hidden="true"></span><span>Colour shows the in-plane direction, as in mumax3: red along +x, green +y, cyan −x, purple −y; white points up (+z), black down.</span>'
       : mode < 4 ? `<span>Blue −1 · white 0 · red +1 for ${['', 'm_x', 'm_y', 'm_z'][mode]}.</span>`
       : mode === 4 ? '<span>Blue and red: the out-of-plane part of the spin waves, δm_z, against the state at the start.</span>'
       : '<span>Brightness: the size of the spin-wave precession.</span>';
+    const t = tr(html);   // translated whole, markup and all
+    lg.innerHTML = t;
+    if (t !== html) lg.dataset.tr = 'no'; else delete lg.dataset.tr;
     gain.hidden = mode < 4;
   }
   // per-preset option controls

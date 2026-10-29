@@ -17,11 +17,12 @@ function newSecrets() {
     stringMu: rand(0.9, 3.4, 2),        // g/m
     film: { Ms: Math.round(rand(320, 1050, 0)) * 1e3, alpha: rand(0.0025, 0.012, 4), gamma: 28.0e9 + Math.round(rand(0, 1.6, 1) * 1e8) * 10 },
     chargeQ: rand(1.5, 4.5, 1),
+    latX: (() => { let a; do { a = rand(3.2, 5.8, 1); } while (Math.abs(a - 4) < 0.3); return a; })(),   // cm, Crystal #9
   };
 }
 
 function fresh() {
-  return { v: 1, style: null, floor: 1, x: 6, y: 19, dir: 'up', items: [], mounts: {}, quests: {}, stamps: [], flags: {}, secrets: newSecrets(), log: [] };
+  return { v: 1, style: null, floor: 1, x: 6, y: 19, dir: 'up', items: [], mounts: {}, quests: {}, stamps: [], flags: {}, secrets: newSecrets(), log: [], cards: [], chal: {}, days: [] };
 }
 
 let S = load();
@@ -70,8 +71,17 @@ export const rig = {
   setQuest(id, st) { S.quests[id] = st; persist(); emit('quest', { id, st }); },
   stamp(id) { if (S.stamps.includes(id)) return false; S.stamps.push(id); persist(); emit('stamp', id); return true; },
   stamps: () => S.stamps.slice(),
+  // insight cards, earned by finishing a challenge
+  card(id) { if (S.cards.includes(id)) return false; S.cards.push(id); persist(); emit('card', id); return true; },
+  cards: () => S.cards.slice(),
+  // challenge results: { pick, ok, t }
+  chal(id, r) { if (r === undefined) return S.chal[id] || null; S.chal[id] = Object.assign({ t: Date.now() }, r); persist(); emit('chal', { id, r }); return r; },
   flag(name, v) { if (v === undefined) return S.flags[name]; S.flags[name] = v; persist(); emit('flag', { name, v }); return v; },
-  secret: (name) => S.secrets[name],
+  secret: (name) => {
+    // saves from before a secret existed get one the first time it is asked for
+    if (S.secrets[name] === undefined) { const n = newSecrets()[name]; if (n !== undefined) { S.secrets[name] = n; persist(); } }
+    return S.secrets[name];
+  },
   on(evt, fn) { if (!listeners.has(evt)) listeners.set(evt, new Set()); listeners.get(evt).add(fn); return () => listeners.get(evt).delete(fn); },
   emit,
   // a short history of measurements the quests can look at

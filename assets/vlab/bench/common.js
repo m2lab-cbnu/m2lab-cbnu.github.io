@@ -5,49 +5,76 @@
 import { el, fmtNum } from '../ui/widgets.js';
 import { ITEMS, itemIcon, itemWhere } from '../rpg/items.js';
 import { rig } from '../rpg/state.js';
+import { tr, trf } from '../i18n.js';
+
+const notYet = (it, id) => trf('{0}: not in your bag yet. {1}', tr(it.name), tr(itemWhere(id)));
 
 // ---------------------------------------------------------------- set-up strip
 // slots: [{ id, label, options: [itemId...], def: itemId }]
+// One compact row of slot buttons ("Bob: Steel ball"); each opens a small tray of the options.
+let openTray = null;
+document.addEventListener('pointerdown', (e) => { if (openTray && !openTray.wrap.contains(e.target)) openTray.close(); }, true);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && openTray) { e.preventDefault(); e.stopPropagation(); const b = openTray.btn; openTray.close(); b.focus(); } }, true);
+
+function iconCanvas(id, size = 16) {
+  const cv = el('canvas', { width: 16, height: 16, 'aria-hidden': 'true', class: 'rig-ic' });
+  cv.getContext('2d').drawImage(itemIcon(id), 0, 0);
+  cv.style.width = cv.style.height = size + 'px';
+  return cv;
+}
+
 export function rigStrip(bench) {
   return (host) => {
-    const box = el('div', { class: 'rig', role: 'group', 'aria-label': 'Set-up: samples and equipment' });
-    // on a phone the strip folds away behind a one-line summary, so the experiment shows first
-    const sum = el('summary', { class: 'rig-sum' });
-    const fold = el('details', { class: 'rig-fold', open: window.innerWidth > 640 ? true : undefined }, sum, box);
+    const box = el('div', { class: 'rig', role: 'group', 'aria-label': 'Samples and equipment' }, el('span', { class: 'rig-title', text: 'Set-up' }));
     const hint = el('p', { class: 'rig-hint', 'aria-live': 'polite' });
-    const rows = [];
+    const slots = [];
+    const avail = (id) => (ITEMS[id] && ITEMS[id].where === 'free') || rig.has(id);
     for (const slot of bench.slots) {
-      const opts = el('div', { class: 'rig-opts', role: 'radiogroup', 'aria-label': slot.label });
-      const btns = slot.options.map((id) => {
+      const btn = el('button', { type: 'button', class: 'rig-slot-btn', 'aria-haspopup': 'true', 'aria-expanded': 'false' });
+      const tray = el('div', { class: 'rig-tray', role: 'radiogroup', 'aria-label': slot.label, hidden: true });
+      const wrap = el('div', { class: 'rig-slot' }, btn, tray);
+      const opts = slot.options.map((id) => {
         const it = ITEMS[id] || { name: id };
-        const icon = itemIcon(id);
-        const cv = el('canvas', { width: 16, height: 16, 'aria-hidden': 'true' });
-        cv.getContext('2d').drawImage(icon, 0, 0);
-        const b = el('button', { type: 'button', class: 'rig-opt', role: 'radio', 'data-id': id }, cv, el('span', { text: it.name }));
+        const b = el('button', { type: 'button', class: 'rig-opt', role: 'radio', 'data-id': id }, iconCanvas(id, 28), el('span', { class: 'nm', text: it.name }), el('small', { class: 'ds' }));
         b.addEventListener('click', () => {
-          if (!avail(id)) { hint.textContent = `${it.name}: not in your bag yet. ${itemWhere(id)}`; return; }
+          if (!avail(id)) { hint.textContent = notYet(it, id); return; }
           rig.mount(bench.id, slot.id, id, 'strip');
           hint.textContent = it.desc || '';
+          close(); btn.focus({ preventScroll: true });
         });
-        b.addEventListener('focus', () => { hint.textContent = avail(id) ? (it.desc || '') : `${it.name}: not in your bag yet. ${itemWhere(id)}`; });
+        b.addEventListener('focus', () => { hint.textContent = avail(id) ? (it.desc || '') : notYet(it, id); });
+        b.addEventListener('pointerenter', () => { hint.textContent = avail(id) ? (it.desc || '') : notYet(it, id); });
         return b;
       });
-      opts.append(...btns);
-      rows.push({ slot, btns });
-      box.append(el('div', { class: 'rig-slot' }, el('span', { class: 'lbl', text: slot.label }), opts));
+      tray.append(...opts);
+      const close = () => { tray.hidden = true; btn.setAttribute('aria-expanded', 'false'); if (openTray && openTray.btn === btn) openTray = null; };
+      const open = () => {
+        if (openTray) openTray.close();
+        tray.hidden = false; btn.setAttribute('aria-expanded', 'true');
+        openTray = { wrap, btn, close };
+        const cur = tray.querySelector('[aria-checked="true"]') || opts[0];
+        setTimeout(() => cur && cur.focus({ preventScroll: true }), 20);
+      };
+      btn.addEventListener('click', () => (tray.hidden ? open() : close()));
+      tray.addEventListener('keydown', (e) => {
+        const i = opts.indexOf(document.activeElement); if (i < 0) return;
+        const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+        if (k) { e.preventDefault(); opts[(i + k + opts.length) % opts.length].focus(); }
+      });
+      slots.push({ slot, btn, opts });
+      box.append(wrap);
     }
-    box.append(hint);
-    host.append(fold);
-    const avail = (id) => (ITEMS[id] && ITEMS[id].where === 'free') || rig.has(id);
+    host.append(el('div', { class: 'rig-bar' }, box, hint));
     function refresh() {
-      sum.replaceChildren(el('span', { class: 'rig-sum-l', text: 'Samples and equipment' }), el('span', { class: 'rig-sum-v', text: bench.slots.map((sl) => (ITEMS[current(bench, sl.id)] || {}).name).join(' · ') }));
-      for (const { slot, btns } of rows) {
-        const cur = current(bench, slot.id);
-        for (const b of btns) {
+      for (const { slot, btn, opts } of slots) {
+        const cur = current(bench, slot.id), it = ITEMS[cur] || { name: cur };
+        btn.replaceChildren(iconCanvas(cur, 24), el('span', { class: 'l', text: slot.label }), el('b', { text: it.name }), el('span', { class: 'car', 'aria-hidden': 'true', text: '▾' }));
+        btn.setAttribute('aria-label', trf('{0}: {1}. Change', tr(slot.label), tr(it.name)));
+        for (const b of opts) {
           const id = b.dataset.id, on = id === cur, ok = avail(id);
           b.setAttribute('aria-checked', on ? 'true' : 'false');
-          b.setAttribute('aria-pressed', on ? 'true' : 'false');
           b.classList.toggle('is-locked', !ok);
+          b.querySelector('.ds').textContent = ok ? '' : 'not found yet';
           b.title = ok ? (ITEMS[id] && ITEMS[id].desc) || '' : itemWhere(id);
         }
       }

@@ -5,6 +5,7 @@ import { TILE, renderFloor, windowRects, WALLS, FACES } from './tiles.js';
 import { PROPS, propSprite } from './props.js';
 import { playerSprites, npcSprites, dropShadow } from './sprites.js';
 import { Pix, PAL } from './pix.js';
+import { timeOfDay, ambient, rgb, paintWindows, windowRuns, floorLights } from './light.js';
 
 const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
 const KEYMAP = {
@@ -13,6 +14,9 @@ const KEYMAP = {
 };
 const ACTION_KEYS = new Set([' ', 'Enter', 'e', 'E', 'z', 'Z']);
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// each person's little feeling: Kongi hums, Injeolmi purrs, Baro sparkles, Prof. Bueong ponders, Dr. Yeo has ideas, Nuri sings
+const EMOTE = { pip: 'note', mochi: 'heart', bolt: 'spark', hoo: 'dots', fennec: 'idea', nova: 'note' };
 
 export class Game {
   constructor(canvas, world, opts = {}) {
@@ -32,6 +36,9 @@ export class Game {
     this.inset = { left: 0, right: 0, bottom: 0 };
     this.hover = null; this.focusTarget = null;
     this.scale = 3;
+    this.tod = timeOfDay();
+    setInterval(() => { this.tod = timeOfDay(); }, 30000);
+    this.dust = [];
     this.labels = [];
     this._bind();
     this._resize();
@@ -89,7 +96,21 @@ export class Game {
       props.push(q);
     }
     const npcs = (f.npcs || []).map((n) => Object.assign({ fx: n.x, fy: n.y, moving: false, t: 0, from: [n.x, n.y], frame: 0, wait: 1 + Math.random() * 3, floor: f.floor }, n));
-    return { ...f, W, H, layer, solid, props, wallProps, floorProps, npcs, windows: windowRects(f) };
+    // soft shadows where the floor meets the walls
+    const g = layer.getContext('2d');
+    const isFloor = (c) => c !== undefined && !WALLS.has(c) && c !== ' ';
+    for (let y = 1; y < H; y++) for (let x = 0; x < W; x++) {
+      const c = f.rows[y][x]; if (!isFloor(c)) continue;
+      const up = f.rows[y - 1][x];
+      if (FACES.has(up) && up === up.toLowerCase()) {
+        [0.24, 0.15, 0.08, 0.03].forEach((a, j) => { g.fillStyle = `rgba(19,36,71,${a})`; g.fillRect(x * TILE, y * TILE + j, TILE, 1); });
+      }
+      if (x > 0 && f.rows[y][x - 1] === '#') [0.18, 0.08].forEach((a, j) => { g.fillStyle = `rgba(19,36,71,${a})`; g.fillRect(x * TILE + j, y * TILE, 1, TILE); });
+      if (x < W - 1 && f.rows[y][x + 1] === '#') [0.12, 0.05].forEach((a, j) => { g.fillStyle = `rgba(19,36,71,${a})`; g.fillRect(x * TILE + TILE - 1 - j, y * TILE, 1, TILE); });
+    }
+    const out = { ...f, W, H, layer, solid, props, wallProps, floorProps, npcs, windows: windowRects(f), runs: windowRuns(f) };
+    out.lights = floorLights(out);
+    return out;
   }
 
   get floor() { return this.floors[this.p.floor]; }
@@ -461,16 +482,31 @@ export class Game {
     g.fillStyle = PAL.night; g.fillRect(0, 0, B.c.width, B.c.height);
     g.drawImage(f.layer, -cx, -cy);
     B.at(-cx, -cy);
-    // clouds drifting past the windows
+    const tod = this.tod;
+    // the view through the windows follows the time of day, then the frames go back on top
+    g.save(); g.translate(-cx, -cy);
+    paintWindows(g, f.runs, tod, f.floor, t);
+    for (const r of f.runs) {
+      g.fillStyle = PAL.steelD; g.fillRect(r.x, r.y, r.w, 1); g.fillStyle = PAL.steelL; g.fillRect(r.x, r.y + 1, r.w, 1);
+      g.fillStyle = PAL.steelL; g.fillRect(r.x, r.y + 29, r.w, 3); g.fillStyle = '#FFFFFF'; g.fillRect(r.x, r.y + 29, r.w, 1); g.fillStyle = PAL.steelD; g.fillRect(r.x, r.y + 31, r.w, 1);
+      g.fillStyle = PAL.steelD; g.fillRect(r.x, r.y, 1, 32); g.fillRect(r.x + r.w - 1, r.y, 1, 32);
+      g.fillStyle = PAL.steelL; g.fillRect(r.x + 1, r.y, 1, 32); g.fillRect(r.x + r.w - 2, r.y, 1, 32);
+      for (let k = 1; k < r.n; k++) { g.fillStyle = PAL.steelL; g.fillRect(r.x + k * TILE - 1, r.y, 1, 32); }
+    }
+    g.restore();
+    // clouds drifting past the windows (pink at dusk, dark at night)
+    const cloud = tod.night > 0.6 ? ['#3A4A7A', '#2E3D68'] : tod.warm > 0.3 ? ['#FFD1C2', '#F2B4A6'] : ['#FFFFFF', '#E3F6FF'];
     for (const w of f.windows) {
       g.save(); g.beginPath(); g.rect(w.x - cx, w.y - cy, w.w, w.h); g.clip();
       for (let k = 0; k < 3; k++) {
         const span = w.w + 24, xx = w.x - 12 + ((t * (3 + k) + k * 37 + w.x) % span);
         const yy = w.y + 2 + ((k * 5 + w.x / 16) % 6);
-        B.rect(xx, yy, 8, 2, '#FFFFFF'); B.rect(xx + 2, yy - 1, 4, 1, '#FFFFFF'); B.hl(xx, yy + 2, 8, '#E3F6FF');
+        B.rect(xx, yy, 8, 2, cloud[0]); B.rect(xx + 2, yy - 1, 4, 1, cloud[0]); B.hl(xx, yy + 2, 8, cloud[1]);
       }
       g.restore();
     }
+    // sunbeams on the floor, with dust floating in them
+    if (tod.sun > 0.05 && !reduceMotion) this._dust(B, f, tod, t);
     // wall pieces that move
     for (const q of f.wallProps) if (q.def.anim) q.def.anim(B, q.px, q.py, t, q.opt || {});
     // things on the floor, people and you, sorted by how far down the screen they stand
@@ -480,6 +516,12 @@ export class Game {
     items.push({ y: Math.round(this.p.fy * TILE) + 15.5, me: true });
     items.sort((a, b) => a.y - b.y);
     const vx0 = cx - 64, vx1 = cx + B.c.width + 64, vy0 = cy - 96, vy1 = cy + B.c.height + 96;
+    // soft contact shadows first, so nothing stands on another thing's shadow
+    for (const it of items) {
+      const q = it.q; if (!q || q.def.noShadow) continue;
+      if (q.px > vx1 || q.px + q.img.width < vx0 || q.py > vy1 || q.py + q.img.height < vy0) continue;
+      this._shadow(B, q.x * TILE + q.w * TILE / 2, (q.y + q.h) * TILE - 1, q.w * TILE - 2);
+    }
     for (const it of items) {
       if (it.q) {
         const q = it.q;
@@ -507,12 +549,130 @@ export class Game {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(B.c, 0, 0, B.c.width * this.scale, B.c.height * this.scale);
+    this._light(ctx, f, tod, t);
     // name label for the hovered or faced thing, at full resolution
     if (ft && !this.frozen && this.opts.labelFor) {
       const a = this._anchor(ft), text = this.opts.labelFor(ft);
       if (a && text) this._label(text, (a.x - cx) * this.scale, (a.y - cy - 8) * this.scale);
     }
     if (this.fade > 0) { ctx.fillStyle = `rgba(19, 36, 71, ${Math.min(1, this.fade)})`; ctx.fillRect(0, 0, this.canvas.width, this.canvas.height); }
+  }
+
+  // a soft oval shadow under something w pixels wide, cached per width
+  _shadow(B, x, y, w) {
+    if (!this._shadows) this._shadows = new Map();
+    let img = this._shadows.get(w);
+    if (!img) {
+      const c = document.createElement('canvas'); c.width = w + 4; c.height = 7;
+      const g = c.getContext('2d');
+      for (let j = 0; j < 7; j++) {
+        const yy = (j - 3) / 3.5, half = (w / 2 + 1) * Math.sqrt(Math.max(0, 1 - yy * yy));
+        g.fillStyle = `rgba(19,36,71,${0.16 + 0.06 * (1 - Math.abs(yy))})`;
+        g.fillRect(Math.round(c.width / 2 - half), j, Math.round(half * 2), 1);
+      }
+      img = c; this._shadows.set(w, img);
+    }
+    B.g.drawImage(img, Math.round(x - img.width / 2) + B.ox, Math.round(y - 4) + B.oy);
+  }
+
+  // sunbeams: bright patches on the floor below each window, leaning with the sun, and dust
+  _beams(f, tod) {
+    const out = [];
+    const len = 70 - 24 * tod.warm;            // long at midday, shorter and warmer at sunset
+    const lean = -tod.az * 34;                  // morning light leans west, afternoon light east
+    for (const r of f.runs) {
+      const y0 = r.y + 2 * TILE, x0 = r.x + 2, x1 = r.x + r.w - 2;
+      out.push([[x0, y0], [x1, y0], [x1 + lean, y0 + len], [x0 + lean, y0 + len]]);
+    }
+    return out;
+  }
+  _dust(B, f, tod, t) {
+    const beams = this._beams(f, tod);
+    if (this.dust.length < 26 * beams.length) for (const bm of beams) for (let k = 0; k < 2; k++) this.dust.push({ b: bm, u: Math.random(), v: Math.random(), s: 0.15 + Math.random() * 0.3, ph: Math.random() * 6 });
+    const a = 0.55 * tod.sun;
+    for (const d of this.dust) {
+      if (!beams.some((b) => b[0][0] === d.b[0][0] && b[0][1] === d.b[0][1])) continue;
+      d.v = (d.v + d.s * 0.004) % 1; d.u = (d.u + Math.sin(t * 0.7 + d.ph) * 0.0015 + 1) % 1;
+      const [p0, p1, , p3] = d.b;
+      const x = p0[0] + (p1[0] - p0[0]) * d.u + (p3[0] - p0[0]) * d.v, y = p0[1] + (p3[1] - p0[1]) * d.v - 6;
+      const tw = 0.5 + 0.5 * Math.sin(t * 2 + d.ph * 3);
+      B.g.fillStyle = `rgba(255,248,214,${a * tw})`;
+      B.g.fillRect(Math.round(x) + B.ox, Math.round(y) + B.oy, 1, 1);
+    }
+  }
+
+  // light: a soft light map at half the screen's resolution, multiplied over the crisp pixels
+  _light(ctx, f, tod, t) {
+    const W = this.canvas.width, H = this.canvas.height, k = 0.5;
+    const lw = Math.max(1, Math.ceil(W * k)), lh = Math.max(1, Math.ceil(H * k));
+    if (!this.lcv) this.lcv = document.createElement('canvas');
+    if (this.lcv.width !== lw || this.lcv.height !== lh) { this.lcv.width = lw; this.lcv.height = lh; }
+    const L = this.lcv.getContext('2d');
+    const amb = ambient(tod, f.floor);
+    L.globalCompositeOperation = 'source-over';
+    L.fillStyle = rgb(amb); L.fillRect(0, 0, lw, lh);
+    L.globalCompositeOperation = 'lighter';
+    const s = this.scale * k, cx = this.cam.x, cy = this.cam.y;
+    const hexRGB = (h) => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+    const glows = [];
+    for (const li of f.lights) {
+      const x = (li.x - cx) * s, y = (li.y - cy) * s, r = li.r * s;
+      if (x < -r || y < -r || x > lw + r || y > lh + r) continue;
+      let inten = li.i * (li.night ? 0.25 + 0.75 * tod.night : 1);
+      if (li.ceiling) inten = li.i + li.nightBoost * tod.night;
+      if (li.flicker && !reduceMotion) inten *= 1 - li.flicker * 0.5 * (1 + Math.sin(t * (3 + (li.seed || 0) % 5) + (li.seed || 0)));
+      if (inten <= 0.01) continue;
+      const [cr, cg, cb] = hexRGB(li.c);
+      const gr = L.createRadialGradient(x, y, 0, x, y, r);
+      gr.addColorStop(0, `rgba(${cr},${cg},${cb},${Math.min(1, inten)})`);
+      gr.addColorStop(0.5, `rgba(${cr},${cg},${cb},${Math.min(1, inten) * 0.4})`);
+      gr.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+      L.fillStyle = gr; L.fillRect(x - r, y - r, 2 * r, 2 * r);
+      if (li.emit) glows.push([x / k, y / k, r / k, li.c, inten]);
+    }
+    // sunbeams brighten the floor
+    if (tod.sun > 0.05) {
+      const warm = tod.warm;
+      const col = warm > 0.3 ? `rgba(255,190,130,${0.36 * tod.sun})` : `rgba(255,246,214,${0.38 * tod.sun})`;
+      for (const bm of this._beams(f, tod)) {
+        L.beginPath(); bm.forEach(([bx, by], i) => { const X = (bx - cx) * s, Y = (by - cy) * s; if (i) L.lineTo(X, Y); else L.moveTo(X, Y); }); L.closePath();
+        const y0 = (bm[0][1] - cy) * s, y1 = (bm[2][1] - cy) * s;
+        const gr = L.createLinearGradient(0, y0, 0, y1); gr.addColorStop(0, col); gr.addColorStop(1, 'rgba(255,240,200,0)');
+        L.fillStyle = gr; L.fill();
+      }
+      // the windows themselves are bright
+      for (const r of f.runs) { L.fillStyle = `rgba(255,255,255,${0.25 * tod.sun})`; L.fillRect((r.x - cx) * s, (r.y - cy) * s, r.w * s, r.h * s); }
+    } else {
+      for (const r of f.runs) { L.fillStyle = 'rgba(160,190,255,0.12)'; L.fillRect((r.x - cx) * s, (r.y - cy) * s, r.w * s, r.h * s); }
+    }
+    // the player carries a little light at night, so they never get lost in the dark
+    if (tod.night > 0.4) {
+      const x = (this.p.fx * TILE + 8 - cx) * s, y = (this.p.fy * TILE + 6 - cy) * s, r = 40 * s;
+      const gr = L.createRadialGradient(x, y, 0, x, y, r);
+      gr.addColorStop(0, `rgba(255,236,200,${0.22 * tod.night})`); gr.addColorStop(1, 'rgba(255,236,200,0)');
+      L.fillStyle = gr; L.fillRect(x - r, y - r, 2 * r, 2 * r);
+    }
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(this.lcv, 0, 0, W, H);
+    // glows of screens, lasers and lamps, stronger in the dark
+    ctx.globalCompositeOperation = 'lighter';
+    const gk = 0.12 + 0.3 * tod.night;
+    for (const [x, y, r, c, inten] of glows) {
+      const [cr, cg, cb] = hexRGB(c), rr = r * 0.55;
+      const gr = ctx.createRadialGradient(x, y, 0, x, y, rr);
+      gr.addColorStop(0, `rgba(${cr},${cg},${cb},${Math.min(0.5, inten * gk)})`); gr.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+      ctx.fillStyle = gr; ctx.fillRect(x - rr, y - rr, 2 * rr, 2 * rr);
+    }
+    // a gentle vignette
+    ctx.globalCompositeOperation = 'source-over';
+    const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.45, W / 2, H / 2, Math.hypot(W, H) * 0.62);
+    vg.addColorStop(0, 'rgba(19,36,71,0)'); vg.addColorStop(1, `rgba(19,36,71,${0.16 + 0.12 * tod.night})`);
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+    ctx.imageSmoothingEnabled = false;
   }
 
   _anchor(t) {
@@ -529,7 +689,8 @@ export class Game {
     const f = p.moving ? (Math.floor(p.step * 2) % 2 ? 1 : 2) : 0;
     const x = Math.round(p.fx * TILE), y = Math.round(p.fy * TILE);
     dropShadow(B, x + 8, y + 15, 12);
-    B.draw(frames[f], x, y - 5 - (p.moving && f ? 0 : 0));
+    const img = frames[f];
+    B.draw(img, x + Math.round((16 - img.width) / 2), y + 15 - img.height);
   }
 
   _drawNpc(B, n, t) {
@@ -543,14 +704,32 @@ export class Game {
       const blink = (Math.floor(t * 1.3 + (n.x * 7 % 5)) % 6) === 0;
       img = n.moving ? fr[Math.floor(n.t * 2) % 2] : fr[blink ? 1 : 0];
     }
-    const hover = n.id === 'bolt' ? Math.round(Math.sin(t * 2.5) * 1.5) - 6 : 0;
+    const hover = n.id === 'bolt' ? Math.round(Math.sin(t * 2.5) * 1.5) - 6 : n.id === 'nova' ? Math.round(Math.sin(t * 3.1 + 1) * 2) - 7 : 0;
     dropShadow(B, x + 8, y + 15, n.id === 'mochi' ? 12 : 13);
     const h = img.height;
     B.draw(img, x + Math.round((16 - img.width) / 2), y + 16 - h + 1 + hover);
+    // now and then a little feeling pops up over their head, when you are close enough to see it
+    const em = EMOTE[n.id];
+    if (em && !n.sleeping && !n.talking && !(this.opts.npcMark && this.opts.npcMark(n.id)) && Math.hypot(n.fx - this.p.fx, n.fy - this.p.fy) < 7) {
+      const per = 13 + (n.id.length % 5) * 2, ph = (t + n.id.charCodeAt(0) * 1.7) % per;
+      if (ph < 2.6) this._drawEmote(B, x + 8, y + 16 - h + hover - 5 - Math.round(Math.min(1, ph * 3) * 2), em, ph);
+    }
     if (n.sleeping) {
       const k = Math.floor(t * 1.5) % 3;
       B.px(x + 13 + k, y + 1 - k * 2, PAL.sky); B.px(x + 14 + k, y - k * 2, PAL.sky);
     }
+  }
+
+  // a speech bubble with a tiny picture: ♪ note, ♥ heart, ✦ sparkle, … thinking, ! idea
+  _drawEmote(B, x, y, kind, ph) {
+    const P = PAL, w = 11, h = 9, x0 = x - 5, y0 = y - h;
+    B.rect(x0, y0, w, h, P.out); B.rect(x0 + 1, y0 + 1, w - 2, h - 2, P.snow); B.px(x - 1, y0 + h, P.out); B.px(x, y0 + h + 1, P.out); B.px(x - 1, y0 + h - 1, P.snow);
+    const c = { note: P.violet, heart: P.rose, spark: P.gold, dots: P.navy, idea: P.orange }[kind];
+    if (kind === 'note') { B.vl(x + 1, y0 + 2, 4, c); B.px(x + 2, y0 + 2, c); B.rect(x - 1, y0 + 5, 2, 2, c); }
+    else if (kind === 'heart') { B.px(x - 2, y0 + 3, c); B.px(x - 1, y0 + 2, c); B.px(x, y0 + 3, c); B.px(x + 1, y0 + 2, c); B.px(x + 2, y0 + 3, c); B.hl(x - 2, y0 + 4, 5, c); B.hl(x - 1, y0 + 5, 3, c); B.px(x, y0 + 6, c); }
+    else if (kind === 'spark') { B.vl(x, y0 + 2, 5, c); B.hl(x - 2, y0 + 4, 5, c); B.px(x, y0 + 4, '#FFFFFF'); }
+    else if (kind === 'dots') { const k = Math.floor(ph * 2.5) % 4; for (let i = 0; i < Math.min(3, k); i++) B.px(x - 2 + i * 2, y0 + 5, c); }
+    else { B.vl(x, y0 + 2, 3, c); B.px(x, y0 + 6, c); }
   }
 
   _drawMark(B, x, y, m) {
@@ -571,7 +750,7 @@ export class Game {
   _label(text, x, y) {
     const ctx = this.ctx, dpr = this._dpr;
     const size = Math.round(13 * dpr);
-    ctx.font = `600 ${size}px Pixelify, "Pixelify Sans", system-ui, sans-serif`;
+    ctx.font = `600 ${size}px Pixelify, "Pixelify Sans", Galmuri, system-ui, sans-serif`;
     const w = Math.ceil(ctx.measureText(text).width) + Math.round(16 * dpr), h = Math.round(24 * dpr);
     let lx = Math.round(x - w / 2), ly = Math.round(y - h);
     lx = Math.max(4 * dpr, Math.min(this.canvas.width - w - 4 * dpr - this.inset.right * dpr, lx));

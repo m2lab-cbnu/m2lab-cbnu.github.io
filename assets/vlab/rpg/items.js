@@ -29,7 +29,7 @@ export const ITEMS = {
   'g-moon':       { name: 'Moon', desc: 'g = 1.62 m/s². The gravity room turns itself down.', icon: ['planet', C.steelL, C.steel], where: 'free', phys: { g: 1.62 } },
   'g-mars':       { name: 'Mars', desc: 'g = 3.71 m/s².', icon: ['planet', C.orange, C.redD], where: 'free', phys: { g: 3.71 } },
   'g-jupiter':    { name: 'Jupiter', desc: 'g = 24.8 m/s² (if you could stand there).', icon: ['planet', C.sand, C.copper], where: 'free', phys: { g: 24.79 } },
-  'g-x':          { name: 'Planet X', desc: 'A gravity card from Prof. Hoo. Its g is a secret.', icon: ['planet', C.violet, C.pink], where: 'quest:hoo-planetx', phys: { g: null } },
+  'g-x':          { name: 'Planet X', desc: 'A gravity card from Prof. Bueong. Its g is a secret.', icon: ['planet', C.violet, C.pink], where: 'quest:hoo-planetx', phys: { g: null } },
   'air':          { name: 'Room air', desc: 'Ordinary air: drag, and a little buoyancy.', icon: ['air'], where: 'free' },
   'belljar':      { name: 'Vacuum jar', desc: 'Pumps the air away: no drag at all.', icon: ['jar'], where: 'cab1' },
   'vactube':      { name: 'Vacuum tunnel', desc: 'A long glass tube along the range with the air pumped out.', icon: ['tube'], where: 'cab1' },
@@ -44,7 +44,7 @@ export const ITEMS = {
   'm100':         { name: '100 g mass', desc: 'A slotted brass mass.', icon: ['mass', '100'], where: 'free', phys: { m: 0.100 } },
   'm200':         { name: '200 g mass', desc: 'A slotted brass mass.', icon: ['mass', '200'], where: 'free', phys: { m: 0.200 } },
   'm500':         { name: '500 g mass', desc: 'The heavy one.', icon: ['mass', '500'], where: 'cab1', phys: { m: 0.500 } },
-  'm-mystery':    { name: 'Mystery block', desc: 'Prof. Hoo wants to know its mass, without a balance.', icon: ['mass', '?'], where: 'quest:hoo-block', phys: { m: null } },
+  'm-mystery':    { name: 'Mystery block', desc: 'Prof. Bueong wants to know its mass, without a balance.', icon: ['mass', '?'], where: 'quest:hoo-block', phys: { m: null } },
   'damp-air':     { name: 'Just air', desc: 'Very little damping.', icon: ['air'], where: 'free', phys: { b: 0.012 } },
   'damp-paddle':  { name: 'Paddle in water', desc: 'A vane in a beaker of water: strong damping.', icon: ['paddle'], where: 'cab1', phys: { b: 0.30 } },
   'damp-magnet':  { name: 'Eddy-current damper', desc: 'A copper plate moving past a magnet. You set the gap.', icon: ['eddy'], where: 'cab1', phys: { b: 0.08 } },
@@ -62,7 +62,7 @@ export const ITEMS = {
   'lens-10':      { name: 'Lens +10 cm', desc: 'A strong converging lens.', icon: ['lens', 'convex', C.ice], where: 'free', phys: { f: 0.10 } },
   'lens-20':      { name: 'Lens +20 cm', desc: 'A weaker converging lens.', icon: ['lens', 'convex', C.glass], where: 'free', phys: { f: 0.20 } },
   'lens-m15':     { name: 'Lens −15 cm', desc: 'A diverging lens: on its own it makes no real image.', icon: ['lens', 'concave', C.lilac], where: 'cab1', phys: { f: -0.15 } },
-  'lens-x':       { name: 'Mystery lens', desc: 'Prof. Hoo wants its focal length.', icon: ['lens', 'convex', C.pink], where: 'quest:hoo-lens', phys: { f: null } },
+  'lens-x':       { name: 'Mystery lens', desc: 'Prof. Bueong wants its focal length.', icon: ['lens', 'convex', C.pink], where: 'quest:hoo-lens', phys: { f: null } },
   'src-arrow':    { name: 'Arrow lamp', desc: 'A lit arrow, 3 cm tall: easy to see which way up the image is.', icon: ['arrowlamp'], where: 'free', phys: { h: 0.03 } },
   'src-candle':   { name: 'Candle', desc: 'A flickering flame, 4 cm tall.', icon: ['candle'], where: 'cab1', phys: { h: 0.04 } },
   'src-far':      { name: 'Collimator', desc: 'Light as if from very far away: the image forms at the focal point.', icon: ['collimator'], where: 'cab1', phys: { far: true } },
@@ -90,7 +90,7 @@ export const ITEMS = {
   'magnet-n42':   { name: 'Neodymium magnet', desc: '12.7 mm across and 12.7 mm long, grade N42 (1.3 T).', icon: ['magnet', C.red, 1], where: 'free', phys: { R: 6.35e-3, len: 12.7e-3, Br: 1.30, rho: 7500 } },
   'magnet-stack': { name: 'Stack of three', desc: 'Three of the small magnets stuck end to end.', icon: ['magnet', C.red, 3], where: 'cab2', phys: { R: 6.35e-3, len: 38.1e-3, Br: 1.30, rho: 7500 } },
   'magnet-n52':   { name: 'Super magnet', desc: 'Grade N52 (1.45 T), 25 mm long. Handle with care!', icon: ['magnet', C.violet, 2], where: 'quest:pip-trade', phys: { R: 6.35e-3, len: 25.4e-3, Br: 1.45, rho: 7500 } },
-  'magnet-tiny':  { name: 'Tiny magnet', desc: 'A 6 mm fridge magnet. Mochi likes to bat it around.', icon: ['magnet', C.pink, 0], where: 'hidden', phys: { R: 3.0e-3, len: 6.0e-3, Br: 1.20, rho: 7500 } },
+  'magnet-tiny':  { name: 'Tiny magnet', desc: 'A 6 mm fridge magnet. Injeolmi likes to bat it around.', icon: ['magnet', C.pink, 0], where: 'hidden', phys: { R: 3.0e-3, len: 6.0e-3, Br: 1.20, rho: 7500 } },
   'magnet-ferrite': { name: 'Ferrite magnet', desc: 'A dark ceramic magnet, much weaker (0.39 T) and lighter.', icon: ['magnet', C.ink, 1], where: 'cab2', phys: { R: 6.35e-3, len: 12.7e-3, Br: 0.39, rho: 4900 } },
   'slug-steel':   { name: 'Steel slug', desc: 'Same size as the magnet, but not magnetised. The control experiment.', icon: ['magnet', C.steel, 1], where: 'free', phys: { R: 6.35e-3, len: 12.7e-3, Br: 0, rho: 7850 } },
   'pipe-cu':      { name: 'Copper pipe', desc: '1 m long, 14 mm inside, 1 mm wall. Copper conducts superbly.', icon: ['pipe', C.copper, C.copperL], where: 'free', phys: { a: 7.0e-3, w: 1.0e-3, sigma: 5.96e7, cold: 8.0 } },
@@ -150,6 +150,28 @@ export const ITEMS = {
   'film-ni':      { name: 'Nickel film', desc: '30 nm. A smaller magnetisation, a lot more damping.', icon: ['film', C.mint], where: 'cab3', phys: { key: 'ni' } },
   'film-fe':      { name: 'Iron film', desc: '15 nm. The strongest magnetisation of the lot.', icon: ['film', C.copper], where: 'cab3', phys: { key: 'fe' } },
   'film-x':       { name: 'Film #7', desc: 'Grown last night. Nobody has measured it yet.', icon: ['film', C.orange, '?'], where: 'quest:fennec-film', phys: { key: 'x' } },
+
+  // ---------- 3F: the spin gallery and the project room
+  'sph-yig':      { name: 'Garnet sphere', desc: 'Yttrium iron garnet, the favourite magnet of magnon labs. So little friction that it rings on and on (the real one even longer).', icon: ['sphere', C.red, C.redD], where: 'free', phys: { alpha: 0.004, lw: 8 } },
+  'sph-py':       { name: 'Permalloy sphere', desc: 'A metal magnet with plenty of friction: it settles down in a second or two.', icon: ['sphere', C.mint, C.greenD], where: 'cab3', phys: { alpha: 0.02, lw: 150 } },
+  'cav-copper':   { name: 'Copper cavity', desc: 'A box that traps microwaves at one frequency. Its walls lose a little each bounce.', icon: ['cavity', C.copper, C.copperD], where: 'free', phys: { kappa: 15 } },
+  'cav-super':    { name: 'Superconducting cavity', desc: 'Cooled until its walls stop losing energy: the microwaves bounce for a long time.', icon: ['cavity', C.lav, C.violet], where: 'cab3', phys: { kappa: 2 } },
+  'dom-garnet':   { name: 'Garnet film', desc: 'A thin garnet film. Its domains curl up into mazes and stripes.', icon: ['film', C.orange], where: 'free', phys: { kind: 'maze' } },
+  'dom-copt':     { name: 'Co/Pt film', desc: 'Its magnetisation points out of the plane and flips all at once, in jumps.', icon: ['film', C.pink], where: 'cab3', phys: { kind: 'switch' } },
+  'lat-sc':       { name: 'Simple cubic crystal', desc: 'Steel balls on the corners of cubes, 4 cm apart.', icon: ['lattice', 0], where: 'free', phys: { kind: 'sc', a: 0.04 } },
+  'lat-bcc':      { name: 'Body-centred crystal', desc: 'The same cubes, with one more ball in the middle of each.', icon: ['lattice', 1], where: 'free', phys: { kind: 'bcc', a: 0.04 } },
+  'lat-fcc':      { name: 'Face-centred crystal', desc: 'The same cubes, with a ball in the middle of every face.', icon: ['lattice', 2], where: 'cab3', phys: { kind: 'fcc', a: 0.04 } },
+  'lat-x':        { name: 'Crystal #9', desc: 'A simple cubic crystal of unknown spacing. Nuri wants to know it.', icon: ['lattice', 0, '?'], where: 'quest:nova-bragg', phys: { kind: 'sc', a: 0 } },
+  'rod-steel':    { name: 'Steel rod', desc: 'Ordinary steel: hard to magnetise, but it keeps it.', icon: ['rod', C.steelL], where: 'free', phys: { kind: 'steel', soft: 0.35, keep: 1 } },
+  'rod-iron':     { name: 'Soft iron rod', desc: 'Very easy to magnetise, and just as easy to lose it again.', icon: ['rod', C.steel], where: 'cab3', phys: { kind: 'iron', soft: 1.6, keep: 0.25 } },
+  'rod-alu':      { name: 'Aluminium rod', desc: 'Shiny, light and not magnetic at all. A good control experiment.', icon: ['rod', '#E8EEF6'], where: 'free', phys: { kind: 'alu', soft: 0, keep: 0 } },
+  // plush toys from the claw machine on 2F: collect all six
+  'plush-hoo':    { name: 'Prof. Bueong plush', desc: 'Round, soft and very wise-looking, gat and all.', icon: ['plush', 'hoo'], where: 'claw', toy: true },
+  'plush-pip':    { name: 'Kongi plush', desc: 'A penguin plush in a rainbow scarf. Squeeze it and it says nothing, sadly.', icon: ['plush', 'pip'], where: 'claw', toy: true },
+  'plush-fennec': { name: 'Dr. Yeo plush', desc: 'A fox plush in a tiny lab coat, norigae included.', icon: ['plush', 'fennec'], where: 'claw', toy: true },
+  'plush-bolt':   { name: 'Baro plush', desc: 'A robot plush whose screen smiles forever.', icon: ['plush', 'bolt'], where: 'claw', toy: true },
+  'plush-mochi':  { name: 'Injeolmi plush', desc: 'A cat plush the colour of soybean powder. The real one is not impressed.', icon: ['plush', 'mochi'], where: 'claw', toy: true },
+  'plush-nova':   { name: 'Nuri plush', desc: 'A hovering-robot plush. It does not hover.', icon: ['plush', 'nova'], where: 'claw', toy: true },
 
   // ---------- passes and keepsakes
   'passport':     { name: 'Lab passport', desc: 'Collect a stamp for each experiment you crack.', icon: ['passport'], where: 'quest:bolt-hello' },
@@ -234,6 +256,21 @@ function paint(P, spec) {
     case 'bow': P.line(0, 13, 13, 0, C.woodD); P.line(1, 13, 13, 1, C.cream); P.rect(0, 11, 3, 3, C.ink); break;
     case 'film': P.rect(1, 3, 12, 9, C.steelL); P.hl(1, 3, 12, '#FFFFFF'); P.rect(3, 5, 8, 5, a); P.hl(3, 5, 8, mix(a, '#FFFFFF', 0.5)); if (b === '?') tinyText(P, '?', 6, 5, C.out); break;
     case 'passport': P.rect(2, 0, 10, 14, C.navy); P.hl(2, 0, 10, C.blue); P.disc(7, 6, 2, C.gold); P.hl(4, 10, 6, C.cyan); break;
+    case 'sphere': P.disc(7, 8, 5, b); P.disc(6, 7, 4, a); P.px(4, 5, '#FFFFFF'); P.px(5, 5, '#FFFFFF'); P.line(7, 7, 11, 1, C.out); P.px(11, 1, C.red); P.px(10, 1, C.red); P.px(11, 2, C.red); break;
+    case 'cavity': P.rect(1, 3, 12, 10, b); P.rect(2, 4, 10, 8, a); P.hl(2, 4, 10, mix(a, '#FFFFFF', 0.5)); P.rect(5, 6, 4, 4, C.out); P.disc(7, 8, 1, C.red); P.vl(4, 0, 3, C.steelD); P.vl(9, 0, 3, C.steelD); break;
+    case 'lattice': { for (let j = 0; j < 3; j++) for (let i = 0; i < 3; i++) { P.disc(2 + i * 5, 2 + j * 5, 1, C.steelD); P.px(2 + i * 5, 1 + j * 5, '#FFFFFF'); } if (a === 1) for (const [x, y] of [[4, 4], [9, 4], [4, 9], [9, 9]]) { P.disc(x + 1, y + 1, 1, C.steel); } if (a === 2) for (const [x, y] of [[5, 2], [2, 5], [7, 5], [12, 5], [5, 7], [5, 12], [10, 7], [7, 10]]) P.px(x, y, C.violet); if (b === '?') tinyText(P, '?', 6, 5, C.red); break; }
+    case 'rod': P.rect(0, 5, 14, 4, a); P.hl(0, 5, 14, '#FFFFFF'); P.hl(0, 8, 14, mix(a, C.out, 0.35)); P.vl(0, 5, 4, C.red); P.vl(13, 5, 4, C.blue); break;
+    case 'plush': {
+      // a little round face for each person in the building
+      const eyes = (y, c = C.out) => { P.px(4, y, c); P.px(9, y, c); };
+      if (a === 'hoo') { P.rect(3, 0, 8, 2, C.ink); P.hl(1, 2, 12, C.ink); P.disc(7, 8, 5, C.wood); P.disc(4, 7, 2, C.cream); P.disc(9, 7, 2, C.cream); eyes(7); P.px(6, 9, C.orange); P.px(7, 9, C.orange); }
+      else if (a === 'pip') { P.disc(7, 7, 6, C.ink); P.disc(7, 8, 4, C.snow); eyes(7); P.px(6, 9, C.orange); P.px(7, 9, C.orange); [C.red, C.yellow, C.green, C.blue, C.pink].forEach((c, i) => P.px(3 + i * 2, 12, c)); }
+      else if (a === 'fennec') { P.line(1, 0, 3, 4, C.orange); P.line(12, 0, 10, 4, C.orange); P.px(2, 2, C.pink); P.px(11, 2, C.pink); P.disc(7, 8, 5, C.orange); P.disc(7, 10, 3, C.cream); eyes(7); P.px(6, 10, C.out); P.px(3, 9, C.blush); P.px(10, 9, C.blush); }
+      else if (a === 'bolt') { P.px(7, 0, C.red); P.vl(7, 1, 2, C.steelD); P.rect(1, 3, 12, 10, C.snow); P.rect(2, 4, 10, 7, C.night); P.px(4, 7, C.cyan); P.px(3, 8, C.cyan); P.px(5, 8, C.cyan); P.px(9, 7, C.cyan); P.px(8, 8, C.cyan); P.px(10, 8, C.cyan); P.px(3, 9, C.pink); P.px(10, 9, C.pink); }
+      else if (a === 'mochi') { P.line(2, 1, 3, 4, C.sand); P.line(11, 1, 10, 4, C.sand); P.px(2, 2, C.pink); P.px(11, 2, C.pink); P.disc(7, 8, 5, C.sand); P.disc(7, 9, 3, C.cream); eyes(7); P.px(7, 9, C.rose); P.hl(4, 12, 6, C.red); P.px(7, 12, C.gold); }
+      else { [C.red, C.yellow, C.green].forEach((c, i) => P.px(5 + i * 2, 0, c)); P.disc(7, 7, 6, C.snow); P.rect(3, 4, 8, 6, C.night); P.rect(4, 6, 2, 2, C.cyan); P.rect(8, 6, 2, 2, C.cyan); P.px(4, 6, '#FFFFFF'); P.px(8, 6, '#FFFFFF'); }
+      break;
+    }
     default: P.rect(2, 2, 10, 10, C.lav); tinyText(P, '?', 6, 5, C.out);
   }
 }
@@ -247,10 +284,12 @@ export function itemWhere(id) {
   if (w === 'cab1') return 'In the cabinet on 1F.';
   if (w === 'cab2') return 'In the cabinet on 2F.';
   if (w === 'cab3') return 'In the sample cabinet on 3F.';
-  if (w.startsWith('quest:hoo')) return 'Prof. Hoo on 1F has this one.';
-  if (w.startsWith('quest:pip')) return 'Pip on 2F has this one.';
-  if (w.startsWith('quest:fennec')) return 'Dr. Fennec on 3F has this one.';
-  if (w.startsWith('quest:bolt')) return 'Bolt at the front desk has this one.';
+  if (w.startsWith('quest:hoo')) return 'Prof. Bueong on 1F has this one.';
+  if (w.startsWith('quest:pip')) return 'Kongi on 2F has this one.';
+  if (w.startsWith('quest:fennec')) return 'Dr. Yeo on 3F has this one.';
+  if (w.startsWith('quest:bolt')) return 'Baro at the front desk has this one.';
+  if (w.startsWith('quest:nova')) return 'Nuri in the spin gallery on 3F has this one.';
   if (w === 'hidden') return 'Somebody hid it somewhere in the building.';
+  if (w === 'claw') return 'The claw machine on 2F has this one, if you are lucky.';
   return '';
 }
