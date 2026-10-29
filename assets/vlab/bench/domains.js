@@ -109,14 +109,14 @@ function tabPlay(pane) {
 
   const st = new Stage(pane, {
     bench, npc: 'nova',
-    label: 'A Kerr microscope image of a magnetic film: light and dark patches are domains magnetised up and down. Beside it, the magnetisation against the field.',
-    hello: 'Light and dark patches are **magnetic domains**. Push them with the **field** slider, draw your own with the **magnetic pen**, or turn the **analyser**.',
+    label: 'A Kerr microscope image of a magnetic film: light and dark patches are domains magnetized up and down. Beside it, the magnetization against the field.',
+    hello: 'Light and dark patches are **magnetic domains**. Push them with the **field** slider, draw your own with the **magnetic pen**, or turn the **analyzer**.',
     aspect: 16 / 9, phoneAspect: 0.78, minH: 340,
     onReset: () => { S.H = 0; S.ana = 4; filmKind = ''; ensure(); sweep = null; first = true; },
     keys: { arrow: (dx) => { if (dx) setH(S.H + dx * ensure().Hmax / 30); } },
   });
   st.tool('loop', 'Loop', { icon: '#E5534B', on: true }).tool('arrows', 'Spin arrows', { icon: K.COL.net });
-  st.readout('H', 'Field').readout('M', 'Magnetisation').readout('ana', 'Analyser');
+  st.readout('H', 'Field').readout('M', 'Magnetization').readout('ana', 'Analyzer');
 
   // ---------- controls
   const mk = (label, min, max, stepv, get, set) => {
@@ -125,7 +125,7 @@ function tabPlay(pane) {
     return { el: el('label', { class: 'stg-range' }, lab, inp), lab, inp };
   };
   const rH = mk('Magnetic field in millitesla', -12, 12, 0.1, () => S.H, (v) => { sweep = null; S.H = v; });
-  const rA = mk('Analyser angle in degrees', -8, 8, 0.1, () => S.ana, (v) => { S.ana = v; });
+  const rA = mk('Analyzer angle in degrees', -8, 8, 0.1, () => S.ana, (v) => { S.ana = v; });
   const upB = el('button', { type: 'button', class: 'stg-act' }), dnB = el('button', { type: 'button', class: 'stg-act ghost' });
   upB.addEventListener('click', () => { S.pen = 1; syncCtl(); sound.play('click'); });
   dnB.addEventListener('click', () => { S.pen = -1; syncCtl(); sound.play('click'); });
@@ -137,7 +137,7 @@ function tabPlay(pane) {
   function syncCtl() {
     const Hm = film ? film.Hmax : 12;
     rH.inp.min = -Hm; rH.inp.max = Hm; rH.inp.value = S.H; rH.lab.textContent = `Field: ${S.H.toFixed(1)} mT`;
-    rA.inp.value = S.ana; rA.lab.textContent = `Analyser: ${S.ana >= 0 ? '+' : ''}${S.ana.toFixed(1)}° from crossed`;
+    rA.inp.value = S.ana; rA.lab.textContent = `Analyzer: ${S.ana >= 0 ? '+' : ''}${S.ana.toFixed(1)}° from crossed`;
     upB.textContent = 'Pen: write up'; dnB.textContent = 'Pen: write down';
     upB.classList.toggle('ghost', S.pen !== 1); dnB.classList.toggle('ghost', S.pen !== -1);
   }
@@ -246,8 +246,8 @@ function tabPlay(pane) {
       K.text(g, label, p[0], p[1] - r - 7, { size: 10.5, weight: 700, align: 'center', color: '#FFFDF6', halo: '#14244A' });
     };
     const kd = KERR * 180 / Math.PI * EX;
-    disc(pol, 0, 'polariser');
-    disc(ana, 90 + S.ana * EX, 'analyser', [[kd, '#F28A84'], [-kd, '#8DB8F2']]);
+    disc(pol, 0, 'polarizer');
+    disc(ana, 90 + S.ana * EX, 'analyzer', [[kd, '#F28A84'], [-kd, '#8DB8F2']]);
     // camera: what each domain looks like
     const sw = 26;
     [[1, '#E5534B', 'up'], [-1, '#3D7FD6', 'down']].forEach(([v, col, lab], i) => {
@@ -280,7 +280,7 @@ function tabPlay(pane) {
     g.fillStyle = '#FFFDF6'; g.fillRect(ix + iw - bar - 14, iy + ih - 14, bar, 4);
     K.text(g, '20 µm', ix + iw - bar / 2 - 14, iy + ih - 20, { size: 10.5, weight: 700, align: 'center', color: '#FFFDF6', halo: '#14244A' });
     K.text(g, filmKind === 'maze' ? 'garnet film, seen from above' : 'Co/Pt film, seen from above', ix + 10, iy + 18, { size: 10.5, weight: 700, color: '#FFFDF6', halo: '#14244A' });
-    if (Math.abs(S.ana) < 0.6) K.tag(g, 'analyser crossed: the twist is invisible', ix + iw / 2, iy + ih / 2, { size: 12, bg: '#FFE07A' });
+    if (Math.abs(S.ana) < 0.6) K.tag(g, 'analyzer crossed: the twist is invisible', ix + iw / 2, iy + ih / 2, { size: 12, bg: '#FFE07A' });
     // the field: arrows up or down the side
     const Hm = ensure().Hmax, frac = S.H / Hm;
     if (Math.abs(frac) > 0.03) {
@@ -293,7 +293,7 @@ function tabPlay(pane) {
     g.save(); K.rr(g, lx, ly, lw, lh, 10); g.fillStyle = 'rgba(255,253,246,0.96)'; g.fill(); g.lineWidth = 2; g.strokeStyle = K.LINE; g.stroke(); g.restore();
     const x0 = lx + 30, x1 = lx + lw - 12, y0 = ly + 30, y1 = ly + lh - 26;
     const X = (H) => x0 + (H / f.Hmax + 1) / 2 * (x1 - x0), Y = (m) => y1 - (m + 1) / 2 * (y1 - y0);
-    K.text(g, 'Magnetisation against field', lx + 12, ly + 19, { size: 11.5, weight: 700 });
+    K.text(g, 'Magnetization against field', lx + 12, ly + 19, { size: 11.5, weight: 700 });
     g.strokeStyle = '#D6ECF7'; g.lineWidth = 1.2;
     g.beginPath(); g.moveTo(x0, Y(0)); g.lineTo(x1, Y(0)); g.moveTo(X(0), y0); g.lineTo(X(0), y1); g.stroke();
     K.text(g, 'up', x0 - 4, Y(1) + 4, { size: 10, weight: 600, align: 'right' }); K.text(g, 'down', x0 - 4, Y(-1) + 4, { size: 10, weight: 600, align: 'right' });
@@ -334,15 +334,15 @@ function tabPlay(pane) {
   st.tour({
     title: 'How do we see domains?',
     steps: [
-      { say: 'This is a **Kerr microscope** looking at a thin magnetic film. Polarised light bounces off the film, and its polarisation turns a tiny bit: one way where the film points **up**, the other way where it points **down**.',
+      { say: 'This is a **Kerr microscope** looking at a thin magnetic film. Polarized light bounces off the film, and its polarization turns a tiny bit: one way where the film points **up**, the other way where it points **down**.',
         tools: { loop: false, arrows: true }, enter: () => { filmOver = 'maze'; ensure(); sweep = null; S.ana = 4; setH(0); } },
-      { say: 'That twist is invisible on its own. A second polariser, the **analyser**, turns it into light and dark. Exactly crossed, there is no contrast at all; turn it a little and the domains appear.',
+      { say: 'That twist is invisible on its own. A second polarizer, the **analyzer**, turns it into light and dark. Exactly crossed, there is no contrast at all; turn it a little and the domains appear.',
         tools: { arrows: false }, enter: () => { anim = { t0: st.simT, from: 0, to: 4, dur: 3, set: (v) => { S.ana = v; syncCtl(); } }; } },
       { say: 'Each light or dark patch is a **magnetic domain**: all its spins point the same way. Thin **walls** separate them. In this garnet they curl up into mazes of a set width.',
         tools: { arrows: true } },
       { say: 'Turn on a field pointing up. Up domains **grow**, down domains shrink into thin stripes and little bubbles, and finally vanish.',
         tools: { arrows: false, loop: true }, enter: () => { anim = { t0: st.simT, from: 0, to: 9, dur: 5, set: (v) => { S.H = v; syncCtl(); } }; } },
-      { say: 'Sweep the field down and back up while drawing the magnetisation: it does not come back the same way. That is **hysteresis**: a magnet remembers where it came from.',
+      { say: 'Sweep the field down and back up while drawing the magnetization: it does not come back the same way. That is **hysteresis**: a magnet remembers where it came from.',
         enter: () => { anim = null; startSweep(); } },
       { say: 'A hard magnet like this **Co/Pt** film remembers even better: its loop is square. Try the magnetic pen on it: hard disks store their bits as tiny up and down domains just like these.',
         enter: () => { sweep = null; filmOver = 'switch'; ensure(); film.reset(1); S.H = 0; syncCtl(); } },
@@ -359,7 +359,7 @@ function tabPlay(pane) {
       q: 'The light patches point up. Turn on a field that also points up. The light patches…',
       choices: ['grow', 'shrink', 'stay just as they are'], answer: 0,
       run: (s0, finish) => { s0.setPaused(false); s0.setSpeed(1); wait(1, () => { anim = { t0: st.simT, from: 0, to: 6, dur: 3, set: (v) => { S.H = v; syncCtl(); }, then: () => wait(1.5, () => finish(`Now ${Math.round((ensure().m() + 1) * 50)}% of the film points up.`)) }; }); },
-      explain: 'Spins that point along the field have lower energy, so the walls move to make those domains bigger. The magnetisation of the whole film grows with the field.',
+      explain: 'Spins that point along the field have lower energy, so the walls move to make those domains bigger. The magnetization of the whole film grows with the field.',
     },
     {
       id: 'memory', title: 'Does it remember?', card: 'domains.memory', lock: true, after,
@@ -367,15 +367,15 @@ function tabPlay(pane) {
       q: 'This Co/Pt film points down. Push it all the way up with a strong field, then turn the field back to zero. The film is now…',
       choices: ['back to half up, half down', 'still pointing up', 'pointing down again'], answer: 1,
       run: (s0, finish) => { s0.setPaused(false); s0.setSpeed(1); anim = { t0: st.simT, from: 0, to: 30, dur: 4, set: (v) => { S.H = v; syncCtl(); }, then: () => { anim = { t0: st.simT, from: 30, to: 0, dur: 3, set: (v) => { S.H = v; syncCtl(); }, then: () => wait(1.5, () => finish(`At zero field it is still ${Math.round((ensure().m() + 1) * 50)}% up.`)) }; } }; },
-      explain: 'A hard magnet keeps its magnetisation when the field is gone: that is its memory (remanence). It takes a field the other way to switch it back. Hard disks rely on exactly this.',
+      explain: 'A hard magnet keeps its magnetization when the field is gone: that is its memory (remanence). It takes a field the other way to switch it back. Hard disks rely on exactly this.',
     },
     {
       id: 'kerr', title: 'The other side', card: 'domains.kerr', lock: true, after,
       setup: () => { filmOver = 'maze'; ensure(); S.H = 0; S.ana = 4; syncCtl(); },
-      q: 'The analyser sits 4° to one side of crossed. Turn it to 4° on the other side. The picture…',
+      q: 'The analyzer sits 4° to one side of crossed. Turn it to 4° on the other side. The picture…',
       choices: ['stays the same', 'flips: light and dark swap places', 'goes completely dark'], answer: 1,
       run: (s0, finish) => { s0.setPaused(false); s0.setSpeed(1); wait(1, () => { anim = { t0: st.simT, from: 4, to: -4, dur: 3, set: (v) => { S.ana = v; syncCtl(); }, then: () => wait(1, () => finish()) }; }); },
-      explain: 'Up domains turn the light one way and down domains the other. Which of them gets closer to the analyser, and so looks brighter, depends on which side of crossed you are. Cross it exactly and they look the same.',
+      explain: 'Up domains turn the light one way and down domains the other. Which of them gets closer to the analyzer, and so looks brighter, depends on which side of crossed you are. Cross it exactly and they look the same.',
     },
   ]);
 

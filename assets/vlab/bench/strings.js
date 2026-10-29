@@ -76,7 +76,7 @@ function sound(on, f, level) {
 }
 
 function tabString(pane) {
-  pane.append(el('p', { class: 'vp-intro', html: 'Turn the frequency up slowly. Most of the time the string barely moves, then suddenly it swings in one loop, then two, three... Each resonance has <b>f<sub>n</sub> = n v / 2L</b>, with the wave speed <b>v = √(T/μ)</b> set by the tension and the mass per metre.' }));
+  pane.append(el('p', { class: 'vp-intro', html: 'Turn the frequency up slowly. Most of the time the string barely moves, then suddenly it swings in one loop, then two, three... Each resonance has <b>f<sub>n</sub> = n v / 2L</b>, with the wave speed <b>v = √(T/μ)</b> set by the tension and the mass per meter.' }));
   const box = canvasBox('', '16 / 6', 'The vibrating string');
   const fS = slider({ label: 'Vibrator frequency', unit: 'Hz', min: 2, max: 400, step: 0.01, value: S.f, digits: 5, onInput: (v) => { S.f = v; } });
   const fine = el('div', { class: 'vp-row' }, ...[-1, -0.1, 0.1, 1].map((d) => button(`${d > 0 ? '+' : '−'}${Math.abs(d)} Hz`, () => fS.set(Math.max(2, Math.min(400, Math.round((S.f + d) * 100) / 100))), 'quiet')));
@@ -144,10 +144,10 @@ function tabString(pane) {
 }
 
 function tabGraph(pane) {
-  pane.append(el('p', { class: 'vp-intro', html: 'Frequency against the number of loops is a straight line through the origin, with slope <b>v / 2L</b> (L = 1.20 m). From v and the tension T = Mg you get the mass per metre, <b>μ = T / v²</b>.' }));
+  pane.append(el('p', { class: 'vp-intro', html: 'Frequency against the number of loops is a straight line through the origin, with slope <b>v / 2L</b> (L = 1.20 m). From v and the tension T = Mg you get the mass per meter, <b>μ = T / v²</b>.' }));
   const box = canvasBox('', '16 / 10', 'Resonant frequency against number of loops');
   const plot = new Plot(box.canvas, { xlabel: 'Loops n', ylabel: 'Frequency (Hz)' });
-  const vRo = readout('Wave speed v'), muRo = readout('Mass per metre μ');
+  const vRo = readout('Wave speed v'), muRo = readout('Mass per meter μ');
   pane.append(el('div', { class: 'vp-main' }, box, el('div', { class: 'ros' }, vRo, muRo), note('Points are fitted for the string and hanging mass now on the bench.')));
   function draw() {
     const str = current(bench, 'string'), M = current(bench, 'mass');
@@ -187,7 +187,7 @@ function tabPlay(pane) {
     onHide: () => hum.set(100, 0),
     keys: { arrow(dx) { if (dx) setF(drive.f * (dx > 0 ? 1.01 : 1 / 1.01)); }, action() { pluckAt(Lv * 0.25, 0.02); } },
   });
-  st.tool('nodes', 'Nodes', { icon: K.COL.gravity }).tool('waves', 'Two travelling waves', { icon: K.COL.vel }).tool('harm', 'Harmonics', { icon: K.COL.net, on: true }).tool('graph', 'Graph', { icon: K.COL.pe });
+  st.tool('nodes', 'Nodes', { icon: K.COL.gravity }).tool('waves', 'Two traveling waves', { icon: K.COL.vel }).tool('harm', 'Harmonics', { icon: K.COL.net, on: true }).tool('graph', 'Graph', { icon: K.COL.pe });
   st.readout('f1', 'Its note (lowest harmonic)').readout('v', 'Wave speed').readout('T', 'Tension').readout('L', 'Vibrating length');
   const graph = st.liveGraph({ series: [{ id: 'y', label: 'string at the marked point (mm)', color: K.COL.net }], window: 1.5, ylabel: 'mm', sym: true });
 

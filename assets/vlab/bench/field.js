@@ -409,7 +409,7 @@ function tabPlay(pane) {
     {
       id: 'neg', title: 'A negative marble', card: 'field.negative',
       setup: () => layout(PRESETS.dipole),
-      q: 'On this landscape, a positive marble rolls downhill. A negative marble…', choices: ['also rolls downhill', 'rolls uphill, towards the + hill', 'stays where it is'], answer: 1,
+      q: 'On this landscape, a positive marble rolls downhill. A negative marble…', choices: ['also rolls downhill', 'rolls uphill, toward the + hill', 'stays where it is'], answer: 1,
       run: (s, finish) => { s.setTool('land', true); drop(20, 8, -1); drop(20, 22, -1); setTimeout(() => finish(), 3500); },
       explain: 'A negative charge is pushed the opposite way to a positive one, so on the voltage landscape it climbs. That is why electrons in a wire flow from − to +.',
     },

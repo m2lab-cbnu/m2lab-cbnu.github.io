@@ -162,7 +162,7 @@ function tabSweep(pane) {
   const go = button('Sweep', () => run(), 'primary');
   const clr = button('Clear', () => { runs.length = 0; draw(); }, 'quiet');
   const peakRo = readout('Peak at'), qRo = readout('Width (half power)');
-  const need = note('The lag needs the <b>motion sensor</b>. With the ruler you only read the size of the swing, to about a millimetre.');
+  const need = note('The lag needs the <b>motion sensor</b>. With the ruler you only read the size of the swing, to about a millimeter.');
   const runs = [];
   pane.append(el('div', { class: 'vp-cols' }, el('div', { class: 'vp-side' }, group('Sweep range', f1, f2, el('div', { class: 'vp-row' }, go, clr))), el('div', { class: 'vp-main' }, box, box2, el('div', { class: 'ros' }, peakRo, qRo), need)));
   function run() {

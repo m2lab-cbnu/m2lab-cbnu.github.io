@@ -96,9 +96,9 @@ function build3D(w) {
   const ivory = '#E6E3D8', beige = '#E5D7B5';
   const lockin = inst(1.645, 0.15, 0.45, M.beige, (cw, ch) => ({ base: beige, label: { x: 30, y: 14, text: 'LOCK-IN AMPLIFIER', size: 22 },
     knobs: [[880, ch / 2 + 20, 34], [960, ch / 2 + 20, 24]], buttons: [{ x: 640, y: 70, cols: 5, rows: 3, bw: 38, bh: 26, gap: 12, color: '#D3C7A6' }], ports: [[60, ch - 70, 26], [140, ch - 70, 26]] }));
-  const sa = inst(1.385, 0.24, 0.5, M.instWhite, (cw, ch) => ({ base: ivory, label: { x: 40, y: 18, text: 'SPECTRUM ANALYSER', size: 22 },
+  const sa = inst(1.385, 0.24, 0.5, M.instWhite, (cw, ch) => ({ base: ivory, label: { x: 40, y: 18, text: 'SPECTRUM ANALYZER', size: 22 },
     screen: { x: 40, y: 60, w: 420, h: 300 }, knobs: [[800, 150, 48]], buttons: [{ x: 520, y: 70, cols: 4, rows: 6, bw: 40, bh: 30, gap: 12, colors: ['#D5D6CF', '#D5D6CF', '#B9D3E6'] }], ports: [[900, ch - 80, 30]] }));
-  const vna = inst(1.045, 0.32, 0.55, M.instWhite, (cw, ch) => ({ base: ivory, label: { x: 40, y: 18, text: 'NETWORK ANALYSER', size: 22 },
+  const vna = inst(1.045, 0.32, 0.55, M.instWhite, (cw, ch) => ({ base: ivory, label: { x: 40, y: 18, text: 'NETWORK ANALYZER', size: 22 },
     screen: { x: 40, y: 60, w: 520, h: 380 }, knobs: [[870, 170, 50]], buttons: [{ x: 610, y: 70, cols: 4, rows: 7, bw: 38, bh: 30, gap: 11, colors: ['#D5D6CF', '#D5D6CF', '#D5D6CF', '#E6B54E'] }], ports: [[140, ch - 70, 34], [330, ch - 70, 34], [520, ch - 70, 34], [710, ch - 70, 34]] }));
   const sg = inst(0.785, 0.2, 0.45, M.aluminium, (cw, ch) => ({ base: '#D6DCE2', label: { x: 40, y: 16, text: 'SIGNAL GENERATOR', size: 22 },
     screen: { x: 40, y: 60, w: 470, h: 200 }, knobs: [[700, 210, 46]], buttons: [{ x: 790, y: 60, cols: 4, rows: 5, bw: 36, bh: 30, gap: 10, color: '#C5CDD5' }], ports: [[960, ch - 90, 32]] }));

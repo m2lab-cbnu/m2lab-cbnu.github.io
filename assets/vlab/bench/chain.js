@@ -36,7 +36,7 @@ function tabPlay(pane) {
     onReset: () => { calm(); S.B = 0.2; S.f = 10; S.drive = false; syncCtl(); first = true; },
     keys: { arrow: (dx) => { if (dx) { S.f = Math.max(1, Math.min(24, S.f + dx * 0.2)); syncCtl(); } }, action: () => flick(0) },
   });
-  st.tool('colour', 'Phase colours', { icon: '#B9A8FF', on: true }).tool('line', 'Wave shape', { icon: K.COL.vel, on: true })
+  st.tool('colour', 'Phase colors', { icon: '#B9A8FF', on: true }).tool('line', 'Wave shape', { icon: K.COL.vel, on: true })
     .tool('disp', 'Frequency and wavelength', { icon: K.COL.net });
   st.readout('gap', 'Lowest spin wave (the gap)').readout('fa', 'Antenna').readout('lam', 'Wavelength').readout('v', 'Speed along the row');
 
@@ -233,11 +233,11 @@ function tabPlay(pane) {
   st.tour({
     title: 'What is a spin wave?',
     steps: [
-      { say: 'A row of spins, each one like the single spin next door, all in the same field. Neighbours **hold on to each other** (this is called exchange): if one tips, it tugs at the next.',
+      { say: 'A row of spins, each one like the single spin next door, all in the same field. Neighbors **hold on to each other** (this is called exchange): if one tips, it tugs at the next.',
         tools: { colour: true, line: true, disp: false }, enter: () => { calm(); S.drive = false; syncCtl(); wait(0.4, () => flick(0, 45)); }, mark: () => { const [x, y] = tipOf(0); return [x, y, 24]; } },
-      { say: 'Watch the wobble travel: each spin passes it on to the next one, a little later. That travelling wobble is a **spin wave**, and its smallest possible piece is a **magnon**.',
+      { say: 'Watch the wobble travel: each spin passes it on to the next one, a little later. That traveling wobble is a **spin wave**, and its smallest possible piece is a **magnon**.',
         enter: () => { calm(); wait(0.3, () => flick(0, 45)); } },
-      { say: 'The antenna on the left keeps shaking the first spins at one frequency, so a steady train of spin waves runs along. The colours show where each spin is in its turn: one rainbow is one wavelength.',
+      { say: 'The antenna on the left keeps shaking the first spins at one frequency, so a steady train of spin waves runs along. The colors show where each spin is in its turn: one rainbow is one wavelength.',
         enter: () => { calm(); S.f = 10; S.drive = true; syncCtl(); } },
       { say: 'Higher frequency, **shorter waves**. The curve in the corner (the dispersion) tells you which wavelength goes with which frequency.',
         tools: { disp: true }, enter: () => { anim = { t0: st.simT, from: 8, to: 18, dur: 6, set: (v) => { S.f = v; syncCtl(); } }; } },
@@ -258,7 +258,7 @@ function tabPlay(pane) {
       q: 'The antenna sends spin waves at 8 GHz. Turn it up to 16 GHz. The waves along the row get…',
       choices: ['shorter', 'longer', 'no different'], answer: 0,
       run: (s0, finish) => { s0.setPaused(false); s0.setSpeed(1); wait(4, () => { const a = 2 * Math.PI / kOf(8, S.B); anim = { t0: st.simT, from: 8, to: 16, dur: 2, set: (v) => { S.f = v; syncCtl(); }, then: () => wait(4, () => finish(`${a.toFixed(0)} spins long at 8 GHz, ${(2 * Math.PI / kOf(16, S.B)).toFixed(0)} spins at 16 GHz.`)) }; }); },
-      explain: 'Shorter waves bend the row more sharply between neighbours, which costs more exchange energy, so they come at higher frequencies. That link between frequency and wavelength is the dispersion.',
+      explain: 'Shorter waves bend the row more sharply between neighbors, which costs more exchange energy, so they come at higher frequencies. That link between frequency and wavelength is the dispersion.',
     },
     {
       id: 'gap', title: 'Below the gap', card: 'chain.gap', lock: true, after,

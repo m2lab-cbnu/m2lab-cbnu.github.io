@@ -109,7 +109,7 @@ async function use(t) {
   }
   if (t.kind === 'elevator') return elevator();
   if (t.kind === 'window') {
-    const views = ['The city hums below. Somewhere out there, a magnet is being measured.', 'Clouds drift past. A drone delivers a box labelled “liquid nitrogen”.', 'From up here the river looks like a long, slow wave.'];
+    const views = ['The city hums below. Somewhere out there, a magnet is being measured.', 'Clouds drift past. A drone delivers a box labeled “liquid nitrogen”.', 'From up here the river looks like a long, slow wave.'];
     await dialog.say(null, [views[Math.floor(Math.random() * views.length)]]);
     return;
   }
@@ -311,7 +311,7 @@ function openCabinet(cab, name) {
 // ---------------------------------------------------------------- the paper gallery and the project photos
 const PAPERS = {
   nc2024: { journal: 'Nature Communications', ref: '15, 7302 (2024)', title: 'Emergent coherent modes in nonlinear magnonic waveguides detected at ultrahigh frequency resolution', doi: 'https://doi.org/10.1038/s41467-024-51483-7',
-    fig: 'images/figures/nonlinear-waveguide.webp', alt: 'Schematic of a frequency-offset vector network analyser measurement on a magnonic waveguide, with transmission spectra near 2.125 GHz',
+    fig: 'images/figures/nonlinear-waveguide.webp', alt: 'Schematic of a frequency-offset vector network analyzer measurement on a magnonic waveguide, with transmission spectra near 2.125 GHz',
     plain: ['Push spin waves hard enough down a narrow magnetic strip and they start to interact with each other.', 'New, very sharp modes then appear in the spectrum, packed so close together in frequency that we needed an ultrahigh frequency resolution to tell them apart.'],
     tryIt: ['chain', 'Send spin waves down a chain of spins'] },
   pra2023: { journal: 'Physical Review Applied', ref: '20, 014046 (2023)', title: 'Optimizing the magnon-phonon cooperativity in planar geometries', doi: 'https://doi.org/10.1103/PhysRevApplied.20.014046',
@@ -325,7 +325,7 @@ const PAPERS = {
     plain: ['Sound waves can carry spin. We showed that phonons in a garnet crystal pass angular momentum from one magnet to another one far away.', 'And they keep in step all the way across: the transfer is coherent, not just a random shove.'],
     tryIt: ['precess', 'Make a single spin precess'] },
   pra2019: { journal: 'Physical Review Applied', ref: '11, 034065 (2019)', title: 'Optimization of spin-wave propagation with enhanced group velocities by exchange-coupled ferrimagnet-ferromagnet bilayers', doi: 'https://doi.org/10.1103/PhysRevApplied.11.034065',
-    plain: ['Spin waves are slow travellers. Stacking two different magnetic layers, held together by exchange, made them run much faster.', 'Faster spin waves are good news if you want to send signals with them.'],
+    plain: ['Spin waves are slow travelers. Stacking two different magnetic layers, held together by exchange, made them run much faster.', 'Faster spin waves are good news if you want to send signals with them.'],
     tryIt: ['chain', 'See how fast a spin wave travels'] },
   prl2016: { journal: 'Physical Review Letters', ref: '117, 107202 (2016)', title: 'Magnons and phonons optically driven out of local equilibrium in a magnetic insulator', doi: 'https://doi.org/10.1103/PhysRevLett.117.107202',
     plain: ['Heat a magnet with a laser and the energy goes into both its spins (magnons) and its vibrations (phonons).', 'We found that the two do not keep the same temperature: they fall out of local equilibrium, and we measured by how much.'],

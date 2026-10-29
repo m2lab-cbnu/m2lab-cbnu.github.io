@@ -98,7 +98,7 @@ const table = dataTable([
 ], { caption: 'Your drops' });
 
 function tabDrop(pane) {
-  pane.append(el('p', { class: 'vp-intro', html: 'The slinky hangs from your hand, stretched by its own weight. Let go: the top collapses downwards, and the bottom hangs in the air until the collapse arrives. Meanwhile the centre of mass falls exactly as a stone would. Film it to see it slowly.' }));
+  pane.append(el('p', { class: 'vp-intro', html: 'The slinky hangs from your hand, stretched by its own weight. Let go: the top collapses downwards, and the bottom hangs in the air until the collapse arrives. Meanwhile the center of mass falls exactly as a stone would. Film it to see it slowly.' }));
   const box = canvasBox('', '3 / 4', 'The slinky, hanging');
   const go = button('Let go', () => drop(), 'go');
   const again = button('Pick it up', () => { S.run = null; S.playing = false; S.hold = true; draw(); }, 'quiet');
@@ -155,7 +155,7 @@ function tabDrop(pane) {
     if (S.run) {
       const sm = S.run.samples, i = Math.min(sm.length - 1, Math.floor(S.t / 0.002)), com = sm[i][3];
       g.fillStyle = '#6B5BE6'; g.beginPath(); g.moveTo(cx + rw + 12, top + com * sc); g.lineTo(cx + rw + 22, top + com * sc - 6); g.lineTo(cx + rw + 22, top + com * sc + 6); g.fill();
-      g.fillText('centre of mass', cx + rw + 26, top + com * sc + 4);
+      g.fillText('center of mass', cx + rw + 26, top + com * sc + 4);
     }
     tRo.set(S.run ? `${frameT.toFixed(3)} s` : 'still holding it');
     hRo.set(S.run && current(bench, 'watch') === 'camera' && S.run.tMove ? `${S.run.tMove.toFixed(3)} s` : S.run ? 'film it to measure' : '–');
@@ -164,7 +164,7 @@ function tabDrop(pane) {
 }
 
 function tabGraph(pane) {
-  pane.append(el('p', { class: 'vp-intro', html: 'Positions from the film: the top races down, the bottom stays flat until the collapse front arrives, and the centre of mass follows a parabola with acceleration g, from the very start.' }));
+  pane.append(el('p', { class: 'vp-intro', html: 'Positions from the film: the top races down, the bottom stays flat until the collapse front arrives, and the center of mass follows a parabola with acceleration g, from the very start.' }));
   const box = canvasBox('', '16 / 10', 'Positions against time');
   const plot = new Plot(box.canvas, { xlabel: 'Time after letting go (s)', ylabel: 'Distance fallen (cm)' });
   const need = note('Graphs need the <b>high-speed camera</b> (from the cabinet on 1F). Choose it in “Watch with”, then drop the slinky.');
@@ -178,7 +178,7 @@ function tabGraph(pane) {
     const series = [
       { x: t, y: sm.map((q) => (q[1] - y0[1]) * 100), color: COLORS.signal, width: 2.2, label: 'top' },
       { x: t, y: sm.map((q) => (q[2] - y0[2]) * 100), color: COLORS.pink, width: 2.2, label: 'bottom' },
-      { x: t, y: sm.map((q) => (q[3] - y0[3]) * 100), color: COLORS.violet, width: 2, dash: [5, 4], label: 'centre of mass' },
+      { x: t, y: sm.map((q) => (q[3] - y0[3]) * 100), color: COLORS.violet, width: 2, dash: [5, 4], label: 'center of mass' },
       { x: t, y: t.map((tt) => 0.5 * G * tt * tt * 100), color: COLORS.gold, width: 1.4, dash: [2, 3], label: '½ g t²' },
     ];
     plot.ylim = [-2, 140]; plot.setSeries(series).setVLines(r.tMove ? [{ x: r.tMove, color: COLORS.pink, dash: [4, 4] }] : []).draw();
@@ -198,10 +198,10 @@ function tabPlay(pane) {
     onReset: () => rehang(),
     keys: { action() { if (run) rehang(); else letGo(); } },
   });
-  st.tool('tension', 'Stretch', { icon: K.COL.spring, on: true }).tool('cm', 'Centre of mass', { icon: K.COL.net }).tool('ball', 'Drop a ball too', { icon: '#D9EE55' })
-    .tool('front', 'The news travelling down', { icon: K.COL.gravity }).tool('graph', 'Graph', { icon: K.COL.pe });
+  st.tool('tension', 'Stretch', { icon: K.COL.spring, on: true }).tool('cm', 'Center of mass', { icon: K.COL.net }).tool('ball', 'Drop a ball too', { icon: '#D9EE55' })
+    .tool('front', 'The news traveling down', { icon: K.COL.gravity }).tool('graph', 'Graph', { icon: K.COL.pe });
   st.readout('wait', 'Bottom stayed still for').readout('fall', 'Fall to the floor').readout('drop', 'Bottom started at').readout('m', 'Slinky');
-  const graph = st.liveGraph({ series: [{ id: 'top', label: 'top (cm)', color: K.COL.string }, { id: 'bot', label: 'bottom (cm)', color: K.COL.gravity }, { id: 'cm', label: 'centre of mass (cm)', color: K.COL.net }], window: 0.7, ylabel: 'fallen (cm)' });
+  const graph = st.liveGraph({ series: [{ id: 'top', label: 'top (cm)', color: K.COL.string }, { id: 'bot', label: 'bottom (cm)', color: K.COL.gravity }, { id: 'cm', label: 'center of mass (cm)', color: K.COL.net }], window: 0.7, ylabel: 'fallen (cm)' });
   let p = params(), rest = hang(p), samples = null, run = false, t = 0, tStill = null, pending = null, landed = false, first = true;
   let Lay = { w: 800, h: 500, top: 60, s: 320, cx: 400 };
   st.setSpeed(0.25);
@@ -302,7 +302,7 @@ function tabPlay(pane) {
       const cy = Y(yc);
       g.save(); g.beginPath(); g.moveTo(cx - 70, cy); g.lineTo(cx - 60, cy - 9); g.lineTo(cx - 50, cy); g.lineTo(cx - 60, cy + 9); g.closePath(); g.fillStyle = K.COL.net; g.fill(); g.lineWidth = 2; g.strokeStyle = K.LINE; g.stroke(); g.restore();
       K.lineSeg(g, cx - 50, cy, cx - 34, cy, K.COL.net, 2, [3, 3]);
-      K.tag(g, 'centre of mass', cx - 60, cy - 20, { size: 11, bg: '#DCD3FF' });
+      K.tag(g, 'center of mass', cx - 60, cy - 20, { size: 11, bg: '#DCD3FF' });
     }
     if (st.on('front') && q && !landed) {
       // where the collapse has got to: the first gap that is still stretched
@@ -337,7 +337,7 @@ function tabPlay(pane) {
       { say: 'Hanging still, every coil is held up by the stretched coils above it. The top gaps are stretched most (red): they hold up the whole slinky. The bottom gaps hold up almost nothing.', tools: { tension: true, cm: false, ball: false, front: false }, enter: () => rehang() },
       { say: 'Let go! In slow motion: the top shoots down… and the bottom **does not move at all**.', enter: (s) => { s.setSpeed(1 / 16); rehang(); setTimeout(letGo, 400); } },
       { say: 'The message "let go" has to travel down the slinky, coil by coil, as a wave. Until it arrives, the bottom coils feel exactly what they felt before: **held up**. So they stay put.', tools: { front: true }, enter: (s) => { s.setSpeed(1 / 16); rehang(); setTimeout(letGo, 400); } },
-      { say: 'Meanwhile the **centre of mass** falls exactly like a dropped ball. Gravity is the only thing pulling on the slinky from outside, and it does not care how the coils are arranged.', tools: { front: false, cm: true, ball: true }, enter: (s) => { s.setSpeed(0.25); rehang(); setTimeout(letGo, 400); } },
+      { say: 'Meanwhile the **center of mass** falls exactly like a dropped ball. Gravity is the only thing pulling on the slinky from outside, and it does not care how the coils are arranged.', tools: { front: false, cm: true, ball: true }, enter: (s) => { s.setSpeed(0.25); rehang(); setTimeout(letGo, 400); } },
     ],
     onEnd: () => { rehang(); st.setSpeed(0.25); },
   });
@@ -356,10 +356,10 @@ function tabPlay(pane) {
     },
     {
       id: 'cm', title: 'The middle of the slinky', card: 'slinky.cm', lock: true, after,
-      q: 'Compared with a ball dropped at the same moment, the slinky’s centre of mass falls…', choices: ['more slowly', 'exactly the same', 'faster'], answer: 1,
+      q: 'Compared with a ball dropped at the same moment, the slinky’s center of mass falls…', choices: ['more slowly', 'exactly the same', 'faster'], answer: 1,
       run: (s, finish) => { s.setSpeed(0.25); s.setTool('cm', true); s.setTool('ball', true); rehang(); setTimeout(letGo, 300); until(done, () => finish()); },
       skip: () => { if (!run) letGo(); t = samples[samples.length - 1][0]; },
-      explain: 'Inside forces (the coils pulling on each other) cancel out for the slinky as a whole. Only gravity is left, so the centre of mass falls at g, just like the ball.',
+      explain: 'Inside forces (the coils pulling on each other) cancel out for the slinky as a whole. Only gravity is left, so the center of mass falls at g, just like the ball.',
     },
     {
       id: 'ball', title: 'A ball on the bottom', card: 'slinky.ball', lock: true, after,

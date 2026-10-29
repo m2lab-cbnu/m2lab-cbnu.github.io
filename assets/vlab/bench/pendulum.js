@@ -83,10 +83,10 @@ function release() {
 
 // ---------------------------------------------------------------- the swing tab
 function tabSwing(pane) {
-  pane.append(el('p', { class: 'vp-intro', html: 'Pull the bob aside, let go and time it. <b>L</b> is measured from the pivot to the <b>centre</b> of the bob. Change the bob, the timing tool, the planet or the air above.' }));
+  pane.append(el('p', { class: 'vp-intro', html: 'Pull the bob aside, let go and time it. <b>L</b> is measured from the pivot to the <b>center</b> of the bob. Change the bob, the timing tool, the planet or the air above.' }));
   const box = canvasBox('', '4 / 3', 'The pendulum seen from the side');
   const nowRo = readout('Angle now'), perRo = readout('Last period'), spdRo = readout('Speed at the bottom');
-  const Ls = slider({ label: 'String length L (pivot to centre of bob)', unit: 'm', min: 0.1, max: 2, step: 0.005, value: S.L, digits: 4, onInput: (v) => { S.L = v; if (!S.swinging) draw(); } });
+  const Ls = slider({ label: 'String length L (pivot to center of bob)', unit: 'm', min: 0.1, max: 2, step: 0.005, value: S.L, digits: 4, onInput: (v) => { S.L = v; if (!S.swinging) draw(); } });
   const As = slider({ label: 'Release angle θ₀', unit: '°', min: 1, max: 80, step: 1, value: S.th0, digits: 3, onInput: (v) => { S.th0 = v; if (!S.swinging) { S.s = [v * Math.PI / 180, 0]; draw(); } } });
   const relBtn = button('Let go', () => { release(); watchReset(); }, 'primary');
   const stopBtn = button('Catch it', () => { S.swinging = false; S.s = [S.th0 * Math.PI / 180, 0]; draw(); });
@@ -415,7 +415,7 @@ function tabPlay(pane) {
   let decomp = false, firstGrab = true, noted = false, pending = null;
   let G = { w: 600, h: 400, fy: 340, s: 200, px: 300, py: 50 };
 
-  const lenSl = el('input', { type: 'range', min: 0.2, max: 1.6, step: 0.01, value: 1, 'aria-label': 'String length in metres' });
+  const lenSl = el('input', { type: 'range', min: 0.2, max: 1.6, step: 0.01, value: 1, 'aria-label': 'String length in meters' });
   lenSl.addEventListener('input', () => setL(+lenSl.value));
   const goBtn = el('button', { type: 'button', class: 'stg-act', text: 'Let go' });
   const stopBtn = el('button', { type: 'button', class: 'stg-act ghost', text: 'Stop it' });
@@ -604,7 +604,7 @@ function tabPlay(pane) {
       // gravity split into along-the-string and along-the-path parts
       const along = Math.cos(th) * F;
       const ax = bx - ux / Lp * along, ay = by - uy / Lp * along;
-      K.arrow(g, bx, by, ax, ay, K.hexA(K.COL.gravity, 0.75), { dash: [6, 5], lw: 3.5, label: 'cancelled by the string', size: 11, labelAt: 'side', side: th > 0 ? 1 : -1 });
+      K.arrow(g, bx, by, ax, ay, K.hexA(K.COL.gravity, 0.75), { dash: [6, 5], lw: 3.5, label: 'canceled by the string', size: 11, labelAt: 'side', side: th > 0 ? 1 : -1 });
       g.save(); g.setLineDash([4, 4]); g.strokeStyle = K.hexA(K.LINE, 0.5); g.lineWidth = 1.5;
       g.beginPath(); g.moveTo(ax, ay); g.lineTo(bx, by + F); g.lineTo(bx + tx * back, by + ty * back); g.stroke(); g.restore();
     }
@@ -786,8 +786,8 @@ function tabPlay(pane) {
   st.tour({
     title: 'Why does it swing?',
     steps: [
-      { say: 'Two things pull on the bob. **Gravity** pulls it straight down (red). The **string** pulls it towards the pivot (blue).', tools: { forces: true, speed: false, snaps: false, energy: false }, enter: () => { setOne(32 * Math.PI / 180); decomp = false; }, mark: () => { const [x, y] = pos(one, G.px, G.py, G.s); return [x, y, bobR(one, G.s) + 10]; } },
-      { say: 'Split gravity into two parts. One part pulls **along the string**, and the string cancels it. The other part (purple) points along the path, **back towards the middle**. That part makes it swing.', enter: () => { setOne(32 * Math.PI / 180); decomp = true; }, leave: () => { decomp = false; } },
+      { say: 'Two things pull on the bob. **Gravity** pulls it straight down (red). The **string** pulls it toward the pivot (blue).', tools: { forces: true, speed: false, snaps: false, energy: false }, enter: () => { setOne(32 * Math.PI / 180); decomp = false; }, mark: () => { const [x, y] = pos(one, G.px, G.py, G.s); return [x, y, bobR(one, G.s) + 10]; } },
+      { say: 'Split gravity into two parts. One part pulls **along the string**, and the string cancels it. The other part (purple) points along the path, **back toward the middle**. That part makes it swing.', enter: () => { setOne(32 * Math.PI / 180); decomp = true; }, leave: () => { decomp = false; } },
       { say: 'Now watch the purple arrow while it swings, in slow motion. It is biggest at the ends and **zero at the bottom**: the bob speeds up all the way down, then slows down on the way up.', tools: { forces: true, speed: true }, enter: () => { setOne(32 * Math.PI / 180, true); st.setSpeed(0.25); } },
       { say: 'Energy goes back and forth: **height energy** at the ends, **motion energy** at the bottom. The snapshots are taken at equal times, so they spread out where it is fast and bunch up where it is slow.', tools: { forces: false, speed: false, snaps: true, energy: true }, enter: () => { setOne(40 * Math.PI / 180, true); st.setSpeed(1); } },
       { say: 'Heavy or light? A heavier bob is pulled harder, but it is just as much harder to get moving. The two cancel, so the **brass bob and the ping-pong ball swing in step**.', tools: { snaps: false, energy: false }, enter: () => { compare({ L: 1, bob: 'bob-brass', place: 'g-earth', th: 0.35, label: 'brass bob, 285 g' }, { L: 1, bob: 'ball-pingpong', place: 'g-earth', th: 0.35, label: 'ping-pong ball, 2.7 g' }); goCompare(); } },

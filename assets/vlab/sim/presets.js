@@ -143,7 +143,7 @@ export const PRESETS = [
   },
   {
     id: 'dispersion', name: 'Dispersion from a simulation',
-    blurb: 'A line of cells that stands for an infinite film. A short pulse at the centre launches waves of every wavelength; a 2D Fourier transform of m_z(x, t) gives the dispersion, next to the Kalinikos–Slavin curve.',
+    blurb: 'A line of cells that stands for an infinite film. A short pulse at the center launches waves of every wavelength; a 2D Fourier transform of m_z(x, t) gives the dispersion, next to the Kalinikos–Slavin curve.',
     options: { geometry: 'DE', B: 0.02 },
     build(o) {
       const mat = matFromLab();

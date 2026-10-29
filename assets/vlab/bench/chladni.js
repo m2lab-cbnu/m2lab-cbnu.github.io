@@ -187,7 +187,7 @@ function tabPlay(pane) {
 
   const st = new Stage(pane, {
     bench, npc: 'pip',
-    label: 'A metal plate seen from above, with sand on it, held at its centre over a speaker. Below it, a strip of notes from low to high.',
+    label: 'A metal plate seen from above, with sand on it, held at its center over a speaker. Below it, a strip of notes from low to high.',
     hello: 'Slide along the **strip of notes** at the bottom. Most notes do nothing… but at a **resonance** the sand dances into a pattern. How many can you find?',
     aspect: 16 / 10, phoneAspect: 0.72, minH: 360,
     onReset: () => { grains = null; S.f = 300; anim = null; pending = null; first = true; },
@@ -514,7 +514,7 @@ function tabPlay(pane) {
   st.tour({
     title: 'How does the sand know?',
     steps: [
-      { say: 'This brass plate is held at its centre over a speaker, with sand sprinkled all over it. The speaker plays one steady note.',
+      { say: 'This brass plate is held at its center over a speaker, with sand sprinkled all over it. The speaker plays one steady note.',
         tools: { motion: false, lines: false, side: true }, enter: () => { grains = null; anim = null; S.f = firstRes() * 0.82; } },
       { say: 'Most notes do almost nothing: the plate barely moves and the sand sits still. Watch the curve in the strip: the plate only answers strongly at a few **resonances**.',
         mark: () => [fx(S.f), Lay.sy + Lay.sh / 2, 30] },
@@ -547,14 +547,14 @@ function tabPlay(pane) {
       explain: 'Sand on the moving parts keeps getting kicked into the air. Only on the still lines, the nodes, does it get left alone, so that is where it piles up.',
     },
     {
-      id: 'stiff', title: 'An aluminium plate', card: 'chladni.stiff', lock: true, after,
+      id: 'stiff', title: 'An aluminum plate', card: 'chladni.stiff', lock: true, after,
       setup: () => { anim = null; pending = null; S.plateOver = 'plate-square'; grains = null; S.f = firstRes(); },
-      q: 'Aluminium is lighter than brass but almost as stiff. Swap to an aluminium plate of the same size. The same pattern now appears at…',
+      q: 'Aluminum is lighter than brass but almost as stiff. Swap to an aluminum plate of the same size. The same pattern now appears at…',
       choices: ['a higher note', 'a lower note', 'the same note'], answer: 0,
       run: (s0, finish) => {
         s0.setPaused(false); s0.setSpeed(1);
         const fb = firstRes();
-        wait(2.5, () => { S.plateOver = 'plate-alu'; grains = null; resp = null; const fa = firstRes(); glide(fa, () => wait(3, () => finish(`Brass: ${Math.round(fb)} Hz. Aluminium: ${Math.round(fa)} Hz, the same pattern.`))); });
+        wait(2.5, () => { S.plateOver = 'plate-alu'; grains = null; resp = null; const fa = firstRes(); glide(fa, () => wait(3, () => finish(`Brass: ${Math.round(fb)} Hz. Aluminum: ${Math.round(fa)} Hz, the same pattern.`))); });
       },
       explain: 'Bending waves run faster on a plate that is stiffer for its weight. Faster waves mean every resonance moves to a higher note, by about 1.4 times here.',
     },

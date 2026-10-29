@@ -216,7 +216,7 @@ function tabPlay(pane) {
   const b1 = mk('Left one only', 'stg-act'), b2 = mk('Both together'), b3 = mk('Both opposite'), b4 = mk('Stop them');
   b1.addEventListener('click', () => startMode('one')); b2.addEventListener('click', () => startMode('same'));
   b3.addEventListener('click', () => startMode('opp')); b4.addEventListener('click', () => { stopAll(); sound.play('pop'); });
-  const lenSl = el('input', { type: 'range', min: 0.6, max: 1.4, step: 0.01, value: S.L2, 'aria-label': 'Right string length in metres' });
+  const lenSl = el('input', { type: 'range', min: 0.6, max: 1.4, step: 0.01, value: S.L2, 'aria-label': 'Right string length in meters' });
   lenSl.addEventListener('input', () => setLen(1, +lenSl.value));
   st.controls(el('div', { class: 'stg-row' }, b1, b2), el('div', { class: 'stg-row' }, b3, b4), el('label', { class: 'stg-range' }, el('span', { text: 'Right string length' }), lenSl));
   function syncLen() { lenSl.value = S.L2; }

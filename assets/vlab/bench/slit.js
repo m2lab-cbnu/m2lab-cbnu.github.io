@@ -21,12 +21,12 @@ const SCREEN_HALF = 0.06;              // we look at ±6 cm of the screen
 
 const bench = {
   id: 'slit', title: 'Double slit', kicker: '2F · Physics Playground', icon: '⫴', floor: 2,
-  blurb: 'Fringes, diffusers, polarisers and single photons.',
+  blurb: 'Fringes, diffusers, polarizers and single photons.',
   slots: [
     { id: 'laser', label: 'Laser', options: ['laser-red', 'laser-green', 'laser-blue'], def: 'laser-red' },
     { id: 'slits', label: 'Slits', options: ['slit-1', 'slit-2', 'slit-2w', 'slit-3', 'slit-10'], def: 'slit-2' },
     { id: 'diff', label: 'Diffuser', options: ['diff-none', 'diffuser'], def: 'diff-none' },
-    { id: 'pol', label: 'Polarisers', options: ['pol-none', 'polarizers'], def: 'pol-none' },
+    { id: 'pol', label: 'Polarizers', options: ['pol-none', 'polarizers'], def: 'pol-none' },
     { id: 'det', label: 'Detector', options: ['screen-eye', 'photodiode', 'spad'], def: 'screen-eye' },
   ],
 };
@@ -114,7 +114,7 @@ function pattern() {
 function rgbOf(lam) { return lam > 600e-9 ? [255, 60, 70] : lam > 500e-9 ? [70, 255, 120] : [90, 140, 255]; }
 
 function tabDark(pane) {
-  pane.append(el('p', { class: 'vp-intro', html: 'Inside the dark room. Two slits make bright and dark stripes, because light arriving from the two slits adds up in some places and cancels in others. Now try to spoil it: a diffuser in different places, still or spinning, or polarisers that tell you which slit the light came through.' }));
+  pane.append(el('p', { class: 'vp-intro', html: 'Inside the dark room. Two slits make bright and dark stripes, because light arriving from the two slits adds up in some places and cancels in others. Now try to spoil it: a diffuser in different places, still or spinning, or polarizers that tell you which slit the light came through.' }));
   const scr = canvasBox('is-dark', '16 / 7', 'The screen at the back of the dark room');
   const top = canvasBox('', '16 / 4', 'The set-up seen from above');
   const prof = canvasBox('', '16 / 6', 'Brightness across the screen');
@@ -123,11 +123,11 @@ function tabDark(pane) {
   const where = segmented({ label: 'Where the diffuser goes', options: [{ value: 'before', label: 'Before the slits' }, { value: 'after', label: 'After the slits' }, { value: 'screen', label: 'As the screen' }], value: S.where, onChange: (v) => { S.where = v; recompute(); } });
   const spin = checkbox({ label: 'Spin the diffuser', checked: S.spin, onChange: (v) => { S.spin = v; recompute(); } });
   const grain = segmented({ label: 'Diffuser grain', options: [{ value: 12, label: 'Fine (12 µm)' }, { value: 400, label: 'Coarse (0.4 mm)' }], value: S.grain, onChange: (v) => { S.grain = +v; recompute(); } });
-  const polm = segmented({ label: 'Polarisers on the slits', options: [{ value: 'same', label: 'Same direction' }, { value: 'cross', label: 'Crossed' }], value: S.polMode, onChange: (v) => { S.polMode = v; recompute(); } });
-  const ana = segmented({ label: 'Third polariser, in front of the screen', options: [{ value: 'none', label: 'None' }, { value: 'plus', label: 'At +45°' }, { value: 'minus', label: 'At −45°' }], value: S.analyzer, onChange: (v) => { S.analyzer = v; recompute(); } });
+  const polm = segmented({ label: 'Polarizers on the slits', options: [{ value: 'same', label: 'Same direction' }, { value: 'cross', label: 'Crossed' }], value: S.polMode, onChange: (v) => { S.polMode = v; recompute(); } });
+  const ana = segmented({ label: 'Third polarizer, in front of the screen', options: [{ value: 'none', label: 'None' }, { value: 'plus', label: 'At +45°' }, { value: 'minus', label: 'At −45°' }], value: S.analyzer, onChange: (v) => { S.analyzer = v; recompute(); } });
   const rate = slider({ label: 'Laser power (photons per second)', unit: '', min: 10, max: 3000, step: 10, value: S.rate, log: true, digits: 4, onInput: (v) => { S.rate = v; } });
   const clr = button('Clear the photon count', () => { S.photons = []; S.hist = null; }, 'quiet');
-  const dGrp = group('Diffuser', where, spin, grain), pGrp = group('Polarisers', polm, ana), sGrp = group('Single photons', rate, clr);
+  const dGrp = group('Diffuser', where, spin, grain), pGrp = group('Polarizers', polm, ana), sGrp = group('Single photons', rate, clr);
   const visRo = readout('Fringe visibility'), spRo = readout('Fringe spacing'), nRo = readout('Photons counted');
   pane.append(el('div', { class: 'vp-cols' },
     el('div', { class: 'vp-side' }, group('Screen', Ls), dGrp, pGrp, sGrp),
@@ -290,7 +290,7 @@ function tabPlay(pane) {
     if (two && S.polMode === 'cross' && S.analyzer === 'none') S.sawCrossed = true;
     if (two && S.polMode === 'cross' && S.analyzer !== 'none' && S.sawCrossed) rig.note({ bench: 'slit', eraser: true });
     if (st.mode !== 'play') return;
-    if (S.polMode === 'cross' && S.analyzer === 'none') st.say('The films are **crossed**: light from one slit is polarised up and down (bright ripples), from the other side to side (pale ripples). Such waves cannot cancel each other, and the light now carries a mark of **which slit** it came through. The stripes are gone.');
+    if (S.polMode === 'cross' && S.analyzer === 'none') st.say('The films are **crossed**: light from one slit is polarized up and down (bright ripples), from the other side to side (pale ripples). Such waves cannot cancel each other, and the light now carries a mark of **which slit** it came through. The stripes are gone.');
     else if (S.polMode === 'cross') st.say('The **third film** lets through only light at 45°, a share of each kind. After it, nobody can tell which slit the light came from… and the stripes **come back**. This is the idea behind the quantum eraser.');
     else st.say('Both films point **the same way**, so the light from the two slits can still add up and cancel: stripes, a little dimmer.');
   }
@@ -532,7 +532,7 @@ function tabPlay(pane) {
     g.beginPath(); g.arc(L.xs, yT, 7, 0, Math.PI * 2); g.strokeStyle = '#FFFFFF'; g.lineWidth = 2.5; g.stroke();
     const dw = (rB - rA) / lp, e = Math.abs(dw - Math.round(dw));
     const nar = L.narrow;
-    const verdict = !same ? (nar ? 'no cancelling' : 'polarised differently: they cannot cancel') : e < 0.15 ? (nar ? 'bright' : 'crests arrive together: bright') : e > 0.35 ? (nar ? 'dark' : 'crest meets trough: dark') : (nar ? 'dim' : 'partly cancel: dim');
+    const verdict = !same ? (nar ? 'no canceling' : 'polarized differently: they cannot cancel') : e < 0.15 ? (nar ? 'bright' : 'crests arrive together: bright') : e > 0.35 ? (nar ? 'dark' : 'crest meets trough: dark') : (nar ? 'dim' : 'partly cancel: dim');
     const x0 = L.xp + (nar ? 12 : 24), y0 = L.ry0 + (nar ? 34 : 20), sz = nar ? 10 : 12;
     K.tag(g, `${nar ? 'yellow' : 'yellow path'}: ${(rA / lp).toFixed(2)} waves`, x0, y0, { align: 'left', size: sz, bg: '#FFF4C7' });
     K.tag(g, `${nar ? 'green' : 'green path'}: ${(rB / lp).toFixed(2)} waves`, x0, y0 + sz + 12, { align: 'left', size: sz, bg: '#E6FBF1' });

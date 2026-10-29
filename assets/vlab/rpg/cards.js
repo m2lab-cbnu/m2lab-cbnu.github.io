@@ -25,12 +25,12 @@ export const CARDS = {
   'optics.2f': { floor: 1, title: 'At twice the focal length: same size', text: 'An object 2f in front of a lens makes an upside-down image of the same size 2f behind it.' },
   'optics.inside': { floor: 1, title: 'Inside the focus: a magnifier', text: 'Closer than the focal length, the rays leave spreading apart. No picture on a screen, but your eye sees a big upright image.' },
   // 1F · vibrating string
-  'strings.tension': { floor: 1, title: 'Four times the pull, one octave up', text: 'Wave speed goes as √(tension/mass per metre), and the note with it. Four times the tension doubles the frequency.' },
+  'strings.tension': { floor: 1, title: 'Four times the pull, one octave up', text: 'Wave speed goes as √(tension/mass per meter), and the note with it. Four times the tension doubles the frequency.' },
   'strings.touch': { floor: 1, title: 'A light touch picks out harmonics', text: 'A finger at the middle stops every harmonic that moves there. What is left sounds an octave higher.' },
   'strings.middle': { floor: 1, title: 'Where you pluck shapes the sound', text: 'Plucked at the middle, a string has no even harmonics and sounds soft. Near the end it sounds bright.' },
   // 1F · field table
   'field.null': { floor: 1, title: 'Pushes cancel nearer the small charge', text: 'Between +1 and +4 the field vanishes a third of the way from the +1, because the push falls off as 1/distance².' },
-  'field.negative': { floor: 1, title: 'Negative charges roll uphill', text: 'On a voltage landscape a positive charge rolls down and a negative one climbs. Electrons flow towards +.' },
+  'field.negative': { floor: 1, title: 'Negative charges roll uphill', text: 'On a voltage landscape a positive charge rolls down and a negative one climbs. Electrons flow toward +.' },
   'field.scale': { floor: 1, title: 'Twice the charges, same pattern', text: 'Doubling every charge doubles every push but keeps its direction, so the field lines keep their shape.' },
   // 2F · magnet and pipes
   'pipe.metal': { floor: 2, title: 'Better conductor, stronger brake', text: 'A falling magnet drives eddy currents in the pipe that push back. The better the metal conducts, the slower the fall.' },
@@ -38,10 +38,10 @@ export const CARDS = {
   'pipe.cold': { floor: 2, title: 'Cold copper brakes harder', text: 'Cooled to −196 °C copper conducts about eight times better, so the magnet falls about eight times more slowly.' },
   // 2F · slinky
   'slinky.wait': { floor: 2, title: 'The bottom waits for the news', text: 'Let go of a hanging slinky and the bottom stays put until the collapse travels down and reaches it.' },
-  'slinky.cm': { floor: 2, title: 'The centre of mass falls like a stone', text: 'Inside forces cancel for the slinky as a whole, so its centre of mass falls at g, whatever the coils are doing.' },
+  'slinky.cm': { floor: 2, title: 'The center of mass falls like a stone', text: 'Inside forces cancel for the slinky as a whole, so its center of mass falls at g, whatever the coils are doing.' },
   'slinky.ball': { floor: 2, title: 'Heavier, it waits longer', text: 'A tennis ball on the bottom stretches the slinky more, so the collapse takes longer to arrive and the ball hovers too.' },
   // 2F · double slit
-  'slit.cover': { floor: 2, title: 'Stripes need two waves', text: 'Cover one slit and the stripes vanish. Bright and dark stripes come from the light of two slits adding up in some places and cancelling in others.' },
+  'slit.cover': { floor: 2, title: 'Stripes need two waves', text: 'Cover one slit and the stripes vanish. Bright and dark stripes come from the light of two slits adding up in some places and canceling in others.' },
   'slit.color': { floor: 2, title: 'Shorter waves, closer stripes', text: 'Blue light has shorter waves than red, so its stripes sit closer together. The spacing is λL/d.' },
   'slit.apart': { floor: 2, title: 'Slits apart, stripes together', text: 'Move the slits farther apart and the stripes squeeze closer. Twice the gap, half the spacing.' },
   'slit.photons': { floor: 2, title: 'One photon at a time, still stripes', text: 'Single photons land as single dots, yet thousands of them build the same stripes. Where each can land is set by a wave through both slits.' },
@@ -56,13 +56,13 @@ export const CARDS = {
   // 2F · Chladni plate
   'chladni.higher': { floor: 2, title: 'Higher notes, finer patterns', text: 'Each resonance fits a whole number of bending waves on the plate. Higher notes mean shorter waves, so more still lines.' },
   'chladni.nodes': { floor: 2, title: 'Sand marks where nothing moves', text: 'Sand is thrown off the parts of the plate that move and comes to rest on the nodal lines, which stay still.' },
-  'chladni.stiff': { floor: 2, title: 'A stiffer plate sings higher', text: 'Bending waves run faster on a plate that is stiffer for its weight, so aluminium plays every pattern at a higher note than brass.' },
+  'chladni.stiff': { floor: 2, title: 'A stiffer plate sings higher', text: 'Bending waves run faster on a plate that is stiffer for its weight, so aluminum plays every pattern at a higher note than brass.' },
   // 3F · spin precession
   'precess.field': { floor: 3, title: 'Twice the field, twice the pace', text: 'A spin goes round its field at f = γB: 28 GHz for every tesla. Double the field and it turns twice as fast.' },
   'precess.resonance': { floor: 3, title: 'Resonance: f = γB', text: 'Microwaves only tip the spin over when they turn at its own pace: 5.6 GHz needs 0.2 T. That is ferromagnetic resonance.' },
   'precess.damping': { floor: 3, title: 'More friction, wider line', text: 'Damping lets a spin answer a wider range of fields, but less strongly: the resonance line gets wider and lower.' },
   // 3F · spin-wave machine
-  'chain.shorter': { floor: 3, title: 'Higher frequency, shorter spin waves', text: 'Shorter spin waves twist neighbouring spins more against each other, which costs energy, so they need higher frequencies.' },
+  'chain.shorter': { floor: 3, title: 'Higher frequency, shorter spin waves', text: 'Shorter spin waves twist neighboring spins more against each other, which costs energy, so they need higher frequencies.' },
   'chain.gap': { floor: 3, title: 'Nothing travels below the gap', text: 'Below f = γB no spin wave exists: the wobble near the antenna cannot travel. Above it, the waves run.' },
   'chain.field': { floor: 3, title: 'A magnet tunes spin waves', text: 'More field lifts the whole dispersion curve, so the same frequency gives longer spin waves.' },
   // 3F · magnons meet photons
@@ -74,10 +74,10 @@ export const CARDS = {
   'logic.xor': { floor: 3, title: 'A delay turns the rule round', text: 'A half-wave delay in one arm makes equal bits cancel and different bits add: an XOR gate.' },
   'logic.majority': { floor: 3, title: 'The majority wins', text: 'Three spin waves meet and the result carries the phase of the majority: a majority gate in a single junction.' },
   // 3F · Kerr microscope
-  'domains.grow': { floor: 3, title: 'Fields grow the domains that agree', text: 'Domains pointing along the field grow and the others shrink, so the whole film’s magnetisation follows the field.' },
+  'domains.grow': { floor: 3, title: 'Fields grow the domains that agree', text: 'Domains pointing along the field grow and the others shrink, so the whole film’s magnetization follows the field.' },
   'domains.memory': { floor: 3, title: 'Magnets remember', text: 'A hard magnet keeps pointing the way it was pushed, even when the field is gone. Hard disks store bits this way.' },
-  'domains.kerr': { floor: 3, title: 'Light reads the magnet', text: 'Reflected light turns slightly with the magnetisation; an analyser makes that twist visible as light and dark domains.' },
-  'bragg.law': { floor: 3, title: 'Bragg’s law: 2d sinθ = nλ', text: 'Waves bouncing off neighbouring planes of a crystal add up only when the extra path is a whole number of wavelengths.' },
+  'domains.kerr': { floor: 3, title: 'Light reads the magnet', text: 'Reflected light turns slightly with the magnetization; an analyzer makes that twist visible as light and dark domains.' },
+  'bragg.law': { floor: 3, title: 'Bragg’s law: 2d sinθ = nλ', text: 'Waves bouncing off neighboring planes of a crystal add up only when the extra path is a whole number of wavelengths.' },
   'bragg.missing': { floor: 3, title: 'Missing peaks tell the lattice', text: 'Extra atoms halfway between the planes cancel some reflections. Which peaks are missing reveals the crystal’s structure.' },
   'bragg.freq': { floor: 3, title: 'Shorter waves, smaller angles', text: 'Halve the wavelength and the peaks move to smaller angles. X-rays are short enough for atoms 0.3 nm apart.' },
   'rod.hammer': { floor: 3, title: 'Shaken domains follow the field', text: 'Each blow frees the pinned domains for an instant, and they settle along Earth’s field. Steel becomes a magnet just by being hit.' },

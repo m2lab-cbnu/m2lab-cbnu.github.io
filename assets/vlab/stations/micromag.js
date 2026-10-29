@@ -15,7 +15,7 @@ import { lab } from '../state.js';
 import { tr, trf } from '../i18n.js';
 
 const VIEWS = [
-  { value: 0, label: 'Direction (mumax colours)' }, { value: 1, label: 'm_x' }, { value: 2, label: 'm_y' }, { value: 3, label: 'm_z' },
+  { value: 0, label: 'Direction (mumax colors)' }, { value: 1, label: 'm_x' }, { value: 2, label: 'm_y' }, { value: 3, label: 'm_z' },
   { value: 4, label: 'Spin waves (δm_z)' }, { value: 5, label: 'Spin-wave intensity' },
 ];
 const st = {
@@ -169,7 +169,7 @@ function tabSimulate(pane) {
   }
   function legend() {
     const mode = engine.view.mode;
-    const html = mode === 0 ? '<span class="wheel" aria-hidden="true"></span><span>Colour shows the in-plane direction, as in mumax3: red along +x, green +y, cyan −x, purple −y; white points up (+z), black down.</span>'
+    const html = mode === 0 ? '<span class="wheel" aria-hidden="true"></span><span>Color shows the in-plane direction, as in mumax3: red along +x, green +y, cyan −x, purple −y; white points up (+z), black down.</span>'
       : mode < 4 ? `<span>Blue −1 · white 0 · red +1 for ${['', 'm_x', 'm_y', 'm_z'][mode]}.</span>`
       : mode === 4 ? '<span>Blue and red: the out-of-plane part of the spin waves, δm_z, against the state at the start.</span>'
       : '<span>Brightness: the size of the spin-wave precession.</span>';
@@ -209,7 +209,7 @@ function tabSimulate(pane) {
       optBox.append(
         segmented({ label: 'Geometry', options: [{ value: 'DE', label: 'DE' }, { value: 'BV', label: 'BV' }, { value: 'FV', label: 'FV (field along z)' }], value: o.geometry, onChange: (v) => { o.geometry = v; if (v === 'FV' && o.B < 0.5) o.B = Math.max(0.3, 4e-7 * Math.PI * lab.sample.Ms + 0.1); } }),
         slider({ label: 'Field', unit: 'mT', min: 1, max: 3000, step: 1, value: o.B * 1e3, digits: 4, onInput: (v) => { o.B = v / 1e3; } }),
-        button('Run and analyse', async () => { if (await load()) startDispersion(); }, 'go'));
+        button('Run and analyze', async () => { if (await load()) startDispersion(); }, 'go'));
     }
     if (st.preset === 'draw') {
       let tool = 'draw';

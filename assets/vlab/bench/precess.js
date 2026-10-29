@@ -321,7 +321,7 @@ function tabPlay(pane) {
         tools: { trail: true, field: true, torque: false, clock: false }, enter: () => { S.drive = false; sweep = null; syncCtl(); setB(0.2); tipTo(4); }, mark: () => { const t = proj(S.m[0] * 0.92, S.m[1] * 0.92, S.m[2] * 0.92); return [t[0], t[1], 24]; } },
       { say: 'Tip it over and let go. It does not simply fall back: the field **twists it sideways**, so it goes round and round the field. This is **precession**, just like the wobbling gyroscope.',
         tools: { torque: true }, enter: () => tipTo(55) },
-      { say: 'A little friction (**damping**) slowly takes its energy, so it spirals back home towards the field. The green arrow shows that pull.',
+      { say: 'A little friction (**damping**) slowly takes its energy, so it spirals back home toward the field. The green arrow shows that pull.',
         tools: { torque: true } },
       { say: 'How fast it goes round is set only by the field: **28 GHz for every tesla**. Double the field and it turns twice as fast. (Everything here is slowed down billions of times, so you can see it.)',
         tools: { torque: false, clock: true }, enter: () => { tipTo(50); anim = { t0: st.simT, from: 0.12, to: 0.3, dur: 4, set: (v) => setB(v) }; } },

@@ -169,7 +169,7 @@ function drawRail(c, s) {
 
 // ---------------------------------------------------------------- rays
 function tabRays(pane) {
-  pane.append(el('p', { class: 'vp-intro', html: 'Three easy rays from the tip of the arrow: one parallel to the axis (it then passes through the focus), one through the centre of the lens (straight on), and one through the near focus (it leaves parallel). Where they meet is the image. If they spread apart, trace them backwards: a <b>virtual</b> image.' }));
+  pane.append(el('p', { class: 'vp-intro', html: 'Three easy rays from the tip of the arrow: one parallel to the axis (it then passes through the focus), one through the center of the lens (straight on), and one through the near focus (it leaves parallel). Where they meet is the image. If they spread apart, trace them backwards: a <b>virtual</b> image.' }));
   const box = canvasBox('', '16 / 8', 'Ray diagram for the first lens');
   pane.append(el('div', { class: 'vp-main' }, box, note('The diagram uses the first lens only. Positions follow the sliders on the Bench tab.')));
   function draw() {
@@ -470,10 +470,10 @@ function tabPlay(pane) {
   st.tour({
     title: 'How does a lens make a picture?',
     steps: [
-      { say: 'Light leaves every point of the lamp in **all directions**. Here are rays from the tip of the arrow, fanning out towards the lens.', tools: { fan: true, principal: false, focus: false, ghost: false }, enter: () => put(40, 46) },
+      { say: 'Light leaves every point of the lamp in **all directions**. Here are rays from the tip of the arrow, fanning out toward the lens.', tools: { fan: true, principal: false, focus: false, ghost: false }, enter: () => put(40, 46) },
       { say: 'A convex lens bends each ray, more strongly the farther from the middle it passes. So rays from the tip **come back together at one point**: the image of the tip.', tools: { ghost: true }, enter: () => put(40, 70) },
       { say: 'Put the screen exactly there and the picture is **sharp**. In front of that point or behind it, the light from each point is spread over a patch: **blurry**.', enter: () => put(40, 55) },
-      { say: 'Three easy rays find the image without any maths. Parallel to the axis → through the focus **F**. Through the centre → straight on. Through the near focus → out parallel.', tools: { fan: false, principal: true, focus: true }, enter: () => put(40, 55) },
+      { say: 'Three easy rays find the image without any math. Parallel to the axis → through the focus **F**. Through the center → straight on. Through the near focus → out parallel.', tools: { fan: false, principal: true, focus: true }, enter: () => put(40, 55) },
       { say: 'Bring the lens closer: the lamp nears the focus and the image runs **far away and gets big**. Closer than the focus, the rays spread apart: no picture on the screen, but your eye sees a big upright image. That is a **magnifying glass**.', tools: { principal: true, focus: true, ghost: true }, enter: () => put(17, 100) },
     ],
     onEnd: () => put(35, 60),

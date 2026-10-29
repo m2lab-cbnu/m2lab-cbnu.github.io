@@ -244,7 +244,7 @@ function tabPlay(pane) {
     g.restore();
     // what is on the turntable
     const { kind, id } = ensure();
-    const name = id === 'lat-x' && !kindOver ? 'Crystal #9' : { sc: 'simple cubic', bcc: 'body-centred', fcc: 'face-centred' }[kind];
+    const name = id === 'lat-x' && !kindOver ? 'Crystal #9' : { sc: 'simple cubic', bcc: 'body-centered', fcc: 'face-centered' }[kind];
     const lines = [[trf('{0}, {1} to the beam', tr(name), tr(S.face === 100 ? 'cube face' : 'diagonal')), '#FFFDF6']];
     if (showPl && !Lay.narrow) lines.push([`planes ${(Xc.d * a * 100).toFixed(1)} cm apart`, '#CFE8F7']);
     if (showPl && Xc.cols.some((p) => !p[4])) lines.push(['orange balls sit between the planes', '#FFD1A1']);
@@ -360,7 +360,7 @@ function tabPlay(pane) {
         enter: () => glideTh(firstPeak()) },
       { say: 'Scan the angle and record the signal: peaks wherever the extra path is 1, 2, 3… wavelengths. The purple lines show where Bragg’s law puts them.',
         tools: { paths: false, bragg: true }, enter: () => startScan(TH0, TH1, 10) },
-      { say: 'Now the **body-centred** crystal: an extra ball in the middle of each cube, exactly halfway between the planes. Its waves arrive half a wavelength late and cancel the first peak. **Missing peaks reveal the structure.**',
+      { say: 'Now the **body-centered** crystal: an extra ball in the middle of each cube, exactly halfway between the planes. Its waves arrive half a wavelength late and cancel the first peak. **Missing peaks reveal the structure.**',
         enter: () => { kindOver = 'bcc'; startScan(TH0, TH1, 10); } },
     ],
     onEnd: () => { kindOver = null; aOver = null; scan = null; anim = null; data = []; },

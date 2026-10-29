@@ -247,7 +247,7 @@ function tabPlay(pane) {
     ig.putImageData(idata, 0, 0);
     K.box(g, P.x - 6, P.y - 6, P.w + 12, P.h + 12, K.MAT.navy, { r: 10, bands: false });
     g.save(); K.rr(g, P.x, P.y, P.w, P.h, 6); g.clip(); g.imageSmoothingEnabled = true; g.drawImage(img, P.x, P.y, P.w, P.h); g.restore();
-    K.text(g, alu ? 'aluminium: no domains to see' : 'Kerr image of the rod’s surface: light = towards the red end', P.x + 8, P.y + 16, { size: 10.5, weight: 700, color: '#FFFDF6', halo: '#14244A' });
+    K.text(g, alu ? 'aluminum: no domains to see' : 'Kerr image of the rod’s surface: light = toward the red end', P.x + 8, P.y + 16, { size: 10.5, weight: 700, color: '#FFFDF6', halo: '#14244A' });
   }
 
   st.onDraw((g, w, h) => {
@@ -261,7 +261,7 @@ function tabPlay(pane) {
   st.onOver(() => {
     st.set('blows', String(blows));
     const ax = axial();
-    st.set('ax', `${Math.round(Math.abs(ax) * B_EARTH)} µT${Math.abs(ax) < 0.05 ? '' : ax > 0 ? ', towards red' : ', away from red'}`);
+    st.set('ax', `${Math.round(Math.abs(ax) * B_EARTH)} µT${Math.abs(ax) < 0.05 ? '' : ax > 0 ? ', toward red' : ', away from red'}`);
     const b = probe();
     st.set('B', `${b >= 0 ? '+' : ''}${Math.round(b)} µT${Math.abs(b) < 8 ? '' : b > 0 ? ' (red end north)' : ' (red end south)'}`);
   });
@@ -306,7 +306,7 @@ function tabPlay(pane) {
       q: 'The rod lies along Earth’s field, red end down and to the north. Hammer it 12 times. The red end becomes…',
       choices: ['a north pole', 'a south pole', 'nothing: hitting cannot make a magnet'], answer: 0,
       run: (s0, finish) => { s0.setPaused(false); s0.setSpeed(1); strike(12); until(() => queue === 0, () => wait(0.6, () => finish(`The probe now reads ${Math.round(probe())} µT.`))); },
-      explain: 'The domains settle along Earth’s field, which points down into the ground to the north. Magnetisation pointing towards the red end makes it a north pole.',
+      explain: 'The domains settle along Earth’s field, which points down into the ground to the north. Magnetization pointing toward the red end makes it a north pole.',
     },
     {
       id: 'erase', title: 'Across the field', card: 'rod.erase', lock: true, after,

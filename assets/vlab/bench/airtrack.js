@@ -91,13 +91,13 @@ const table = dataTable([
 let nRun = 0;
 
 function tabTrack(pane) {
-  pane.append(el('p', { class: 'vp-intro', html: 'Glider A is pushed towards glider B. Choose the masses, the speeds and the bumpers, then let go. The table checks momentum (always kept) and kinetic energy (kept only by bouncy bumpers).' }));
+  pane.append(el('p', { class: 'vp-intro', html: 'Glider A is pushed toward glider B. Choose the masses, the speeds and the bumpers, then let go. The table checks momentum (always kept) and kinetic energy (kept only by bouncy bumpers).' }));
   const box = canvasBox('', '16 / 6', 'The air track seen from the side');
   const masses = [0.1, 0.2, 0.3, 0.4].map((m) => ({ value: m, label: `${m * 1000} g` }));
   const mA = segmented({ label: 'Mass of glider A', options: masses, value: S.mA, onChange: (v) => { S.mA = +v; draw(); } });
   const mB = segmented({ label: 'Mass of glider B', options: masses, value: S.mB, onChange: (v) => { S.mB = +v; draw(); } });
   const vA = slider({ label: 'Push on A (speed)', unit: 'm/s', min: 0.05, max: 1.5, step: 0.01, value: S.vA, digits: 3, onInput: (v) => { S.vA = v; } });
-  const vB = slider({ label: 'Speed of B (negative: towards A)', unit: 'm/s', min: -1, max: 1, step: 0.01, value: S.vB, digits: 3, onInput: (v) => { S.vB = v; } });
+  const vB = slider({ label: 'Speed of B (negative: toward A)', unit: 'm/s', min: -1, max: 1, step: 0.01, value: S.vB, digits: 3, onInput: (v) => { S.vB = v; } });
   const air = checkbox({ label: 'Blower on (air cushion)', checked: S.air, onChange: (v) => { S.air = v; } });
   const slow = checkbox({ label: 'Slow motion (camera)', checked: false, onChange: (v) => { S.slow = v ? 0.2 : 1; } });
   const go = button('Let go', () => { S.run = newRun(); anim.start(); }, 'go');
@@ -200,13 +200,13 @@ const GL = { A: ['#FFD54F', '#FFF1B0', '#C99A1B'], B: ['#5FD3F0', '#C9F4FF', '#1
 
 function tabPlay(pane) {
   const st = new Stage(pane, {
-    bench, npc: 'hoo', label: 'Two gliders on an air track. Grab one, push it towards the other and let go.',
-    hello: 'Grab a glider, **push it** towards the other one and let go. Try different masses and bumpers, and watch the arrows: the total never changes.',
+    bench, npc: 'hoo', label: 'Two gliders on an air track. Grab one, push it toward the other and let go.',
+    hello: 'Grab a glider, **push it** toward the other one and let go. Try different masses and bumpers, and watch the arrows: the total never changes.',
     aspect: 16 / 8.2,
     onReset: () => reset(),
     keys: { arrow(dx) { r.vA = Math.max(-1.5, Math.min(1.5, r.vA + dx * 0.1)); }, action() { reset(); r.vA = 0.6; } },
   });
-  st.tool('mom', 'Momentum', { icon: K.COL.vel, on: true }).tool('energy', 'Energy', { icon: K.COL.ke }).tool('cm', 'Centre of mass', { icon: K.COL.net })
+  st.tool('mom', 'Momentum', { icon: K.COL.vel, on: true }).tool('energy', 'Energy', { icon: K.COL.ke }).tool('cm', 'Center of mass', { icon: K.COL.net })
     .tool('snaps', 'Snapshots', { icon: '#F29E4C' }).tool('graph', 'Graph', { icon: K.COL.pe });
   st.readout('pa', 'Momentum of A').readout('pb', 'Momentum of B').readout('pt', 'Total').readout('ke', 'Motion energy kept');
   const graph = st.liveGraph({ series: [{ id: 'a', label: 'glider A (m)', color: '#C99A1B' }, { id: 'b', label: 'glider B (m)', color: '#1F8FB0' }], window: 6, ylabel: 'position (m)' });
@@ -342,7 +342,7 @@ function tabPlay(pane) {
       const cx = X(xc), cy = Lay.y - 132;
       g.save(); g.beginPath(); g.moveTo(cx, cy - 10); g.lineTo(cx + 9, cy); g.lineTo(cx, cy + 10); g.lineTo(cx - 9, cy); g.closePath(); g.fillStyle = K.COL.net; g.fill(); g.lineWidth = 2; g.strokeStyle = K.LINE; g.stroke(); g.restore();
       K.lineSeg(g, cx, cy + 10, cx, Lay.y - 34, K.hexA(K.COL.net, 0.5), 1.5, [4, 4]);
-      K.tag(g, 'centre of mass', cx, cy - 22, { size: 11, bg: '#DCD3FF' });
+      K.tag(g, 'center of mass', cx, cy - 22, { size: 11, bg: '#DCD3FF' });
     }
     if (st.on('energy')) {
       const ka = 0.5 * r.mA * r.vA ** 2, kb = 0.5 * r.mB * r.vB ** 2, E = Math.max(ke0, ka + kb, 1e-9);
@@ -377,7 +377,7 @@ function tabPlay(pane) {
     },
   });
   st.handle(grab('A')); st.handle(grab('B'));
-  st.hint('Grab glider A and push it towards B', { sticky: true });
+  st.hint('Grab glider A and push it toward B', { sticky: true });
 
   // ---------- why
   const go = (o) => { reset(o); r.before = { vA: r.vA, vB: r.vB }; startE(); };
@@ -386,7 +386,7 @@ function tabPlay(pane) {
     steps: [
       { say: '**Momentum** is mass times velocity: how hard something would be to stop. Glider A has some (the arrow), B has none.', tools: { mom: true, energy: false, cm: false }, enter: (s) => { s.setSpeed(1); go({ bump: 'bump-spring', mA: 0.2, mB: 0.2, vA: 0.5 }); } },
       { say: 'In the crash, A pushes B and **B pushes A back just as hard, for just as long**. So whatever momentum A loses, B gains.', enter: (s) => { s.setSpeed(1 / 16); go({ bump: 'bump-spring', mA: 0.2, mB: 0.2, vA: 0.5, xA: 0.82 }); } },
-      { say: 'So the **total stays the same** (the green arrow at the top). The **centre of mass** glides on at a steady speed, as if nothing happened.', tools: { cm: true }, enter: (s) => { s.setSpeed(0.5); go({ bump: 'bump-spring', mA: 0.4, mB: 0.1, vA: 0.5 }); } },
+      { say: 'So the **total stays the same** (the green arrow at the top). The **center of mass** glides on at a steady speed, as if nothing happened.', tools: { cm: true }, enter: (s) => { s.setSpeed(0.5); go({ bump: 'bump-spring', mA: 0.4, mB: 0.1, vA: 0.5 }); } },
       { say: 'Energy is another story. **Springy bumpers** give back almost all the motion energy. **Velcro** makes them stick: a lot of energy turns into heat and sound, yet the momentum is still all there.', tools: { cm: false, energy: true }, enter: (s) => { s.setSpeed(0.5); go({ bump: 'bump-velcro', mA: 0.2, mB: 0.2, vA: 0.6 }); } },
     ],
     onEnd: () => reset(),

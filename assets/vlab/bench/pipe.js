@@ -222,7 +222,7 @@ function tabGraph(pane) {
   const box = canvasBox('', '16 / 9', 'Speed against time');
   const plot = new Plot(box.canvas, { xlabel: 'Time (s)', ylabel: 'Speed (cm/s)' });
   const box2 = canvasBox('', '16 / 7', 'Braking along the pipe');
-  const plot2 = new Plot(box2.canvas, { xlabel: 'Depth of the magnet’s centre (cm)', ylabel: 'Braking b (N s/m)' });
+  const plot2 = new Plot(box2.canvas, { xlabel: 'Depth of the magnet’s center (cm)', ylabel: 'Braking b (N s/m)' });
   const need = note('The speed graph needs the <b>high-speed camera</b>. You can always see the braking calculated along the pipe below.');
   pane.append(el('div', { class: 'vp-main' }, need, box, box2));
   function draw() {
@@ -448,8 +448,8 @@ function tabPlay(pane) {
   st.setChallenges([
     {
       id: 'metals', title: 'Which metal brakes best?', card: 'pipe.metal', lock: true, after, skip,
-      q: 'Copper, aluminium and stainless steel pipes, none of them magnetic. In which does the magnet fall slowest?', choices: ['Copper', 'Aluminium', 'Stainless steel'], answer: 0,
-      run: (s, finish) => { race([{ mag: 'magnet-n42', pipe: 'pipe-cu', label: 'copper' }, { mag: 'magnet-n42', pipe: 'pipe-al', label: 'aluminium' }, { mag: 'magnet-n42', pipe: 'pipe-steel', label: 'stainless' }], 4); until(allDone, () => finish(times())); },
+      q: 'Copper, aluminum and stainless steel pipes, none of them magnetic. In which does the magnet fall slowest?', choices: ['Copper', 'Aluminum', 'Stainless steel'], answer: 0,
+      run: (s, finish) => { race([{ mag: 'magnet-n42', pipe: 'pipe-cu', label: 'copper' }, { mag: 'magnet-n42', pipe: 'pipe-al', label: 'aluminum' }, { mag: 'magnet-n42', pipe: 'pipe-steel', label: 'stainless' }], 4); until(allDone, () => finish(times())); },
       explain: 'The better the metal conducts, the bigger the eddy currents and the harder they brake. Copper conducts best of the three, stainless steel worst.',
     },
     {

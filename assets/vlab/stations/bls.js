@@ -109,7 +109,7 @@ function tabSpectrum(pane) {
   const modes = slider({ label: 'Thickness modes shown', unit: '', min: 0, max: 3, step: 1, value: S.modes, digits: 1, onInput: (v) => { S.modes = Math.round(v); changed(); } });
   const res = slider({ label: 'Instrument resolution', unit: 'GHz', min: 0.02, max: 1, step: 0.01, value: S.res / 1e9, digits: 3, onInput: (v) => { S.res = v * 1e9; changed(); } });
   const box = canvasBox('', '16 / 9', 'BLS spectrum');
-  const plot = new Plot(box.canvas, { xlabel: 'Frequency shift (GHz)', ylabel: 'Counts (normalised)', hover: true });
+  const plot = new Plot(box.canvas, { xlabel: 'Frequency shift (GHz)', ylabel: 'Counts (normalized)', hover: true });
   const ro = { q: readout('Wavevector transferred'), s: readout('Stokes peak'), a: readout('Anti-Stokes peak'), df: readout('Frequency difference'), r: readout('Intensity ratio Stokes / anti-Stokes'), D: readout('DMI you would infer') };
   const quick = el('div', { class: 'vp-row' },
     button('Thin CoFeB/Pt with DMI', () => { lab.setSample({ ...material('cofeb'), d: 1.5e-9, D: 1.2e-3, edited: true }); S.geom = 'DE'; S.B = 0.3; changed(); }, 'quiet'),
@@ -154,7 +154,7 @@ function tabMap(pane) {
   const Bs = slider({ label: 'Bias field', unit: 'mT', min: 1, max: 300, step: 0.5, value: o.B * 1e3, digits: 4, onInput: (v) => { o.B = v / 1e3; } });
   const fq = slider({ label: 'Microwave frequency (0 = automatic)', unit: 'GHz', min: 0, max: 40, step: 0.01, value: 0, digits: 4, onInput: (v) => { o.f = v > 0 ? v * 1e9 : null; } });
   const spot = slider({ label: 'Laser spot size (FWHM)', unit: 'nm', min: 50, max: 2000, step: 10, value: S.spot * 1e9, digits: 4, onInput: (v) => { S.spot = v * 1e-9; if (lastMap) showMap(lastMap, false); } });
-  const logc = checkbox({ label: 'Logarithmic colour scale', checked: true, onChange: () => { if (lastMap) showMap(lastMap, false); } });
+  const logc = checkbox({ label: 'Logarithmic color scale', checked: true, onChange: () => { if (lastMap) showMap(lastMap, false); } });
   const go = button('Run the scan', () => scan(), 'go');
   const status = el('span', { class: 'sim-status', 'aria-live': 'polite' });
   const live = el('div', { class: 'sim-view' });
@@ -275,7 +275,7 @@ function tabPump(pane) {
   const play = button('Play', () => animate(), 'secondary');
   const ro = { th: readout('Threshold at this field'), k: readout('First magnons to grow'), fmin: readout('Bottom of the spin-wave band'), mu: readout('Chemical potential below the bottom'), c: readout('Fraction in the condensate') };
   pane.append(
-    el('p', { class: 'vp-intro', html: 'A strong microwave field along M (parallel pumping) splits each pump photon into two magnons at half its frequency. Above a threshold their number grows exponentially. The extra magnons then scatter, cool towards the bottom of the band, and if there are enough of them they gather there as a <b>Bose–Einstein condensate</b>, as seen in YIG films by BLS.' }),
+    el('p', { class: 'vp-intro', html: 'A strong microwave field along M (parallel pumping) splits each pump photon into two magnons at half its frequency. Above a threshold their number grows exponentially. The extra magnons then scatter, cool toward the bottom of the band, and if there are enough of them they gather there as a <b>Bose–Einstein condensate</b>, as seen in YIG films by BLS.' }),
     el('div', { class: 'vp-cols' },
       el('div', { class: 'vp-side' }, sampleEditor({ fields: ['d', 'Ms', 'A', 'gamma', 'alpha'] }), group('Pumping', fp, B, pump, yig), group('Time', tsl, el('div', { class: 'vp-row' }, play)),
         note('The condensation part is a teaching model: rate equations with a Bose–Einstein target distribution at room temperature, a 60 ns thermalization time and a 300 ns lifetime.')),

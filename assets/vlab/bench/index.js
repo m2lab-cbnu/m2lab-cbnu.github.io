@@ -13,7 +13,7 @@ export const EXPERIMENTS = [
   // 2F · Physics Playground
   { id: 'pipe', floor: 2, title: 'Magnet and pipes', blurb: 'A magnet falls through a copper pipe, very slowly.', load: () => import('./pipe.js') },
   { id: 'slinky', floor: 2, title: 'Slinky drop', blurb: 'Let go of the top. The bottom waits.', load: () => import('./slinky.js') },
-  { id: 'slit', floor: 2, title: 'Double slit', blurb: 'Fringes, diffusers, polarisers and single photons.', load: () => import('./slit.js') },
+  { id: 'slit', floor: 2, title: 'Double slit', blurb: 'Fringes, diffusers, polarizers and single photons.', load: () => import('./slit.js') },
   { id: 'coupled', floor: 2, title: 'Coupled pendulums', blurb: 'Energy sloshing between two swings.', load: () => import('./coupled.js') },
   { id: 'gyro', floor: 2, title: 'Gyroscope', blurb: 'Precession and nutation.', load: () => import('./gyro.js') },
   { id: 'chladni', floor: 2, title: 'Chladni plate', blurb: 'Sand draws the shapes of vibration.', load: () => import('./chladni.js') },

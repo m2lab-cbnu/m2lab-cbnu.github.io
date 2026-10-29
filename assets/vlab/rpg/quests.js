@@ -27,11 +27,11 @@ export const STAMPS = [
   { id: 'block', floor: 1, name: 'No scales', how: 'Find the mass of the mystery block with a spring.', item: 'm-mystery', color: C.brass },
   { id: 'halfke', floor: 1, name: 'Half lost', how: 'Make a collision lose half of its kinetic energy.', item: 'bump-velcro', color: C.orange },
   { id: 'lens', floor: 1, name: 'Sharp eyes', how: 'Find the focal length of the mystery lens.', item: 'lens-x', color: C.sky },
-  { id: 'string', floor: 1, name: 'Heavy string', how: 'Find the mass per metre of the mystery string.', item: 'str-x', color: C.lav },
+  { id: 'string', floor: 1, name: 'Heavy string', how: 'Find the mass per meter of the mystery string.', item: 'str-x', color: C.lav },
   { id: 'null', floor: 1, name: 'Nowhere to go', how: 'Find the point where the electric field vanishes.', item: 'probe', color: C.green },
   { id: 'slowfall', floor: 2, name: 'Slow fall', how: 'Make a magnet take over a minute to fall through the 1 m pipe.', item: 'magnet-n42', color: C.copper },
   { id: 'hover', floor: 2, name: 'Floating slinky', how: 'Tell Kongi how long the bottom of the slinky hovers.', item: 'slinky-metal', color: C.steel },
-  { id: 'eraser', floor: 2, name: 'Eraser', how: 'Hide the fringes with polarisers, then bring them back.', item: 'polarizers', color: C.red },
+  { id: 'eraser', floor: 2, name: 'Eraser', how: 'Hide the fringes with polarizers, then bring them back.', item: 'polarizers', color: C.red },
   { id: 'beats', floor: 2, name: 'Swap time', how: 'Find how long the energy takes to move to the other pendulum.', item: 'spring-soft', color: C.green },
   { id: 'precess', floor: 2, name: 'Wobble', how: 'Time the precession of the gyroscope.', item: 'gyrowheel', color: C.gold },
   { id: 'chladni', floor: 2, name: 'Sand artist', how: 'Draw a Chladni pattern with at least six nodal lines.', item: 'plate-square', color: C.brass },
@@ -95,20 +95,20 @@ const Q = {
   },
   'hoo-lens': {
     giver: 'hoo', stamp: 'lens', give: 'lens-x', unit: 'cm',
-    offer: ['This **mystery lens** came without a label. What is its focal length?', 'Within four percent, please, in centimetres.'],
+    offer: ['This **mystery lens** came without a label. What is its focal length?', 'Within four percent, please, in centimeters.'],
     ask: 'What is the focal length of the mystery lens?',
     hint: ['Make a sharp image on the screen for a few distances, and use 1/f = 1/d_o + 1/d_i.', 'Or use the collimator: light from very far away comes to a focus one focal length behind the lens.'],
     check: (v) => Math.abs(v / rig.secret('lensF') - 1) < 0.04,
-    near: (v) => Math.abs(v / (rig.secret('lensF') / 100) - 1) < 0.05 ? ['Right number, wrong unit: I asked in centimetres.'] : null,
+    near: (v) => Math.abs(v / (rig.secret('lensF') / 100) - 1) < 0.05 ? ['Right number, wrong unit: I asked in centimeters.'] : null,
     win: ['Exactly. You have a sharp eye, and a sharp image.'],
   },
   'hoo-string': {
     giver: 'hoo', stamp: 'string', give: 'str-x', unit: 'g/m',
-    offer: ['Last one from me. This **mystery string**: how many grams does one metre of it weigh?', 'You may not cut it. Use the vibrating string bench.'],
-    ask: 'What is its mass per metre?',
+    offer: ['Last one from me. This **mystery string**: how many grams does one meter of it weigh?', 'You may not cut it. Use the vibrating string bench.'],
+    ask: 'What is its mass per meter?',
     hint: ['Hang a known mass, find the resonances and their frequencies f_n = n v / 2L.', 'The wave speed is v = √(T/μ), with the tension T = Mg from the hanging mass.'],
     check: (v) => Math.abs(v / rig.secret('stringMu') - 1) < 0.06,
-    near: (v) => Math.abs(v / (rig.secret('stringMu') / 1000) - 1) < 0.06 ? ['That is in kilograms per metre. I asked for grams per metre.'] : null,
+    near: (v) => Math.abs(v / (rig.secret('stringMu') / 1000) - 1) < 0.06 ? ['That is in kilograms per meter. I asked for grams per meter.'] : null,
     win: ['Bueong! That is it. You have finished my whole list. 잘했어요 (jal haesseoyo: well done)! I am a very proud owl.'],
   },
   'pip-hover': {
@@ -140,7 +140,7 @@ const Q = {
   },
   'fennec-film': {
     giver: 'fennec', stamp: 'film', give: 'film-x', unit: 'kA/m',
-    offer: ['We grew a new film last night, sample **#7**. Nobody has measured it yet.', 'Put it in the FMR magnet and find its saturation magnetisation M_s, within five percent, in kA/m.'],
+    offer: ['We grew a new film last night, sample **#7**. Nobody has measured it yet.', 'Put it in the FMR magnet and find its saturation magnetization M_s, within five percent, in kA/m.'],
     ask: 'What is M_s of film #7?',
     hint: ['Choose “Film #7” as the film. In the f–H map, the resonance follows the Kittel formula f = γ√(B(B + μ₀M_s)).', 'Measure the resonance field at two or three frequencies and solve for M_s. The film is thin and has no anisotropy.'],
     check: (v) => Math.abs(v / (rig.secret('film').Ms / 1000) - 1) < 0.05,
@@ -158,13 +158,13 @@ const Q = {
   },
   'nova-bragg': {
     giver: 'nova', stamp: 'crystal', give: 'lat-x', unit: 'cm',
-    offer: ['Somebody built this crystal of steel balls and forgot to write down how far apart the balls are. It is **Crystal #9**.', 'Put it on the Bragg table in the paper gallery and find the spacing between neighbouring balls, in centimetres.'],
+    offer: ['Somebody built this crystal of steel balls and forgot to write down how far apart the balls are. It is **Crystal #9**.', 'Put it on the Bragg table in the paper gallery and find the spacing between neighboring balls, in centimeters.'],
     ask: 'How far apart are the balls in Crystal #9?',
     hint: ['Choose Crystal #9 and scan. The first peak comes where the extra path 2d sinθ is one wavelength.', 'With the cube face to the beam, d is the spacing itself. The wavelength is shown next to the frequency.'],
     check: (v) => Math.abs(v / rig.secret('latX') - 1) < 0.04,
     near: (v) => {
       const a = rig.secret('latX');
-      if (Math.abs(v / (a / 100) - 1) < 0.05) return ['That is in metres. I asked in centimetres.'];
+      if (Math.abs(v / (a / 100) - 1) < 0.05) return ['That is in meters. I asked in centimeters.'];
       if (Math.abs(v / (a / Math.SQRT2) - 1) < 0.05) return ['That is the spacing of the diagonal planes. The cube’s side is √2 times bigger.'];
       if (Math.abs(v / (a / 2) - 1) < 0.05) return ['Half of what I expected. Did you take the second peak for the first?'];
       return null;
@@ -310,7 +310,7 @@ export function makeTalk(ctx) {
       const auto = ['slowfall', 'eraser', 'chladni'].filter((s) => !rig.stamps().includes(s));
       const hints = {
         slowfall: 'Can you make a magnet take more than a whole minute to fall through the 1 m pipe? A strong magnet, the best conductor, and... cold metal conducts much better.',
-        eraser: 'In the dark room: put crossed polarisers on the two slits and the fringes vanish. Then add the eraser and bring them back!',
+        eraser: 'In the dark room: put crossed polarizers on the two slits and the fringes vanish. Then add the eraser and bring them back!',
         chladni: 'At the Chladni plate, find a pattern with six or more nodal lines.',
       };
       if (auto.length) { await say('pip', [hints[auto[0]]]); return; }

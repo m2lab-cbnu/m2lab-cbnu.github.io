@@ -335,7 +335,7 @@ function tabPlay(pane) {
   let ghostOn = false, pending = null, drop = null, firstAim = true, demo = false;
   let Lay = { w: 800, h: 420, fy: 360, left: 70, s: 40 };
 
-  const vIn = el('input', { type: 'range', min: 2, max: 30, step: 0.1, value: aim.v0, 'aria-label': 'Launch speed in metres per second' });
+  const vIn = el('input', { type: 'range', min: 2, max: 30, step: 0.1, value: aim.v0, 'aria-label': 'Launch speed in meters per second' });
   const aIn = el('input', { type: 'range', min: 0, max: 85, step: 0.5, value: aim.ang, 'aria-label': 'Launch angle in degrees' });
   const vLab = el('span'), aLab = el('span');
   vIn.addEventListener('input', () => { aim.v0 = +vIn.value; syncInputs(); });

@@ -228,7 +228,7 @@ function tabPlay(pane) {
         enter: () => { setGate('xnor', [0, 0, 0]); wait(3, () => { S.bits = [0, 1, 0]; record(); }); } },
       { say: 'Put a **half-wave delay** in one arm and the rule flips: now it is different inputs that light the lamp. That is the XOR gate.',
         enter: () => setGate('xor', [1, 0, 0]) },
-      { say: 'With **three** inputs, the wave that comes out takes the phase of the **majority**. This majority gate is a favourite of spin-wave computing: one junction does what takes many transistors.',
+      { say: 'With **three** inputs, the wave that comes out takes the phase of the **majority**. This majority gate is a favorite of spin-wave computing: one junction does what takes many transistors.',
         enter: () => setGate('maj', [1, 1, 0]) },
       { say: 'No charges move, so there is no current to heat the chip. Making spin waves do useful work like this is part of what our lab studies (look for the waveguide paper in the gallery next door).',
         enter: () => setGate('xnor', [0, 0, 0]) },
