@@ -216,8 +216,7 @@ ul, ol { padding: 0; }
 }
 
 /* ---------- Projects ----------
-   The main project leads with a drawing of what it builds: a quantum state handed from a
-   superconducting qubit (gold) to a magnon (cyan) and on to a second qubit. site.js plays it. */
+   Plain rows: the main project large, the earlier one below a line, then the ITRC note. */
 .projects-band h2 { color: #fff; }
 .proj-row { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 10px clamp(32px, 5vw, 72px); align-items: start; }
 .proj-row h3 { color: #fff; }
@@ -225,38 +224,14 @@ ul, ol { padding: 0; }
 .proj-row > p { color: var(--on-dark); max-width: 38rem; }
 .proj-row--main h3 { font-size: clamp(1.6rem, 1.2rem + 1.3vw, 2.3rem); line-height: 1.12; }
 .proj-row--main > p { font-size: clamp(1.0625rem, 1rem + .25vw, 1.1875rem); line-height: 1.6; }
-.proj-row--past { margin-top: clamp(48px, 7vw, 80px); padding-top: 28px; border-top: 1px solid var(--cavity-line); }
+.proj-row--past { margin-top: clamp(36px, 5vw, 56px); padding-top: 28px; border-top: 1px solid var(--cavity-line); }
 .proj-row--past h3 { font-size: clamp(1.25rem, 1.1rem + .5vw, 1.45rem); }
 .projects-note { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--cavity-line); color: var(--on-dark-2); }
 
-.tx { margin-top: clamp(28px, 4.5vw, 56px); }
-.tx-svg { display: block; width: 100%; height: auto; }
-.tx-svg--narrow { display: none; }
-.tx-poles text { font: 600 22px var(--sans); fill: var(--on-dark-2); }
-.tx-svg--narrow .tx-poles text { font-size: 32px; }
-.tx-steps { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 18px; text-align: center; }
-.tx-step { padding-top: 12px; border-top: 2px solid var(--cavity-line); color: var(--on-dark-2); font-size: .9375rem; line-height: 1.45; transition: border-color .35s, color .35s; }
-.tx-step b { display: block; margin-bottom: 2px; color: #fff; font-size: 1.0625rem; font-weight: 600; }
-.tx-step.is-on { color: #fff; }
-.tx-step--sc.is-on { border-color: var(--antenna); }
-.tx-step--mag.is-on { border-color: var(--magnon); }
-.tx-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 28px; margin-top: 26px; }
-.tx-foot p { max-width: 44rem; color: var(--on-dark-2); }
-.tx-foot .sim-play { flex: none; }
 @media (max-width: 760px) {
   .proj-row { grid-template-columns: 1fr; }
   .proj-row--main > p { margin-top: 8px; }
   .proj-row--past > p { margin-top: 6px; }
-}
-@media (max-width: 640px) {
-  .tx-svg--wide { display: none; }
-  .tx-svg--narrow { display: block; }
-  .tx-steps { grid-template-columns: 1fr; gap: 0; margin-top: 14px; text-align: left; }
-  .tx-step { display: grid; grid-template-columns: 14px minmax(0, 1fr); column-gap: 12px; padding: 10px 0; border-top: 0; border-bottom: 1px solid var(--cavity-line); }
-  .tx-step::before { content: ""; grid-row: span 2; width: 10px; height: 10px; margin-top: 7px; border-radius: 50%; background: var(--antenna); }
-  .tx-step--mag::before { background: var(--magnon); }
-  .tx-step b { margin: 0; }
-  .tx-step.is-on { background: rgba(0, 212, 255, .08); }
 }
 
 /* ---------- Lab ---------- */
